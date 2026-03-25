@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>src</name>
+    </assembly>
+    <members>
+        <member name="T:src.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.#ctor(src.Data.StocksContext,Microsoft.Extensions.Logging.ILogger{src.Services.Cliente_Movimento_Services})">
+            <summary>
+            Initializes a new instance of <see cref="T:src.Services.Cliente_Movimento_Services"/>.
+            </summary>
+            <param name="context">EF Core database context used to access <see cref="T:src.Models.Cliente_Movimento"/> entities.</param>
+            <param name="logger">Logger used to record failures and operational errors.</param>
+        </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.GetAll">
+            <summary>
+            Gets all <see cref="T:src.Models.Cliente_Movimento"/> records ordered by identifier.
+            </summary>
+            <remarks>
+            This query is tracked by EF Core (no <c>AsNoTracking</c>). Use paged or no-tracking variants
+            where appropriate.
+            </remarks>
+            <returns>All movimentos ordered by <see cref="P:src.Models.Cliente_Movimento.Id"/>.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.GetAllPaged(PageParameters)">
+            <summary>
+            Gets a paginated list of clientes.
+            </summary>
+            <param name="pageParameters">Pagination parameters (page number and page size).</param>
+            <returns>A paged list containing the requested page of clientes movimentos.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="T:PageParameters">
+            <summary>
+            Represents page parameters
+            </summary>
+        </member>
+        <member name="P:PageParameters.PageNumber">
+            <summary>
+            Use for page number that is passed from frontend.
+            </summary>
+        </member>
+        <member name="P:PageParameters.PageSize">
+            <summary>
+            Use for page size that is passed from frontend.
+            </summary>
+        </member>
+        <member name="T:Program">
+            <summary>
+            Auto-generated public partial Program class for top-level statement apps.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.CreateDocumentationId(System.Type)">
+            <summary>
+            Generates a documentation comment ID for a type.
+            Example: T:Namespace.Outer+Inner`1 becomes T:Namespace.Outer.Inner`1
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.CreateDocumentationId(System.Reflection.PropertyInfo)">
+            <summary>
+            Generates a documentation comment ID for a property.
+            Example: P:Namespace.ContainingType.PropertyName or for an indexer P:Namespace.ContainingType.Item(System.Int32)
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.CreateDocumentationId(System.Type,System.String)">
+            <summary>
+            Generates a documentation comment ID for a property given its container type and property name.
+            Example: P:Namespace.ContainingType.PropertyName
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.CreateDocumentationId(System.Reflection.MethodInfo)">
+            <summary>
+            Generates a documentation comment ID for a method (or constructor).
+            For example:
+              M:Namespace.ContainingType.MethodName(ParamType1,ParamType2)~ReturnType
+              M:Namespace.ContainingType.#ctor(ParamType)
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.GetTypeDocId(System.Type,System.Boolean,System.Boolean)">
+            <summary>
+            Generates a documentation ID string for a type.
+            This method handles nested types (replacing '+' with '.'),
+            generic types, arrays, pointers, by-ref types, and generic parameters.
+            The <paramref name="includeGenericArguments"/> flag controls whether
+            constructed generic type arguments are emitted, while <paramref name="omitGenericArity"/>
+            controls whether the generic arity marker (e.g. "`1") is appended.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.NormalizeDocId(System.String)">
+            <summary>
+            Normalizes a documentation comment ID to match the compiler-style format.
+            Strips the return type suffix for ordinary methods but retains it for conversion operators.
+            </summary>
+            <param name="docId">The documentation comment ID to normalize.</param>
+            <returns>The normalized documentation comment ID.</returns>
+        </member>
+    </members>
+</doc>
