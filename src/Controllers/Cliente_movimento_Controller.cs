@@ -85,5 +85,66 @@ namespace src.Controllers
             var created = await _cliente_Movimento_Service.CreateMovimento(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
+
+
+
+        /// <summary>
+        /// Updates an existing movimento.
+        /// </summary>
+        /// <param name="id">The movimento identifier.</param>
+        /// <param name="dto">The data used to update the movimento.</param>
+        /// <remarks>
+        /// Updates the movimento identified by <paramref name="id"/> and returns the updated resource.
+        /// </remarks>
+        /// <response code="200">movimento updated successfully.</response>
+        /// <response code="400">The request data is invalid.</response>
+        /// <response code="404">movimento not found.</response>
+
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(typeof(Cliente_Movimento), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
+        public async Task<ActionResult<Cliente_Movimento>> Update(int id, [FromBody] Update dto)
+        {
+            _logger.LogInformation("CRUD {CrudOperation} {Resource} id={Id}", "Update", "Cliente_Movimento", id);
+
+            var u = await _cliente_Movimento_Service.Update(id, dto);
+
+            if (u is null)
+            {
+                return NotFound($"No Movimento exists with the provided ID: {id}.");
+            }
+            return Ok(u);
+        }
+
+
+
+        /// <summary>
+        /// Deletes an existing movimentos.
+        /// </summary>
+        /// <param name="id">The movimentos identifier.</param>
+        /// <remarks>
+        /// Deletes the movimentos identified by <paramref name="id"/>.
+        /// </remarks>
+        /// <response code="204">movimentos deleted successfully.</response>
+        /// <response code="404">movimentos not found.</response>
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult Delete(int id)
+        {
+            {
+                _logger.LogInformation("CRUD {CrudOperation} {Resource} id={Id}", "Delete", "Cliente_Movimento", id);
+
+                var DeleteMovimneto = _cliente_Movimento_Service.Delete(id);
+                if (!DeleteMovimneto)
+                {
+                    return NotFound($"No Movimento exists with the provided ID: {id}.");
+                }
+                return NoContent();
+            }
+        }
     }
 }

@@ -4,6 +4,28 @@
         <name>src</name>
     </assembly>
     <members>
+        <member name="M:src.Controllers.Cliente_movimento_Controller.GetById(System.Int32)">
+            <summary>
+            Gets a movimento by identifier.
+            </summary>
+            <param name="id">The movimento identifier.</param>
+            <remarks>
+            Returns the movimento resource if found.
+            </remarks>
+            <response code="200">Movimento returned successfully.</response>
+            <response code="404">Movimento not found.</response>
+        </member>
+        <member name="M:src.Controllers.Cliente_movimento_Controller.CreateMovimento(src.Dtos.Cliente_Movimento_Dtos.Create)">
+            <summary>
+            Creates a new movimento.
+            </summary>
+            <param name="dto">The data used to create a new movimento.</param>
+            <remarks>
+            Creates a new movimento and returns the created resource with its generated identifier.
+            </remarks>
+            <response code="201">Movimento created successfully.</response>
+            <response code="400">The request data is invalid.</response>
+        </member>
         <member name="T:src.Migrations.InitialCreate">
             <inheritdoc />
         </member>

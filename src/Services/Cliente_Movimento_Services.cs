@@ -63,7 +63,7 @@ public class Cliente_Movimento_Services
             var query = _context.Cliente_Movimentos.AsNoTracking().OrderBy(i => i.Id).AsQueryable();
             return await PagedList<Cliente_Movimento>.CreateAsync(query, pageParameters.PageNumber, pageParameters.PageSize);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             _logger.LogWarning(ex, "Database  error in {Method}", nameof(GetAllPaged));
             throw;
@@ -79,7 +79,7 @@ public class Cliente_Movimento_Services
         }
         catch (System.Exception)
         {
-            
+
             throw;
         }
     }
@@ -106,9 +106,56 @@ public class Cliente_Movimento_Services
         }
         catch (System.Exception)
         {
-            
+
             throw;
         }
     }
 
+    public async Task<Cliente_Movimento?> Update(int id, Update dto)
+    {
+        try
+        {
+            var c = _context.Cliente_Movimentos.FirstOrDefault(i => i.Id == id);
+            if (c is null)
+            {
+                return null;
+            }
+            c.MovementRID = dto.MovementRID;
+            c.De = dto.De;
+            c.Para = dto.Para;
+            c.Cliente = dto.Cliente;
+            c.Descricao = dto.Descricao;
+            c.DataFormatada = dto.DataFormatada;
+            c.Datetime = DateTime.UtcNow;
+            c.Quantidade = dto.Quantidade;
+
+            await _context.SaveChangesAsync();
+            return c;
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+
+    }
+    public bool Delete(int id)
+    {
+        try
+        {
+            var cliente = _context.Cliente_Movimentos.FirstOrDefault(i => i.Id == id);
+            if (cliente is null)
+            {
+                return false;
+            }
+            _context.Cliente_Movimentos.Remove(cliente);
+            _context.SaveChanges();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in {Method}", nameof(Delete));
+            throw;
+        }
+    }
 }
