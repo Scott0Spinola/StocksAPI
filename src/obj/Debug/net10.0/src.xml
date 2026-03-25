@@ -26,6 +26,30 @@
             <response code="201">Movimento created successfully.</response>
             <response code="400">The request data is invalid.</response>
         </member>
+        <member name="M:src.Controllers.Cliente_movimento_Controller.Update(System.Int32,src.Dtos.Cliente_Movimento_Dtos.Update)">
+            <summary>
+            Updates an existing movimento.
+            </summary>
+            <param name="id">The movimento identifier.</param>
+            <param name="dto">The data used to update the movimento.</param>
+            <remarks>
+            Updates the movimento identified by <paramref name="id"/> and returns the updated resource.
+            </remarks>
+            <response code="200">movimento updated successfully.</response>
+            <response code="400">The request data is invalid.</response>
+            <response code="404">movimento not found.</response>
+        </member>
+        <member name="M:src.Controllers.Cliente_movimento_Controller.Delete(System.Int32)">
+            <summary>
+            Deletes an existing movimentos.
+            </summary>
+            <param name="id">The movimentos identifier.</param>
+            <remarks>
+            Deletes the movimentos identified by <paramref name="id"/>.
+            </remarks>
+            <response code="204">movimentos deleted successfully.</response>
+            <response code="404">movimentos not found.</response>
+        </member>
         <member name="T:src.Migrations.InitialCreate">
             <inheritdoc />
         </member>
@@ -58,7 +82,22 @@
         </member>
         <member name="M:src.Services.Cliente_Movimento_Services.GetAllPaged(PageParameters)">
             <summary>
-            Gets a paginated list of clientes.
+            Gets a paginated list of Movimentos.
+            </summary>
+            <param name="pageParameters">Pagination parameters (page number and page size).</param>
+            <returns>A paged list containing the requested page of clientes movimentos.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.Cliente_Tag_Services.#ctor(src.Data.StocksContext,Microsoft.Extensions.Logging.ILogger{src.Services.Cliente_Tag_Services})">
+            <summary>
+            Initializes a new instance of <see cref="T:src.Services.Cliente_Tag_Services"/>.
+            </summary>
+            <param name="context">EF Core database context used to access <see cref="T:src.Models.Cliente_Movimento"/> entities.</param>
+            <param name="logger">Logger used to record failures and operational errors.</param>
+        </member>
+        <member name="M:src.Services.Cliente_Tag_Services.GetAllPaged(PageParameters)">
+            <summary>
+            Gets a paginated list of Tags.
             </summary>
             <param name="pageParameters">Pagination parameters (page number and page size).</param>
             <returns>A paged list containing the requested page of clientes movimentos.</returns>

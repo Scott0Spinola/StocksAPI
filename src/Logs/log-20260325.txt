@@ -539,3 +539,362 @@ RETURNING "Id";
 2026-03-25 15:57:11.281 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.CreateMovimento (src)'
 2026-03-25 15:57:11.286 +00:00 [INF] Request finished HTTP/1.1 POST http://localhost:5275/api/Cliente_movimento_ - 201 null application/json; charset=utf-8 309.7132ms
 2026-03-25 16:06:48.704 +00:00 [INF] Application is shutting down...
+2026-03-25 16:37:27.047 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-03-25 16:37:27.099 +00:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2026-03-25 16:37:27.111 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-03-25 16:37:27.1054504+00:00');
+SELECT changes();
+2026-03-25 16:37:27.167 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2026-03-25 16:37:27.173 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-03-25 16:37:27.177 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-03-25 16:37:27.185 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-03-25 16:37:27.188 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2026-03-25 16:37:27.304 +00:00 [INF] Now listening on: http://localhost:5275
+2026-03-25 16:37:27.307 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-25 16:37:27.307 +00:00 [INF] Hosting environment: Development
+2026-03-25 16:37:27.308 +00:00 [INF] Content root path: C:\Users\spino\Desktop\StocksAPI\src
+2026-03-25 16:37:35.374 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/ - null null
+2026-03-25 16:37:35.482 +00:00 [WRN] Failed to determine the https port for redirect.
+2026-03-25 16:37:35.504 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/ - 404 0 null 132.5201ms
+2026-03-25 16:37:35.520 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5275/, Response status code: 404
+2026-03-25 16:37:43.476 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.html - null null
+2026-03-25 16:37:43.547 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.html - 304 null null 71.0115ms
+2026-03-25 16:37:43.567 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - null null
+2026-03-25 16:37:43.569 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.css - null null
+2026-03-25 16:37:43.569 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - null null
+2026-03-25 16:37:43.573 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - null null
+2026-03-25 16:37:43.574 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.js - null null
+2026-03-25 16:37:43.582 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.js - 304 null null 7.9326ms
+2026-03-25 16:37:43.586 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.css - 304 null null 17.7399ms
+2026-03-25 16:37:43.586 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - 304 null null 12.9719ms
+2026-03-25 16:37:43.586 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - 304 null null 19.4543ms
+2026-03-25 16:37:43.591 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - 304 null null 21.9267ms
+2026-03-25 16:37:43.775 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - null null
+2026-03-25 16:37:43.800 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - null null
+2026-03-25 16:37:43.803 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - 304 null null 3.2918ms
+2026-03-25 16:37:43.917 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 141.8365ms
+2026-03-25 16:37:50.449 +00:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/1 - null null
+2026-03-25 16:37:50.453 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:37:50.479 +00:00 [INF] Route matched with {action = "Delete", controller = "Cliente_movimento_"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult Delete(Int32) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-03-25 16:37:50.492 +00:00 [INF] CRUD Delete Cliente_Movimento id=1
+2026-03-25 16:37:50.739 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."Id", "c"."Cliente", "c"."DataFormatada", "c"."Datetime", "c"."De", "c"."Descricao", "c"."MovementRID", "c"."Para", "c"."Quantidade"
+FROM "Cliente_Movimentos" AS "c"
+WHERE "c"."Id" = @id
+LIMIT 1
+2026-03-25 16:37:50.845 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "Cliente_Movimentos"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-03-25 16:37:50.856 +00:00 [INF] Executing StatusCodeResult, setting HTTP status code 204
+2026-03-25 16:37:50.859 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.Delete (src) in 374.7964ms
+2026-03-25 16:37:50.862 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:37:50.869 +00:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/1 - 204 null null 420.4519ms
+2026-03-25 16:38:04.959 +00:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/1 - null null
+2026-03-25 16:38:04.963 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:38:04.964 +00:00 [INF] Route matched with {action = "Delete", controller = "Cliente_movimento_"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult Delete(Int32) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-03-25 16:38:04.969 +00:00 [INF] CRUD Delete Cliente_Movimento id=1
+2026-03-25 16:38:05.036 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."Id", "c"."Cliente", "c"."DataFormatada", "c"."Datetime", "c"."De", "c"."Descricao", "c"."MovementRID", "c"."Para", "c"."Quantidade"
+FROM "Cliente_Movimentos" AS "c"
+WHERE "c"."Id" = @id
+LIMIT 1
+2026-03-25 16:38:05.041 +00:00 [INF] Executing NotFoundObjectResult, writing value of type 'System.String'.
+2026-03-25 16:38:05.043 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.Delete (src) in 78.5354ms
+2026-03-25 16:38:05.045 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:38:05.046 +00:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/1 - 404 null text/plain; charset=utf-8 86.9951ms
+2026-03-25 16:38:16.238 +00:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/2 - null null
+2026-03-25 16:38:16.241 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:38:16.242 +00:00 [INF] Route matched with {action = "Delete", controller = "Cliente_movimento_"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult Delete(Int32) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-03-25 16:38:16.247 +00:00 [INF] CRUD Delete Cliente_Movimento id=2
+2026-03-25 16:38:16.253 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."Id", "c"."Cliente", "c"."DataFormatada", "c"."Datetime", "c"."De", "c"."Descricao", "c"."MovementRID", "c"."Para", "c"."Quantidade"
+FROM "Cliente_Movimentos" AS "c"
+WHERE "c"."Id" = @id
+LIMIT 1
+2026-03-25 16:38:16.259 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "Cliente_Movimentos"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-03-25 16:38:16.265 +00:00 [INF] Executing StatusCodeResult, setting HTTP status code 204
+2026-03-25 16:38:16.266 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.Delete (src) in 22.3709ms
+2026-03-25 16:38:16.268 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:38:16.269 +00:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/2 - 204 null null 31.0787ms
+2026-03-25 16:42:13.970 +00:00 [INF] Application is shutting down...
+2026-03-25 16:42:19.782 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-03-25 16:42:19.831 +00:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2026-03-25 16:42:19.841 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-03-25 16:42:19.836666+00:00');
+SELECT changes();
+2026-03-25 16:42:19.895 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2026-03-25 16:42:19.902 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-03-25 16:42:19.905 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-03-25 16:42:19.911 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-03-25 16:42:19.914 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2026-03-25 16:42:20.001 +00:00 [INF] Now listening on: http://localhost:5275
+2026-03-25 16:42:20.003 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-25 16:42:20.005 +00:00 [INF] Hosting environment: Development
+2026-03-25 16:42:20.005 +00:00 [INF] Content root path: C:\Users\spino\Desktop\StocksAPI\src
+2026-03-25 16:42:24.281 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.html - null null
+2026-03-25 16:42:24.378 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.html - 304 null null 97.7849ms
+2026-03-25 16:42:24.392 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.css - null null
+2026-03-25 16:42:24.392 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - null null
+2026-03-25 16:42:24.392 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - null null
+2026-03-25 16:42:24.392 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - null null
+2026-03-25 16:42:24.392 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.js - null null
+2026-03-25 16:42:24.417 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.js - 304 null null 24.1609ms
+2026-03-25 16:42:24.421 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - 304 null null 28.6882ms
+2026-03-25 16:42:24.421 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - 304 null null 28.6915ms
+2026-03-25 16:42:24.421 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - 304 null null 28.7977ms
+2026-03-25 16:42:24.421 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.css - 304 null null 28.69ms
+2026-03-25 16:42:24.506 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - null null
+2026-03-25 16:42:24.510 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - null null
+2026-03-25 16:42:24.514 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - 304 null null 3.7971ms
+2026-03-25 16:42:24.633 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 127.804ms
+2026-03-25 16:42:30.897 +00:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/3 - null null
+2026-03-25 16:42:30.904 +00:00 [WRN] Failed to determine the https port for redirect.
+2026-03-25 16:42:30.907 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:42:30.927 +00:00 [INF] Route matched with {action = "Delete", controller = "Cliente_movimento_"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult Delete(Int32) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-03-25 16:42:30.936 +00:00 [INF] CRUD Delete Cliente_Movimento id=3
+2026-03-25 16:42:31.154 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."Id", "c"."Cliente", "c"."DataFormatada", "c"."Datetime", "c"."De", "c"."Descricao", "c"."MovementRID", "c"."Para", "c"."Quantidade"
+FROM "Cliente_Movimentos" AS "c"
+WHERE "c"."Id" = @id
+LIMIT 1
+2026-03-25 16:42:31.253 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "Cliente_Movimentos"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-03-25 16:42:31.267 +00:00 [INF] Executing OkObjectResult, writing value of type 'System.Boolean'.
+2026-03-25 16:42:31.283 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.Delete (src) in 350.2711ms
+2026-03-25 16:42:31.285 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:42:31.290 +00:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/3 - 200 null application/json; charset=utf-8 392.7891ms
+2026-03-25 16:45:11.021 +00:00 [INF] Application is shutting down...
+2026-03-25 16:45:16.216 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-03-25 16:45:16.265 +00:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2026-03-25 16:45:16.278 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-03-25 16:45:16.273215+00:00');
+SELECT changes();
+2026-03-25 16:45:16.336 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2026-03-25 16:45:16.344 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-03-25 16:45:16.347 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-03-25 16:45:16.356 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-03-25 16:45:16.359 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2026-03-25 16:45:16.446 +00:00 [INF] Now listening on: http://localhost:5275
+2026-03-25 16:45:16.449 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-25 16:45:16.449 +00:00 [INF] Hosting environment: Development
+2026-03-25 16:45:16.450 +00:00 [INF] Content root path: C:\Users\spino\Desktop\StocksAPI\src
+2026-03-25 16:45:22.326 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.html - null null
+2026-03-25 16:45:22.432 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.html - 304 null null 107.0594ms
+2026-03-25 16:45:22.442 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.css - null null
+2026-03-25 16:45:22.442 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - null null
+2026-03-25 16:45:22.442 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - null null
+2026-03-25 16:45:22.442 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - null null
+2026-03-25 16:45:22.443 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.js - null null
+2026-03-25 16:45:22.467 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.js - 304 null null 23.8937ms
+2026-03-25 16:45:22.472 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - 304 null null 29.871ms
+2026-03-25 16:45:22.472 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.css - 304 null null 29.8725ms
+2026-03-25 16:45:22.472 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - 304 null null 29.6985ms
+2026-03-25 16:45:22.472 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - 304 null null 29.9443ms
+2026-03-25 16:45:22.640 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - null null
+2026-03-25 16:45:22.643 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - null null
+2026-03-25 16:45:22.648 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - 304 null null 4.254ms
+2026-03-25 16:45:22.764 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 123.7808ms
+2026-03-25 16:45:37.186 +00:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/4 - null null
+2026-03-25 16:45:37.190 +00:00 [WRN] Failed to determine the https port for redirect.
+2026-03-25 16:45:37.193 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:45:37.209 +00:00 [INF] Route matched with {action = "Delete", controller = "Cliente_movimento_"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult Delete(Int32) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-03-25 16:45:37.221 +00:00 [INF] CRUD Delete Cliente_Movimento id=4
+2026-03-25 16:45:37.441 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."Id", "c"."Cliente", "c"."DataFormatada", "c"."Datetime", "c"."De", "c"."Descricao", "c"."MovementRID", "c"."Para", "c"."Quantidade"
+FROM "Cliente_Movimentos" AS "c"
+WHERE "c"."Id" = @id
+LIMIT 1
+2026-03-25 16:45:37.547 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "Cliente_Movimentos"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-03-25 16:45:37.571 +00:00 [INF] Movimento with id => 4 was deleted.
+2026-03-25 16:45:37.575 +00:00 [INF] Executing StatusCodeResult, setting HTTP status code 204
+2026-03-25 16:45:37.579 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.Delete (src) in 364.8664ms
+2026-03-25 16:45:37.581 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:45:37.588 +00:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/4 - 204 null null 401.2324ms
+2026-03-25 16:46:03.750 +00:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/4 - null null
+2026-03-25 16:46:03.753 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:46:03.754 +00:00 [INF] Route matched with {action = "Delete", controller = "Cliente_movimento_"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult Delete(Int32) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-03-25 16:46:03.759 +00:00 [INF] CRUD Delete Cliente_Movimento id=4
+2026-03-25 16:46:03.821 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."Id", "c"."Cliente", "c"."DataFormatada", "c"."Datetime", "c"."De", "c"."Descricao", "c"."MovementRID", "c"."Para", "c"."Quantidade"
+FROM "Cliente_Movimentos" AS "c"
+WHERE "c"."Id" = @id
+LIMIT 1
+2026-03-25 16:46:03.827 +00:00 [INF] Executing NotFoundObjectResult, writing value of type 'System.String'.
+2026-03-25 16:46:03.828 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.Delete (src) in 72.37ms
+2026-03-25 16:46:03.829 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:46:03.830 +00:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/4 - 404 null text/plain; charset=utf-8 80.139ms
+2026-03-25 16:48:25.397 +00:00 [INF] Application is shutting down...
+2026-03-25 16:48:30.843 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-03-25 16:48:30.892 +00:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2026-03-25 16:48:30.903 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-03-25 16:48:30.897816+00:00');
+SELECT changes();
+2026-03-25 16:48:30.958 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2026-03-25 16:48:30.969 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-03-25 16:48:30.974 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-03-25 16:48:30.984 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-03-25 16:48:30.987 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2026-03-25 16:48:31.081 +00:00 [INF] Now listening on: http://localhost:5275
+2026-03-25 16:48:31.083 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-25 16:48:31.084 +00:00 [INF] Hosting environment: Development
+2026-03-25 16:48:31.085 +00:00 [INF] Content root path: C:\Users\spino\Desktop\StocksAPI\src
+2026-03-25 16:48:34.477 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.html - null null
+2026-03-25 16:48:34.568 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.html - 304 null null 92.4043ms
+2026-03-25 16:48:34.576 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - null null
+2026-03-25 16:48:34.576 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.css - null null
+2026-03-25 16:48:34.577 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - null null
+2026-03-25 16:48:34.577 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - null null
+2026-03-25 16:48:34.578 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.js - null null
+2026-03-25 16:48:34.608 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.js - 304 null null 29.96ms
+2026-03-25 16:48:34.612 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.css - 304 null null 36.1149ms
+2026-03-25 16:48:34.612 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - 304 null null 36.1149ms
+2026-03-25 16:48:34.612 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - 304 null null 35.5925ms
+2026-03-25 16:48:34.612 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - 304 null null 35.9323ms
+2026-03-25 16:48:34.792 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - null null
+2026-03-25 16:48:34.795 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - null null
+2026-03-25 16:48:34.799 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - 304 null null 4.086ms
+2026-03-25 16:48:34.929 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 136.4908ms
+2026-03-25 16:48:39.802 +00:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/1 - null null
+2026-03-25 16:48:39.806 +00:00 [WRN] Failed to determine the https port for redirect.
+2026-03-25 16:48:39.808 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:48:39.827 +00:00 [INF] Route matched with {action = "Delete", controller = "Cliente_movimento_"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult Delete(Int32) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-03-25 16:48:39.836 +00:00 [INF] CRUD Delete Cliente_Movimento id=1
+2026-03-25 16:48:40.054 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."Id", "c"."Cliente", "c"."DataFormatada", "c"."Datetime", "c"."De", "c"."Descricao", "c"."MovementRID", "c"."Para", "c"."Quantidade"
+FROM "Cliente_Movimentos" AS "c"
+WHERE "c"."Id" = @id
+LIMIT 1
+2026-03-25 16:48:40.057 +00:00 [INF] Movimento was not found with this id => 1.
+2026-03-25 16:48:40.060 +00:00 [INF] Executing NotFoundObjectResult, writing value of type 'System.String'.
+2026-03-25 16:48:40.064 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.Delete (src) in 232.4723ms
+2026-03-25 16:48:40.065 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.Delete (src)'
+2026-03-25 16:48:40.071 +00:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5275/api/Cliente_movimento_/1 - 404 null text/plain; charset=utf-8 268.9321ms
+2026-03-25 16:49:05.534 +00:00 [INF] Application is shutting down...
+2026-03-25 17:11:24.848 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-03-25 17:11:24.896 +00:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2026-03-25 17:11:24.907 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-03-25 17:11:24.9029542+00:00');
+SELECT changes();
+2026-03-25 17:11:24.964 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2026-03-25 17:11:24.972 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-03-25 17:11:24.975 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-03-25 17:11:24.982 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-03-25 17:11:24.986 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2026-03-25 17:11:25.072 +00:00 [INF] Now listening on: http://localhost:5275
+2026-03-25 17:11:25.074 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-25 17:11:25.075 +00:00 [INF] Hosting environment: Development
+2026-03-25 17:11:25.077 +00:00 [INF] Content root path: C:\Users\spino\Desktop\StocksAPI\src
+2026-03-25 17:11:35.708 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_/1 - null null
+2026-03-25 17:11:35.776 +00:00 [WRN] Failed to determine the https port for redirect.
+2026-03-25 17:11:35.778 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetById (src)'
+2026-03-25 17:11:35.800 +00:00 [INF] Route matched with {action = "GetById", controller = "Cliente_movimento_"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[src.Models.Cliente_Movimento] GetById(Int32) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-03-25 17:11:35.813 +00:00 [INF] CRUD Read Cliente_Movimento id=1
+2026-03-25 17:11:36.104 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."Id", "c"."Cliente", "c"."DataFormatada", "c"."Datetime", "c"."De", "c"."Descricao", "c"."MovementRID", "c"."Para", "c"."Quantidade"
+FROM "Cliente_Movimentos" AS "c"
+WHERE "c"."Id" = @id
+LIMIT 1
+2026-03-25 17:11:36.111 +00:00 [INF] Executing NotFoundObjectResult, writing value of type 'System.String'.
+2026-03-25 17:11:36.121 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetById (src) in 314.9472ms
+2026-03-25 17:11:36.123 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetById (src)'
+2026-03-25 17:11:36.131 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_/1 - 404 null text/plain; charset=utf-8 425.6547ms
+2026-03-25 17:11:43.268 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - null null
+2026-03-25 17:11:43.274 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-03-25 17:11:43.296 +00:00 [INF] Route matched with {action = "GetAll", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Movimento]]] GetAll(PageParameters) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-03-25 17:11:43.313 +00:00 [INF] CRUD Read Cliente_Movimento pageNumber=1 pageSize=2
+2026-03-25 17:11:43.396 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM "Cliente_Movimentos" AS "c"
+2026-03-25 17:11:43.413 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[@p1='?' (DbType = Int32), @p='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."Id", "c"."Cliente", "c"."DataFormatada", "c"."Datetime", "c"."De", "c"."Descricao", "c"."MovementRID", "c"."Para", "c"."Quantidade"
+FROM "Cliente_Movimentos" AS "c"
+ORDER BY "c"."Id"
+LIMIT @p1 OFFSET @p
+2026-03-25 17:11:43.417 +00:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Movimento, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-25 17:11:43.447 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetAll (src) in 147.1893ms
+2026-03-25 17:11:43.448 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-03-25 17:11:43.449 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 180.8077ms
+2026-03-25 17:11:49.897 +00:00 [INF] Request starting HTTP/1.1 POST http://localhost:5275/api/Cliente_movimento_ - application/json 163
+2026-03-25 17:11:49.905 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.CreateMovimento (src)'
+2026-03-25 17:11:49.917 +00:00 [INF] Route matched with {action = "CreateMovimento", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[src.Models.Cliente_Movimento]] CreateMovimento(src.Dtos.Cliente_Movimento_Dtos.Create) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-03-25 17:11:49.943 +00:00 [INF] CRUD Create Movimento
+2026-03-25 17:11:50.053 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 6), @p1='?' (Size = 6), @p2='?' (DbType = DateTime), @p3='?' (Size = 6), @p4='?' (Size = 6), @p5='?' (Size = 6), @p6='?' (Size = 6), @p7='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Cliente_Movimentos" ("Cliente", "DataFormatada", "Datetime", "De", "Descricao", "MovementRID", "Para", "Quantidade")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7)
+RETURNING "Id";
+2026-03-25 17:11:50.075 +00:00 [INF] Executing CreatedAtActionResult, writing value of type 'src.Models.Cliente_Movimento'.
+2026-03-25 17:11:50.089 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.CreateMovimento (src) in 167.7821ms
+2026-03-25 17:11:50.091 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.CreateMovimento (src)'
+2026-03-25 17:11:50.092 +00:00 [INF] Request finished HTTP/1.1 POST http://localhost:5275/api/Cliente_movimento_ - 201 null application/json; charset=utf-8 195.0948ms
+2026-03-25 17:12:21.404 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_/5 - null null
+2026-03-25 17:12:21.408 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetById (src)'
+2026-03-25 17:12:21.410 +00:00 [INF] Route matched with {action = "GetById", controller = "Cliente_movimento_"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[src.Models.Cliente_Movimento] GetById(Int32) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-03-25 17:12:21.414 +00:00 [INF] CRUD Read Cliente_Movimento id=5
+2026-03-25 17:12:21.425 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."Id", "c"."Cliente", "c"."DataFormatada", "c"."Datetime", "c"."De", "c"."Descricao", "c"."MovementRID", "c"."Para", "c"."Quantidade"
+FROM "Cliente_Movimentos" AS "c"
+WHERE "c"."Id" = @id
+LIMIT 1
+2026-03-25 17:12:21.433 +00:00 [INF] Executing ObjectResult, writing value of type 'src.Models.Cliente_Movimento'.
+2026-03-25 17:12:21.436 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetById (src) in 22.7427ms
+2026-03-25 17:12:21.437 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetById (src)'
+2026-03-25 17:12:21.438 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_/5 - 200 null application/json; charset=utf-8 34.131ms

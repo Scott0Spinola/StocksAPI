@@ -99,7 +99,6 @@ namespace src.Controllers
         /// <response code="200">movimento updated successfully.</response>
         /// <response code="400">The request data is invalid.</response>
         /// <response code="404">movimento not found.</response>
-
         [HttpPut("{id:int}")]
         [ProducesResponseType(typeof(Cliente_Movimento), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -141,8 +140,10 @@ namespace src.Controllers
                 var DeleteMovimneto = _cliente_Movimento_Service.Delete(id);
                 if (!DeleteMovimneto)
                 {
+                    _logger.LogInformation($"Movimento was not found with this id => {id}.");
                     return NotFound($"No Movimento exists with the provided ID: {id}.");
                 }
+                _logger.LogInformation($"Movimento with id => {id} was deleted.");
                 return NoContent();
             }
         }

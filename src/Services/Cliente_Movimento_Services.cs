@@ -1,12 +1,11 @@
 using System.Data;
 using src.Data;
 using src.Models;
-//using src.Dtos;
+using src.Dtos.Cliente_Movimento_Dtos;
 
 using Microsoft.EntityFrameworkCore;
 using IntervencoesAPI.Services;
-using System.Data.Common;
-using src.Dtos.Cliente_Movimento_Dtos;
+
 
 namespace src.Services;
 
@@ -51,7 +50,7 @@ public class Cliente_Movimento_Services
     }
 
     /// <summary>
-    /// Gets a paginated list of clientes.
+    /// Gets a paginated list of Movimentos.
     /// </summary>
     /// <param name="pageParameters">Pagination parameters (page number and page size).</param>
     /// <returns>A paged list containing the requested page of clientes movimentos.</returns>
@@ -75,7 +74,7 @@ public class Cliente_Movimento_Services
     {
         try
         {
-            return _context.Cliente_Movimentos.FirstOrDefault(i => i.Id == id);
+            return _context.Cliente_Movimentos.AsNoTracking().FirstOrDefault(i => i.Id == id);
         }
         catch (System.Exception)
         {

@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="Dtos\Cliente_Movimento_Dtos\" />
+    <Folder Include="Dtos\Cliente_Tag_Dtos\" />
     <Folder Include="Logs\" />
   </ItemGroup>
 
