@@ -4,6 +4,33 @@
         <name>src</name>
     </assembly>
     <members>
+        <member name="M:src.Controllers.Cliente_movimento_Controller.GetAll(PageParameters)">
+            <summary>
+            Gets a paged list of all movimentos.
+            </summary>
+            <param name="pageParameters">The pagination and sorting parameters.</param>
+            <remarks>
+            Retrieves a paged collection of <see cref="T:src.Models.Cliente_Movimento"/> resources.
+            Logs the read operation including the requested page number and page size.
+            </remarks>
+            <response code="200">Paged movimentos returned successfully.</response>
+            <response code="404">No movimentos found.</response>
+        </member>
+        <member name="M:src.Controllers.Cliente_movimento_Controller.GetintervaloDatePaged(PageParameters,System.DateTime,System.DateTime)">
+            <summary>
+            Gets a paged list of movimentos within a specified date interval.
+            </summary>
+            <param name="pageParameters">The pagination and sorting parameters.</param>
+            <param name="start">The start date of the intervalo (inclusive).</param>
+            <param name="end">The end date of the intervalo (inclusive).</param>
+            <remarks>
+            Returns a paged collection of <see cref="T:src.Models.Cliente_Movimento"/> filtered by the provided date range.
+            The start date must be less than or equal to the end date, otherwise a bad request is returned.
+            </remarks>
+            <response code="200">Paged movimentos returned successfully.</response>
+            <response code="400">The provided date range is invalid.</response>
+            <response code="404">No movimentos found for the specified date range.</response>
+        </member>
         <member name="M:src.Controllers.Cliente_movimento_Controller.GetById(System.Int32)">
             <summary>
             Gets a movimento by identifier.
@@ -50,6 +77,75 @@
             <response code="204">movimentos deleted successfully.</response>
             <response code="404">movimentos not found.</response>
         </member>
+        <member name="M:src.Controllers.Cliente_Tag_Controller.#ctor(src.Services.Cliente_Tag_Services,Microsoft.Extensions.Logging.ILogger{src.Controllers.Cliente_Tag_Controller})">
+            <summary>
+            Initializes a new instance of the <see cref="T:src.Controllers.Cliente_Tag_Controller"/> class.
+            </summary>
+            <param name="cliente_Tag_Services">The service layer for tag operations.</param>
+            <param name="logger">The logger instance for request logging.</param>
+            <remarks>
+            Injects the required dependencies for tag service operations and structured logging.
+            Assigns the service to the backing field <c>_Tag_Servicese</c> and logger to <c>_logger</c>.
+            </remarks>
+        </member>
+        <member name="M:src.Controllers.Cliente_Tag_Controller.GetAll(PageParameters)">
+            <summary>
+            Gets a paged list of all tags.
+            </summary>
+            <param name="pageParameters">The pagination and sorting parameters.</param>
+            <remarks>
+            Retrieves a paged collection of <see cref="T:src.Models.Cliente_Tag"/> resources according to the supplied pagination settings.
+            </remarks>
+            <response code="200">Paged tags returned successfully.</response>
+            <response code="404">No tags found.</response>
+        </member>
+        <member name="M:src.Controllers.Cliente_Tag_Controller.GetById(System.Int32)">
+            <summary>
+            Gets a tag by identifier.
+            </summary>
+            <param name="id">The unique identifier of the tag.</param>
+            <remarks>
+            Retrieves a <see cref="T:src.Models.Cliente_Tag"/> resource by its identifier.
+            Returns 404 if the tag does not exist.
+            </remarks>
+            <response code="200">Tag returned successfully.</response>
+            <response code="404">Tag not found.</response>
+        </member>
+        <member name="M:src.Controllers.Cliente_Tag_Controller.CreateTag(src.Dtos.Cliente_Tag_Dtos.CreateTag)">
+            <summary>
+            Creates a new tag.
+            </summary>
+            <param name="dto">The data used to create the new tag from the request body.</param>
+            <remarks>
+            Calls the service layer to create a new <see cref="T:src.Models.Cliente_Tag"/> resource and returns 201 Created with the created entity
+            and a location header pointing to the new resource's GetById endpoint.
+            </remarks>
+            <response code="201">Tag created successfully.</response>
+            <response code="400">Invalid request data.</response>
+        </member>
+        <member name="M:src.Controllers.Cliente_Tag_Controller.UpdateTag(System.Int32,src.Dtos.Cliente_Tag_Dtos.UpdateTag)">
+            <summary>
+            Updates an existing tag.
+            </summary>
+            <param name="id">The unique identifier of the tag to update.</param>
+            <param name="dto">The updated data for the tag from the request body.</param>
+            <remarks>
+            Calls the service layer to update the <see cref="T:src.Models.Cliente_Tag"/> resource and returns the updated entity on success,
+            or 404 if the resource is not found.
+            </remarks>
+            <response code="200">Tag updated successfully.</response>
+            <response code="404">Tag not found.</response>
+            <response code="400">Invalid request.</response>
+        </member>
+        <member name="M:src.Controllers.Cliente_Tag_Controller.Delete(System.Int32)">
+            <summary>
+            Deletes a tag by identifier.
+            </summary>
+            <param name="id">The unique identifier of the tag to delete.</param>
+            <response code="204">Tag deleted successfully.</response>
+            <response code="404">Tag not found.</response>
+            <response code="400">Invalid request.</response>
+        </member>
         <member name="T:src.Migrations.InitialCreate">
             <inheritdoc />
         </member>
@@ -87,6 +183,79 @@
             <param name="pageParameters">Pagination parameters (page number and page size).</param>
             <returns>A paged list containing the requested page of clientes movimentos.</returns>
             <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.GetById(System.Int32)">
+            <summary>
+            Gets a movimento by identifier.
+            </summary>
+            <param name="id">The unique identifier of the movimento.</param>
+            <remarks>
+            Retrieves a <see cref="T:src.Models.Cliente_Movimento"/> from the data source using its identifier.
+            Logs the lookup operation and returns null if no matching record is found.
+            </remarks>
+        </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.GetByRID(System.String)">
+            <summary>
+            Gets a movimento by movement RID.
+            </summary>
+            <param name="RID">The unique movement RID associated with the movimento.</param>
+            <remarks>
+            Retrieves a <see cref="T:src.Models.Cliente_Movimento"/> whose MovementRID matches the provided value.
+            Logs the lookup operation and returns null if no matching record is found.
+            </remarks>
+        </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.GetByCliente(System.String)">
+            <summary>
+            Gets a movimento by client identifier.
+            </summary>
+            <param name="cliente">The client identifier associated with the movimento.</param>
+            <remarks>
+            Retrieves a <see cref="T:src.Models.Cliente_Movimento"/> whose Cliente field matches the provided value.
+            Logs the lookup operation and returns null if no matching record is found.
+            </remarks>
+        </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.GetByIntervaloDate(System.DateTime,System.DateTime,PageParameters)">
+            <summary>
+            Gets a paged list of movimentos within a specified date interval.
+            </summary>
+            <param name="start">The start date of the interval (inclusive).</param>
+            <param name="end">The end date of the interval (inclusive).</param>
+            <param name="pageParameters">The pagination parameters to apply to the result set.</param>
+            <remarks>
+            Builds a query over <see cref="T:src.Models.Cliente_Movimento"/> filtered by the provided date range and ordered by identifier,
+            then materializes it as a paged list according to the supplied pagination settings.
+            </remarks>
+        </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.CreateMovimento(src.Dtos.Cliente_Movimento_Dtos.Create)">
+            <summary>
+            Creates a new movimento from the provided data transfer object.
+            </summary>
+            <param name="dto">The data used to construct the new movimento.</param>
+            <remarks>
+            Maps the incoming <c>Create</c> DTO to a new <see cref="T:src.Models.Cliente_Movimento"/>, sets the current UTC timestamp,
+            persists it to the data store, and returns the created entity.
+            </remarks>
+        </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.Update(System.Int32,src.Dtos.Cliente_Movimento_Dtos.Update)">
+            <summary>
+            Updates an existing movimento by identifier.
+            </summary>
+            <param name="id">The unique identifier of the movimento to update.</param>
+            <param name="dto">The updated data for the movimento.</param>
+            <remarks>
+            Locates the <see cref="T:src.Models.Cliente_Movimento"/> by identifier, applies the updates from the <c>Update</c> DTO,
+            refreshes the timestamp to current UTC time, persists the changes, and returns the updated entity or null if not found.
+            </remarks>
+        </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.Delete(System.Int32)">
+            <summary>
+            Deletes a movimento by identifier.
+            </summary>
+            <param name="id">The unique identifier of the movimento to delete.</param>
+            <remarks>
+            Locates the <see cref="T:src.Models.Cliente_Movimento"/> by identifier, removes it from the data store if found,
+            and returns true on successful deletion or false if the record does not exist.
+            </remarks>
         </member>
         <member name="F:src.Services.Cliente_Tag_Services._context">
             <summary>

@@ -11,7 +11,7 @@ namespace src.Controllers
     [ApiController]
     public class Cliente_movimento_Controller : ControllerBase
     {
-        private readonly Cliente_Movimento_Services   _cliente_Movimento_Service;
+        private readonly Cliente_Movimento_Services _cliente_Movimento_Service;
         private readonly ILogger<Cliente_movimento_Controller> _logger;
 
         public Cliente_movimento_Controller(Cliente_Movimento_Services cliente_movimento_services, ILogger<Cliente_movimento_Controller> logger)
@@ -19,6 +19,17 @@ namespace src.Controllers
             _cliente_Movimento_Service = cliente_movimento_services;
             _logger = logger;
         }
+
+        /// <summary>
+        /// Gets a paged list of all movimentos.
+        /// </summary>
+        /// <param name="pageParameters">The pagination and sorting parameters.</param>
+        /// <remarks>
+        /// Retrieves a paged collection of <see cref="Cliente_Movimento"/> resources.
+        /// Logs the read operation including the requested page number and page size.
+        /// </remarks>
+        /// <response code="200">Paged movimentos returned successfully.</response>
+        /// <response code="404">No movimentos found.</response>
 
         [HttpGet]
         [ProducesResponseType(typeof(PagedList<Cliente_Movimento>), StatusCodes.Status200OK)]
@@ -35,6 +46,34 @@ namespace src.Controllers
             var paged = await _cliente_Movimento_Service.GetAllPaged(pageParameters);
             return Ok(paged);
 
+        }
+
+
+
+        /// <summary>
+        /// Gets a paged list of movimentos within a specified date interval.
+        /// </summary>
+        /// <param name="pageParameters">The pagination and sorting parameters.</param>
+        /// <param name="start">The start date of the intervalo (inclusive).</param>
+        /// <param name="end">The end date of the intervalo (inclusive).</param>
+        /// <remarks>
+        /// Returns a paged collection of <see cref="Cliente_Movimento"/> filtered by the provided date range.
+        /// The start date must be less than or equal to the end date, otherwise a bad request is returned.
+        /// </remarks>
+        /// <response code="200">Paged movimentos returned successfully.</response>
+        /// <response code="400">The provided date range is invalid.</response>
+        /// <response code="404">No movimentos found for the specified date range.</response>
+        [HttpGet("Por-Data")]
+        [ProducesResponseType(typeof(PagedList<Cliente_Movimento>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<PagedList<Cliente_Movimento>>> GetintervaloDatePaged([FromQuery] PageParameters pageParameters, [FromQuery] DateTime start, [FromQuery] DateTime end)
+        {
+            if (start > end)
+            {
+                return BadRequest("'start' must be less than or equal to 'end'.");
+            }
+            var paged = await _cliente_Movimento_Service.GetByIntervaloDate(start, end, pageParameters);
+            return Ok(paged);
         }
 
 

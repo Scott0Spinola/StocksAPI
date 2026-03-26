@@ -69,11 +69,19 @@ public class Cliente_Movimento_Services
         }
     }
 
-
+    /// <summary>
+    /// Gets a movimento by identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the movimento.</param>
+    /// <remarks>
+    /// Retrieves a <see cref="Cliente_Movimento"/> from the data source using its identifier.
+    /// Logs the lookup operation and returns null if no matching record is found.
+    /// </remarks>
     public Cliente_Movimento? GetById(int id)
     {
         try
         {
+            _logger.LogInformation($"Finding id => {id}.");
             return _context.Cliente_Movimentos.AsNoTracking().FirstOrDefault(i => i.Id == id);
         }
         catch (System.Exception)
@@ -83,6 +91,89 @@ public class Cliente_Movimento_Services
         }
     }
 
+
+
+    /// <summary>
+    /// Gets a movimento by movement RID.
+    /// </summary>
+    /// <param name="RID">The unique movement RID associated with the movimento.</param>
+    /// <remarks>
+    /// Retrieves a <see cref="Cliente_Movimento"/> whose MovementRID matches the provided value.
+    /// Logs the lookup operation and returns null if no matching record is found.
+    /// </remarks>
+    public Cliente_Movimento? GetByRID(string RID)
+    {
+        try
+        {
+            _logger.LogInformation($"Finding MovementRID => {RID}.");
+            return _context.Cliente_Movimentos.FirstOrDefault(r => r.MovementRID == RID);
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+    }
+
+
+
+    /// <summary>
+    /// Gets a movimento by client identifier.
+    /// </summary>
+    /// <param name="cliente">The client identifier associated with the movimento.</param>
+    /// <remarks>
+    /// Retrieves a <see cref="Cliente_Movimento"/> whose Cliente field matches the provided value.
+    /// Logs the lookup operation and returns null if no matching record is found.
+    /// </remarks>
+    public Cliente_Movimento? GetByCliente(string cliente)
+    {
+        try
+        {
+            _logger.LogInformation($"Finding cliente => {cliente}.");
+            return _context.Cliente_Movimentos.FirstOrDefault(c => c.Cliente == cliente);
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Gets a paged list of movimentos within a specified date interval.
+    /// </summary>
+    /// <param name="start">The start date of the interval (inclusive).</param>
+    /// <param name="end">The end date of the interval (inclusive).</param>
+    /// <param name="pageParameters">The pagination parameters to apply to the result set.</param>
+    /// <remarks>
+    /// Builds a query over <see cref="Cliente_Movimento"/> filtered by the provided date range and ordered by identifier,
+    /// then materializes it as a paged list according to the supplied pagination settings.
+    /// </remarks>
+    public async Task<PagedList<Cliente_Movimento>> GetByIntervaloDate(DateTime start, DateTime end, PageParameters pageParameters)
+    {
+        try
+        {
+            var query = _context.Cliente_Movimentos
+                .AsNoTracking()
+                .Where(d => d.Datetime >= start && d.Datetime <= end)
+                .OrderBy(i => i.Id)
+                .AsQueryable();
+            return await PagedList<Cliente_Movimento>.CreateAsync(query, pageParameters.PageNumber, pageParameters.PageSize);
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+    }
+    /// <summary>
+    /// Creates a new movimento from the provided data transfer object.
+    /// </summary>
+    /// <param name="dto">The data used to construct the new movimento.</param>
+    /// <remarks>
+    /// Maps the incoming <c>Create</c> DTO to a new <see cref="Cliente_Movimento"/>, sets the current UTC timestamp,
+    /// persists it to the data store, and returns the created entity.
+    /// </remarks>
     public async Task<Cliente_Movimento> CreateMovimento(Create dto)
     {
         try
@@ -110,6 +201,17 @@ public class Cliente_Movimento_Services
         }
     }
 
+
+
+    /// <summary>
+    /// Updates an existing movimento by identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the movimento to update.</param>
+    /// <param name="dto">The updated data for the movimento.</param>
+    /// <remarks>
+    /// Locates the <see cref="Cliente_Movimento"/> by identifier, applies the updates from the <c>Update</c> DTO,
+    /// refreshes the timestamp to current UTC time, persists the changes, and returns the updated entity or null if not found.
+    /// </remarks>
     public async Task<Cliente_Movimento?> Update(int id, Update dto)
     {
         try
@@ -138,6 +240,15 @@ public class Cliente_Movimento_Services
         }
 
     }
+
+    /// <summary>
+    /// Deletes a movimento by identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the movimento to delete.</param>
+    /// <remarks>
+    /// Locates the <see cref="Cliente_Movimento"/> by identifier, removes it from the data store if found,
+    /// and returns true on successful deletion or false if the record does not exist.
+    /// </remarks>
     public bool Delete(int id)
     {
         try
