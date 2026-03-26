@@ -356,3 +356,4 @@ LIMIT @p1 OFFSET @p
 2026-03-26 11:55:48.720 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetAll (src) in 394.208ms
 2026-03-26 11:55:48.721 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
 2026-03-26 11:55:48.725 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 446.9522ms
+2026-03-26 12:10:20.117 +00:00 [INF] Application is shutting down...
