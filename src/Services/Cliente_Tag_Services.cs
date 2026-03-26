@@ -79,7 +79,7 @@ public class Cliente_Tag_Services
     }
 
 
-    
+
     /// <summary>
     /// Retrieves a <see cref="Cliente_Tag"/> entity by its unique identifier.
     /// </summary>
@@ -98,6 +98,120 @@ public class Cliente_Tag_Services
         }
     }
 
+    /// <summary>
+    /// Gets a tag by unit identifier.
+    /// </summary>
+    /// <param name="unidade">The unit identifier associated with the tag.</param>
+    /// <remarks>
+    /// Retrieves a <see cref="Cliente_Tag"/> whose Unidade field matches the provided value using no-tracking query.
+    /// Returns null if no matching record is found.
+    /// </remarks>
+
+    public Cliente_Tag? GetByUnidade(string unidade)
+    {
+        try
+        {
+            return _context.Cliente_Tags.AsNoTracking().FirstOrDefault(u => u.Unidade == unidade);
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+    }
+
+
+    /// <summary>
+    /// Gets a tag by location identifier.
+    /// </summary>
+    /// <param name="Localizacao">The location identifier associated with the tag.</param>
+    /// <remarks>
+    /// Retrieves a <see cref="Cliente_Tag"/> whose Localizacao field matches the provided value using no-tracking query.
+    /// Returns null if no matching record is found.
+    /// </remarks>
+    public Cliente_Tag? GetByLocalizacao(string Localizacao)
+    {
+        try
+        {
+            return _context.Cliente_Tags.AsNoTracking().FirstOrDefault(l => l.Localizacao == Localizacao);
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+    }
+
+
+
+    /// <summary>
+    /// Gets a tag by product identifier.
+    /// </summary>
+    /// <param name="Produto">The product identifier associated with the tag.</param>
+    /// <remarks>
+    /// Retrieves a <see cref="Cliente_Tag"/> whose Produto field matches the provided value using no-tracking query.
+    /// Returns null if no matching record is found.
+    /// </remarks>
+
+    public Cliente_Tag? GetByProduto(string Produto)
+    {
+        try
+        {
+            return _context.Cliente_Tags.AsNoTracking().FirstOrDefault(p => p.Produto == Produto);
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+    }
+
+
+    /// <summary>
+    /// Gets a tag by EPC identifier.
+    /// </summary>
+    /// <param name="EPC">The Electronic Product Code (EPC) uniquely identifying the RFID tag.</param>
+    /// <remarks>
+    /// Retrieves a <see cref="Cliente_Tag"/> whose EPC field matches the provided value using no-tracking query.
+    /// Returns null if no matching record is found.
+    /// </remarks>
+
+    public Cliente_Tag? GetByEPC(string EPC)
+    {
+        try
+        {
+            return _context.Cliente_Tags.AsNoTracking().FirstOrDefault(e => e.EPC == EPC);
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+    }
+
+
+
+    /// <summary>
+    /// Gets a tag by status identifier.
+    /// </summary>
+    /// <param name="Estado">The status identifier associated with the tag.</param>
+    /// <remarks>
+    /// Retrieves a <see cref="Cliente_Tag"/> whose Estado field matches the provided value using no-tracking query.
+    /// Returns null if no matching record is found.
+    /// </remarks>
+
+    public Cliente_Tag? GetByEstado(string Estado)
+    {
+        try
+        {
+            return _context.Cliente_Tags.AsNoTracking().FirstOrDefault(e => e.Estado == Estado);
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+    }
     /// <summary>
     /// Creates a new <see cref="Cliente_Tag"/> entity in the database.
     /// </summary>
@@ -142,7 +256,7 @@ public class Cliente_Tag_Services
         try
         {
             var tag = _context.Cliente_Tags.FirstOrDefault(i => i.Id == id);
-            if(tag is null)
+            if (tag is null)
             {
                 return null;
             }
@@ -158,12 +272,12 @@ public class Cliente_Tag_Services
             _logger.LogInformation($"Tag Updated with id => {id} and changed => {tag}");
             return tag;
         }
-        catch(System.Exception)
+        catch (System.Exception)
         {
             throw;
         }
     }
-    
+
     /// <summary>
     /// Deletes a <see cref="Cliente_Tag"/> entity by its unique identifier.
     /// </summary>
@@ -175,7 +289,7 @@ public class Cliente_Tag_Services
         try
         {
             var tag = _context.Cliente_Tags.FirstOrDefault(i => i.Id == id);
-            if( tag is null)
+            if (tag is null)
             {
                 return false;
             }
