@@ -50,7 +50,7 @@ namespace src.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Cliente_Tag), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Cliente_Tag>> CreateTag([FromBody] Create dto)
+        public async Task<ActionResult<Cliente_Tag>> CreateTag([FromBody] CreateTag dto)
         {
             var created = await _Tag_Servicese.CreateTag(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
@@ -61,7 +61,7 @@ namespace src.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<Cliente_Tag>> UpdateTag(int id, [FromBody] Update dto)
+        public async Task<ActionResult<Cliente_Tag>> UpdateTag(int id, [FromBody] UpdateTag dto)
         {
             var u = await _Tag_Servicese.Update(id, dto);
 
@@ -86,7 +86,6 @@ namespace src.Controllers
             {
                 return NotFound($"No Tag exists with the provided ID: {id}.");
             }
-            _logger.LogInformation($"Movimento with id => {id} was deleted.");
             return NoContent();
         }
     }

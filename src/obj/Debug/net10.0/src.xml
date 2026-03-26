@@ -128,7 +128,7 @@
             <returns>The <see cref="T:src.Models.Cliente_Tag"/> entity if found; otherwise, null.</returns>
             <exception cref="T:System.Exception">Rethrows any exception encountered during database access.</exception>
         </member>
-        <member name="M:src.Services.Cliente_Tag_Services.CreateTag(src.Dtos.Cliente_Tag_Dtos.Create)">
+        <member name="M:src.Services.Cliente_Tag_Services.CreateTag(src.Dtos.Cliente_Tag_Dtos.CreateTag)">
             <summary>
             Creates a new <see cref="T:src.Models.Cliente_Tag"/> entity in the database.
             </summary>
@@ -136,7 +136,7 @@
             <returns>The created <see cref="T:src.Models.Cliente_Tag"/> entity.</returns>
             <exception cref="T:System.Exception">Rethrows any exception encountered during creation.</exception>
         </member>
-        <member name="M:src.Services.Cliente_Tag_Services.Update(System.Int32,src.Dtos.Cliente_Tag_Dtos.Update)">
+        <member name="M:src.Services.Cliente_Tag_Services.Update(System.Int32,src.Dtos.Cliente_Tag_Dtos.UpdateTag)">
             <summary>
             Updates an existing <see cref="T:src.Models.Cliente_Tag"/> entity with new data.
             </summary>

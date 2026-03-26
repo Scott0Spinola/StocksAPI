@@ -104,7 +104,7 @@ public class Cliente_Tag_Services
     /// <param name="dto">The data transfer object containing tag creation data.</param>
     /// <returns>The created <see cref="Cliente_Tag"/> entity.</returns>
     /// <exception cref="Exception">Rethrows any exception encountered during creation.</exception>
-    public async Task<Cliente_Tag> CreateTag(Create dto)
+    public async Task<Cliente_Tag> CreateTag(CreateTag dto)
     {
         try
         {
@@ -137,7 +137,7 @@ public class Cliente_Tag_Services
     /// <param name="dto">The data transfer object containing updated tag data.</param>
     /// <returns>The updated <see cref="Cliente_Tag"/> entity if found; otherwise, null.</returns>
     /// <exception cref="Exception">Rethrows any exception encountered during update.</exception>
-    public async Task<Cliente_Tag?> Update(int id, Update dto)
+    public async Task<Cliente_Tag?> Update(int id, UpdateTag dto)
     {
         try
         {

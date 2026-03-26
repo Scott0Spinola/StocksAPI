@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace src.Dtos.Cliente_Tag_Dtos;
 
-public record  Create(
+public record  CreateTag(
     [Required]
     [MaxLength (50)]
     string Unidade,

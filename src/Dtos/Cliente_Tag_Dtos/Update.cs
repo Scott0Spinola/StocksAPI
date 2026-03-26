@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace src.Dtos.Cliente_Tag_Dtos;
 
-public record Update
+public record UpdateTag
 (
     [Required]
     [MaxLength (50)]

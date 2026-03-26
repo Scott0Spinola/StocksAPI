@@ -1,5 +1,6 @@
 using src.Data;
 using src.Services;
+using src.Auth;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -30,10 +31,25 @@ builder.Services.AddDbContext<StocksContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<Cliente_Movimento_Services>();
+builder.Services.AddScoped<Cliente_Tag_Services>();
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services
+    .AddAuthentication(ApiKeyAuthenticationHandler.SchemeName)
+    .AddScheme<Microsoft.AspNetCore.Authentication.AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(
+        ApiKeyAuthenticationHandler.SchemeName,
+        _ => { });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        .AddAuthenticationSchemes(ApiKeyAuthenticationHandler.SchemeName)
+        .RequireAuthenticatedUser()
+        .Build();
+});
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -44,7 +60,24 @@ builder.Services.AddSwaggerGen(options =>
     {
         options.IncludeXmlComments(xmlPath);
     }
+      options.AddSecurityDefinition(ApiKeyAuthenticationHandler.SchemeName, new OpenApiSecurityScheme
+    {
+        Description = $"API Key via header {ApiKeyAuthenticationHandler.HeaderName}",
+        Type = SecuritySchemeType.ApiKey,
+        Name = ApiKeyAuthenticationHandler.HeaderName,
+        In = ParameterLocation.Header
+    });
 
+    options.AddSecurityRequirement(hostDocument => new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecuritySchemeReference(
+                ApiKeyAuthenticationHandler.SchemeName,
+                hostDocument,
+                externalResource: null),
+            new List<string>()
+        }
+    });
 });
 
 
@@ -81,6 +114,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapControllers();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers().RequireAuthorization();
+
 app.Run();
 
