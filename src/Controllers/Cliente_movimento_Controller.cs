@@ -11,7 +11,7 @@ namespace src.Controllers
     [ApiController]
     public class Cliente_movimento_Controller : ControllerBase
     {
-        private readonly Cliente_Movimento_Services _cliente_Movimento_Service;
+        private readonly Cliente_Movimento_Services   _cliente_Movimento_Service;
         private readonly ILogger<Cliente_movimento_Controller> _logger;
 
         public Cliente_movimento_Controller(Cliente_Movimento_Services cliente_movimento_services, ILogger<Cliente_movimento_Controller> logger)
@@ -49,7 +49,7 @@ namespace src.Controllers
         /// <response code="200">Movimento returned successfully.</response>
         /// <response code="404">Movimento not found.</response>
         [HttpGet("{id:int}")]
-        [ProducesResponseType(typeof(PagedList<Cliente_Movimento>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Cliente_Movimento), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
         public ActionResult<Cliente_Movimento> GetById(int id)
@@ -140,7 +140,6 @@ namespace src.Controllers
                 var DeleteMovimneto = _cliente_Movimento_Service.Delete(id);
                 if (!DeleteMovimneto)
                 {
-                    _logger.LogInformation($"Movimento was not found with this id => {id}.");
                     return NotFound($"No Movimento exists with the provided ID: {id}.");
                 }
                 _logger.LogInformation($"Movimento with id => {id} was deleted.");

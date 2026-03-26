@@ -5,13 +5,21 @@ using src.Dtos;
 
 using Microsoft.EntityFrameworkCore;
 using IntervencoesAPI.Services;
+using src.Dtos.Cliente_Tag_Dtos;
 
 namespace src.Services;
 
 public class Cliente_Tag_Services
 {
+
+    /// <summary>
+    /// EF Core database context used to access <see cref="Cliente_Tag"/> entities.
+    /// </summary>
     private readonly StocksContext _context;
 
+    /// <summary>
+    /// Logger used to record failures and operational errors.
+    /// </summary>
     private readonly ILogger<Cliente_Tag_Services> _logger;
 
     /// <summary>
@@ -26,6 +34,12 @@ public class Cliente_Tag_Services
     }
 
 
+
+    /// <summary>
+    /// Retrieves all <see cref="Cliente_Tag"/> records from the database, ordered by Id.
+    /// </summary>
+    /// <returns>A list of all <see cref="Cliente_Tag"/> entities.</returns>
+    /// <exception cref="Exception">Rethrows any exception encountered during database access.</exception>
     public List<Cliente_Tag> GetAll()
     {
         try
@@ -34,23 +48,27 @@ public class Cliente_Tag_Services
         }
         catch (System.Exception)
         {
-            
             throw;
         }
     }
 
 
     /// <summary>
-    /// Gets a paginated list of Tags.
+    /// Gets a paginated list of <see cref="Cliente_Tag"/> entities.
     /// </summary>
     /// <param name="pageParameters">Pagination parameters (page number and page size).</param>
-    /// <returns>A paged list containing the requested page of clientes movimentos.</returns>
+    /// <returns>A paged list containing the requested page of <see cref="Cliente_Tag"/> entities.</returns>
     /// <exception cref="Exception">Rethrows any exception after logging.</exception>
     public async Task<PagedList<Cliente_Tag>> GetAllPaged(PageParameters pageParameters)
     {
         try
         {
             var query = _context.Cliente_Tags.AsNoTracking().OrderBy(i => i.Id).AsQueryable();
+            _logger.LogInformation("CRUD {CrudOperation} {Resource} pageNumber={PageNumber} pageSize={PageSize}",
+                "Read",
+                "Cliente_Tag",
+                pageParameters.PageNumber,
+                pageParameters.PageSize);
             return await PagedList<Cliente_Tag>.CreateAsync(query, pageParameters.PageNumber, pageParameters.PageSize);
         }
         catch (Exception ex)
@@ -62,6 +80,12 @@ public class Cliente_Tag_Services
 
 
     
+    /// <summary>
+    /// Retrieves a <see cref="Cliente_Tag"/> entity by its unique identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the tag.</param>
+    /// <returns>The <see cref="Cliente_Tag"/> entity if found; otherwise, null.</returns>
+    /// <exception cref="Exception">Rethrows any exception encountered during database access.</exception>
     public Cliente_Tag? GetById(int id)
     {
         try
@@ -70,10 +94,99 @@ public class Cliente_Tag_Services
         }
         catch (System.Exception)
         {
-
             throw;
         }
     }
 
+    /// <summary>
+    /// Creates a new <see cref="Cliente_Tag"/> entity in the database.
+    /// </summary>
+    /// <param name="dto">The data transfer object containing tag creation data.</param>
+    /// <returns>The created <see cref="Cliente_Tag"/> entity.</returns>
+    /// <exception cref="Exception">Rethrows any exception encountered during creation.</exception>
+    public async Task<Cliente_Tag> CreateTag(Create dto)
+    {
+        try
+        {
+            var tag = new Cliente_Tag
+            {
+                Unidade = dto.Unidade,
+                Localizacao = dto.Localizacao,
+                Produto = dto.Produto,
+                EPC = dto.EPC,
+                Estado = dto.Estado,
+                Data_Ultimo_Movimento = DateTime.UtcNow,
+                Ultima_Localizacao = dto.Ultima_Localizacao,
+                Ultima_Unidade = dto.Ultima_Unidade
+            };
+            _context.Cliente_Tags.Add(tag);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"Created a new tag => {tag}");
+            return tag;
+        }
+        catch (System.Exception)
+        {
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Updates an existing <see cref="Cliente_Tag"/> entity with new data.
+    /// </summary>
+    /// <param name="id">The unique identifier of the tag to update.</param>
+    /// <param name="dto">The data transfer object containing updated tag data.</param>
+    /// <returns>The updated <see cref="Cliente_Tag"/> entity if found; otherwise, null.</returns>
+    /// <exception cref="Exception">Rethrows any exception encountered during update.</exception>
+    public async Task<Cliente_Tag?> Update(int id, Update dto)
+    {
+        try
+        {
+            var tag = _context.Cliente_Tags.FirstOrDefault(i => i.Id == id);
+            if(tag is null)
+            {
+                return null;
+            }
+            tag.Unidade = dto.Unidade;
+            tag.Localizacao = dto.Localizacao;
+            tag.Produto = dto.Produto;
+            tag.EPC = dto.Produto;
+            tag.Estado = dto.Estado;
+            tag.Ultima_Localizacao = dto.Ultima_Localizacao;
+            tag.Ultima_Unidade = dto.Ultima_Unidade;
+
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"Tag Updated with id => {id} and changed => {tag}");
+            return tag;
+        }
+        catch(System.Exception)
+        {
+            throw;
+        }
+    }
     
+    /// <summary>
+    /// Deletes a <see cref="Cliente_Tag"/> entity by its unique identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the tag to delete.</param>
+    /// <returns>True if the tag was deleted; otherwise, false.</returns>
+    /// <exception cref="Exception">Rethrows any exception encountered during deletion.</exception>
+    public bool Delete(int id)
+    {
+        try
+        {
+            var tag = _context.Cliente_Tags.FirstOrDefault(i => i.Id == id);
+            if( tag is null)
+            {
+                return false;
+            }
+            _context.Cliente_Tags.Remove(tag);
+            _context.SaveChanges();
+            _logger.LogInformation($"tag with id => {id} was deleted!!");
+            return true;
+        }
+        catch (System.Exception)
+        {
+            throw;
+        }
+    }
 }

@@ -88,6 +88,16 @@
             <returns>A paged list containing the requested page of clientes movimentos.</returns>
             <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
         </member>
+        <member name="F:src.Services.Cliente_Tag_Services._context">
+            <summary>
+            EF Core database context used to access <see cref="T:src.Models.Cliente_Tag"/> entities.
+            </summary>
+        </member>
+        <member name="F:src.Services.Cliente_Tag_Services._logger">
+            <summary>
+            Logger used to record failures and operational errors.
+            </summary>
+        </member>
         <member name="M:src.Services.Cliente_Tag_Services.#ctor(src.Data.StocksContext,Microsoft.Extensions.Logging.ILogger{src.Services.Cliente_Tag_Services})">
             <summary>
             Initializes a new instance of <see cref="T:src.Services.Cliente_Tag_Services"/>.
@@ -95,13 +105,53 @@
             <param name="context">EF Core database context used to access <see cref="T:src.Models.Cliente_Movimento"/> entities.</param>
             <param name="logger">Logger used to record failures and operational errors.</param>
         </member>
+        <member name="M:src.Services.Cliente_Tag_Services.GetAll">
+            <summary>
+            Retrieves all <see cref="T:src.Models.Cliente_Tag"/> records from the database, ordered by Id.
+            </summary>
+            <returns>A list of all <see cref="T:src.Models.Cliente_Tag"/> entities.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception encountered during database access.</exception>
+        </member>
         <member name="M:src.Services.Cliente_Tag_Services.GetAllPaged(PageParameters)">
             <summary>
-            Gets a paginated list of Tags.
+            Gets a paginated list of <see cref="T:src.Models.Cliente_Tag"/> entities.
             </summary>
             <param name="pageParameters">Pagination parameters (page number and page size).</param>
-            <returns>A paged list containing the requested page of clientes movimentos.</returns>
+            <returns>A paged list containing the requested page of <see cref="T:src.Models.Cliente_Tag"/> entities.</returns>
             <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.Cliente_Tag_Services.GetById(System.Int32)">
+            <summary>
+            Retrieves a <see cref="T:src.Models.Cliente_Tag"/> entity by its unique identifier.
+            </summary>
+            <param name="id">The unique identifier of the tag.</param>
+            <returns>The <see cref="T:src.Models.Cliente_Tag"/> entity if found; otherwise, null.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception encountered during database access.</exception>
+        </member>
+        <member name="M:src.Services.Cliente_Tag_Services.CreateTag(src.Dtos.Cliente_Tag_Dtos.Create)">
+            <summary>
+            Creates a new <see cref="T:src.Models.Cliente_Tag"/> entity in the database.
+            </summary>
+            <param name="dto">The data transfer object containing tag creation data.</param>
+            <returns>The created <see cref="T:src.Models.Cliente_Tag"/> entity.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception encountered during creation.</exception>
+        </member>
+        <member name="M:src.Services.Cliente_Tag_Services.Update(System.Int32,src.Dtos.Cliente_Tag_Dtos.Update)">
+            <summary>
+            Updates an existing <see cref="T:src.Models.Cliente_Tag"/> entity with new data.
+            </summary>
+            <param name="id">The unique identifier of the tag to update.</param>
+            <param name="dto">The data transfer object containing updated tag data.</param>
+            <returns>The updated <see cref="T:src.Models.Cliente_Tag"/> entity if found; otherwise, null.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception encountered during update.</exception>
+        </member>
+        <member name="M:src.Services.Cliente_Tag_Services.Delete(System.Int32)">
+            <summary>
+            Deletes a <see cref="T:src.Models.Cliente_Tag"/> entity by its unique identifier.
+            </summary>
+            <param name="id">The unique identifier of the tag to delete.</param>
+            <returns>True if the tag was deleted; otherwise, false.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception encountered during deletion.</exception>
         </member>
         <member name="T:PageParameters">
             <summary>
