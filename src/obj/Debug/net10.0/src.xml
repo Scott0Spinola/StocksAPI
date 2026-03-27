@@ -297,6 +297,56 @@
             <returns>The <see cref="T:src.Models.Cliente_Tag"/> entity if found; otherwise, null.</returns>
             <exception cref="T:System.Exception">Rethrows any exception encountered during database access.</exception>
         </member>
+        <member name="M:src.Services.Cliente_Tag_Services.GetByUnidade(System.String)">
+            <summary>
+            Gets a tag by unit identifier.
+            </summary>
+            <param name="unidade">The unit identifier associated with the tag.</param>
+            <remarks>
+            Retrieves a <see cref="T:src.Models.Cliente_Tag"/> whose Unidade field matches the provided value using no-tracking query.
+            Returns null if no matching record is found.
+            </remarks>
+        </member>
+        <member name="M:src.Services.Cliente_Tag_Services.GetByLocalizacao(System.String)">
+            <summary>
+            Gets a tag by location identifier.
+            </summary>
+            <param name="Localizacao">The location identifier associated with the tag.</param>
+            <remarks>
+            Retrieves a <see cref="T:src.Models.Cliente_Tag"/> whose Localizacao field matches the provided value using no-tracking query.
+            Returns null if no matching record is found.
+            </remarks>
+        </member>
+        <member name="M:src.Services.Cliente_Tag_Services.GetByProduto(System.String)">
+            <summary>
+            Gets a tag by product identifier.
+            </summary>
+            <param name="Produto">The product identifier associated with the tag.</param>
+            <remarks>
+            Retrieves a <see cref="T:src.Models.Cliente_Tag"/> whose Produto field matches the provided value using no-tracking query.
+            Returns null if no matching record is found.
+            </remarks>
+        </member>
+        <member name="M:src.Services.Cliente_Tag_Services.GetByEPC(System.String)">
+            <summary>
+            Gets a tag by EPC identifier.
+            </summary>
+            <param name="EPC">The Electronic Product Code (EPC) uniquely identifying the RFID tag.</param>
+            <remarks>
+            Retrieves a <see cref="T:src.Models.Cliente_Tag"/> whose EPC field matches the provided value using no-tracking query.
+            Returns null if no matching record is found.
+            </remarks>
+        </member>
+        <member name="M:src.Services.Cliente_Tag_Services.GetByEstado(System.String)">
+            <summary>
+            Gets a tag by status identifier.
+            </summary>
+            <param name="Estado">The status identifier associated with the tag.</param>
+            <remarks>
+            Retrieves a <see cref="T:src.Models.Cliente_Tag"/> whose Estado field matches the provided value using no-tracking query.
+            Returns null if no matching record is found.
+            </remarks>
+        </member>
         <member name="M:src.Services.Cliente_Tag_Services.CreateTag(src.Dtos.Cliente_Tag_Dtos.CreateTag)">
             <summary>
             Creates a new <see cref="T:src.Models.Cliente_Tag"/> entity in the database.

@@ -1,0 +1,18 @@
+services:
+  src:
+    build:
+      context: .
+      dockerfile: .dockerfile
+    image: src:dev
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # Persist SQLite in a mounted volume
+      - ConnectionStrings__DefaultConnection=Data Source=/data/Stocks.db
+    volumes:
+      - src_data:/data
+      - ./Logs:/app/Logs
+
+volumes:
+  src_data:

@@ -63,7 +63,7 @@ namespace src.Controllers
         /// <response code="200">Tag returned successfully.</response>
         /// <response code="404">Tag not found.</response>
         [HttpGet("{id:int}")]
-        [ProducesResponseType(typeof(PagedList<Cliente_Movimento>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedList<Cliente_Tag>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Cliente_Tag> GetById(int id)
         {
@@ -75,6 +75,79 @@ namespace src.Controllers
             return t;
         }
 
+
+
+
+
+        [HttpGet("Unidade")]
+        [ProducesResponseType(typeof(PagedList<Cliente_Tag>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Cliente_Tag> GetByUnidade(string unidade)
+        {
+            var t = _Tag_Servicese.GetByUnidade(unidade);
+            if (t is null)
+            {
+                return NotFound($"No Tag exists with the provided Unidade: {unidade}. ");
+            }
+            return t;
+        }
+
+        [HttpGet("Localizacao")]
+        [ProducesResponseType(typeof(PagedList<Cliente_Tag>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Cliente_Tag> GetByLocalizacao(string localizacao)
+        {
+            var t = _Tag_Servicese.GetByLocalizacao(localizacao);
+            if (t is null)
+            {
+                return NotFound($"No Tag exists with the provided Localização: {localizacao}. ");
+            }
+            return t;
+        }
+
+
+
+        [HttpGet("Produto")]
+        [ProducesResponseType(typeof(PagedList<Cliente_Tag>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Cliente_Tag> GetByProduto(string produto)
+        {
+            var t = _Tag_Servicese.GetByProduto(produto);
+            if (t is null)
+            {
+                return NotFound($"No Tag exists with the provided Produto: {produto}. ");
+            }
+            return t;
+        }
+        
+
+        [HttpGet("EPC")]
+        [ProducesResponseType(typeof(PagedList<Cliente_Tag>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Cliente_Tag> GetByEPC(string epc)
+        {
+            var t = _Tag_Servicese.GetByEPC(epc);
+            if (t is null)
+            {
+                return NotFound($"No Tag exists with the provided EPC: {epc}. ");
+            }
+            return t;
+        }
+
+
+
+        [HttpGet("Estado")]
+        [ProducesResponseType(typeof(PagedList<Cliente_Tag>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Cliente_Tag> GetByEstado(string estado)
+        {
+            var t = _Tag_Servicese.GetByEstado(estado);
+            if (t is null)
+            {
+                return NotFound($"No Tag exists with the provided estado: {estado}. ");
+            }
+            return t;
+        }
 
         /// <summary>
         /// Creates a new tag.

@@ -104,6 +104,44 @@ namespace src.Controllers
 
         }
 
+
+        [HttpGet("RID")]
+        [ProducesResponseType(typeof(Cliente_Movimento), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public ActionResult<Cliente_Movimento> GetByRID(string rid)
+        {
+            
+            var c = _cliente_Movimento_Service.GetByRID(rid);
+            if (c is null)
+            {
+                return NotFound($"No Movimento exists with the provided RID: {rid}.");
+            }
+            return c;
+
+        }
+
+
+
+        
+        [HttpGet("Cliente")]
+        [ProducesResponseType(typeof(Cliente_Movimento), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public ActionResult<Cliente_Movimento> GetByCliente(string cliente)
+        {
+            
+            var c = _cliente_Movimento_Service.GetByCliente(cliente);
+            if (c is null)
+            {
+                return NotFound($"No Movimento exists with the provided Cliente: {cliente}.");
+            }
+            return c;
+
+        }
+
+        
+        
         /// <summary>
         /// Creates a new movimento.
         /// </summary>
