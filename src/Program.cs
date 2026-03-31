@@ -32,6 +32,9 @@ builder.Services.AddDbContext<StocksContext>(options =>
 
 builder.Services.AddScoped<Cliente_Movimento_Services>();
 builder.Services.AddScoped<Cliente_Tag_Services>();
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ErrorHandling>();
+
 
 builder.Services.AddControllers();
 
@@ -96,6 +99,10 @@ builder.Services.AddSwaggerGen(options =>
 
 
 var app = builder.Build();
+
+
+app.UseStatusCodePages();
+app.UseExceptionHandler();
 
 // Ensure SQLite schema exists (esp. in Docker volumes) during development
 if (app.Environment.IsDevelopment())

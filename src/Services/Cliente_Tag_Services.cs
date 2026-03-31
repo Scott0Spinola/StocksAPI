@@ -46,8 +46,9 @@ public class Cliente_Tag_Services
         {
             return _context.Cliente_Tags.AsNoTracking().OrderBy(i => i.Id).ToList();
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error in {Method}", nameof(GetAll));
             throw;
         }
     }
@@ -92,8 +93,9 @@ public class Cliente_Tag_Services
         {
             return _context.Cliente_Tags.AsNoTracking().FirstOrDefault(i => i.Id == id);
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error in {Method}", nameof(GetById));
             throw;
         }
     }
@@ -113,9 +115,9 @@ public class Cliente_Tag_Services
         {
             return _context.Cliente_Tags.AsNoTracking().FirstOrDefault(u => u.Unidade == unidade);
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-
+            _logger.LogError(ex, "Error in {Method}", nameof(GetByUnidade));
             throw;
         }
     }
@@ -135,9 +137,9 @@ public class Cliente_Tag_Services
         {
             return _context.Cliente_Tags.AsNoTracking().FirstOrDefault(l => l.Localizacao == Localizacao);
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-
+            _logger.LogError(ex, "Error in {Method}", nameof(GetByLocalizacao));
             throw;
         }
     }
@@ -159,9 +161,9 @@ public class Cliente_Tag_Services
         {
             return _context.Cliente_Tags.AsNoTracking().FirstOrDefault(p => p.Produto == Produto);
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-
+            _logger.LogError(ex, "Error in {Method}", nameof(GetByProduto));
             throw;
         }
     }
@@ -182,9 +184,9 @@ public class Cliente_Tag_Services
         {
             return _context.Cliente_Tags.AsNoTracking().FirstOrDefault(e => e.EPC == EPC);
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-
+            _logger.LogError(ex, "Error in {Method}", nameof(EPC));
             throw;
         }
     }
@@ -206,9 +208,9 @@ public class Cliente_Tag_Services
         {
             return _context.Cliente_Tags.AsNoTracking().FirstOrDefault(e => e.Estado == Estado);
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-
+            _logger.LogError(ex, "Error in {Method}", nameof(GetByEstado));
             throw;
         }
     }
@@ -238,8 +240,9 @@ public class Cliente_Tag_Services
             _logger.LogInformation($"Created a new tag => {tag}");
             return tag;
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error in {Method}", nameof(CreateTag));
             throw;
         }
     }
@@ -272,8 +275,9 @@ public class Cliente_Tag_Services
             _logger.LogInformation($"Tag Updated with id => {id} and changed => {tag}");
             return tag;
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error in {Method}", nameof(Update));
             throw;
         }
     }
@@ -298,8 +302,9 @@ public class Cliente_Tag_Services
             _logger.LogInformation($"tag with id => {id} was deleted!!");
             return true;
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error in {Method}", nameof(Delete));
             throw;
         }
     }

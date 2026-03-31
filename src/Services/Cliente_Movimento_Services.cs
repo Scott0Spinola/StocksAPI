@@ -82,11 +82,11 @@ public class Cliente_Movimento_Services
         try
         {
             _logger.LogInformation($"Finding id => {id}.");
-            return _context.Cliente_Movimentos.AsNoTracking().FirstOrDefault(i => i.Id == id);
+            return  _context.Cliente_Movimentos.AsNoTracking().FirstOrDefault(i => i.Id == id);
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-
+            _logger.LogError(ex, "Error in {Method}", nameof(GetById));
             throw;
         }
     }
@@ -108,9 +108,9 @@ public class Cliente_Movimento_Services
             _logger.LogInformation($"Finding MovementRID => {RID}.");
             return _context.Cliente_Movimentos.FirstOrDefault(r => r.MovementRID == RID);
         }
-        catch (System.Exception)
+        catch(Exception ex)
         {
-
+            _logger.LogError(ex, "Error in {Method}", nameof(GetByRID));
             throw;
         }
     }
@@ -132,9 +132,9 @@ public class Cliente_Movimento_Services
             _logger.LogInformation($"Finding cliente => {cliente}.");
             return _context.Cliente_Movimentos.FirstOrDefault(c => c.Cliente == cliente);
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-
+            _logger.LogError(ex, "Error in {Method}", nameof(GetByCliente));
             throw;
         }
     }
@@ -160,9 +160,9 @@ public class Cliente_Movimento_Services
                 .AsQueryable();
             return await PagedList<Cliente_Movimento>.CreateAsync(query, pageParameters.PageNumber, pageParameters.PageSize);
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-
+            _logger.LogError(ex, "Error in {Method}", nameof(GetByIntervaloDate));
             throw;
         }
     }
@@ -194,9 +194,9 @@ public class Cliente_Movimento_Services
             await _context.SaveChangesAsync();
             return clientemovimento;
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-
+            _logger.LogError(ex, "Error in {Method}", nameof(CreateMovimento));
             throw;
         }
     }
@@ -233,9 +233,9 @@ public class Cliente_Movimento_Services
             await _context.SaveChangesAsync();
             return c;
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-
+            _logger.LogError(ex, "Error in {Method}", nameof(Update));
             throw;
         }
 
