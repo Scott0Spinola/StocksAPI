@@ -28,7 +28,9 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 });
 
 builder.Services.AddDbContext<StocksContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
 builder.Services.AddScoped<Cliente_Movimento_Services>();
 builder.Services.AddScoped<Cliente_Tag_Services>();
@@ -85,19 +87,6 @@ builder.Services.AddSwaggerGen(options =>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 var app = builder.Build();
 
 
@@ -110,7 +99,24 @@ if (app.Configuration.GetValue<bool>("Database:ApplyMigrations"))
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<StocksContext>();
-    db.Database.Migrate();
+    var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("DatabaseMigration");
+
+    var maxAttempts = app.Configuration.GetValue<int?>("Database:MigrationMaxAttempts") ?? 10;
+    var delaySeconds = app.Configuration.GetValue<int?>("Database:MigrationDelaySeconds") ?? 3;
+
+    for (var attempt = 1; attempt <= maxAttempts; attempt++)
+    {
+        try
+        {
+            db.Database.Migrate();
+            break;
+        }
+        catch (Exception ex) when (attempt < maxAttempts)
+        {
+            logger.LogWarning(ex, "Database migration attempt {Attempt}/{MaxAttempts} failed. Retrying in {DelaySeconds}s...", attempt, maxAttempts, delaySeconds);
+            Thread.Sleep(TimeSpan.FromSeconds(delaySeconds));
+        }
+    }
 }
 
 

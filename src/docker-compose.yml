@@ -3,11 +3,29 @@ services:
     build:
       context: .
       dockerfile: .dockerfile
-    image: src:dev
+    image: movimentos:1.0
     ports:
       - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - Database__ApplyMigrations=true
+      - ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=StocksDb;User Id=sa;Password=${MSSQL_SA_PASSWORD:?set MSSQL_SA_PASSWORD in .env};Encrypt=False;TrustServerCertificate=True;
     volumes:
       - ./Logs:/app/Logs
+    depends_on:
+      - mssql
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: stocksapi-mssql
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:?set MSSQL_SA_PASSWORD in .env}
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+volumes:
+  mssql_data:
 
