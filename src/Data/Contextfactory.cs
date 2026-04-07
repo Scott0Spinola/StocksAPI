@@ -22,7 +22,12 @@ public sealed class Contextfactory : IDesignTimeDbContextFactory<StocksContext>
         }
 
         var optionsBuilder = new DbContextOptionsBuilder<StocksContext>();
-        optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.UseSqlServer(
+            connectionString,
+            sqlServerOptions =>
+            {
+                sqlServerOptions.EnableRetryOnFailure();
+            });
 
         return new StocksContext(optionsBuilder.Options);
     }

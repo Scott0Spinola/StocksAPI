@@ -12,7 +12,7 @@ using src.Data;
 namespace src.Data.Migrations
 {
     [DbContext(typeof(StocksContext))]
-    [Migration("20260407085332_InitialCreate")]
+    [Migration("20260407144134_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

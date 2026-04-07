@@ -28,7 +28,12 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 });
 
 builder.Services.AddDbContext<StocksContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlServerOptions =>
+        {
+            sqlServerOptions.EnableRetryOnFailure();
+        }));
 
 builder.Services.AddScoped<Cliente_Movimento_Services>();
 builder.Services.AddScoped<Cliente_Tag_Services>();

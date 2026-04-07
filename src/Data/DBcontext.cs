@@ -8,5 +8,4 @@ public class StocksContext(DbContextOptions<StocksContext> options) : DbContext(
     public DbSet<Cliente_Movimento> Cliente_Movimentos => Set<Cliente_Movimento>();
 
     public DbSet<Cliente_Tag> Cliente_Tags => Set<Cliente_Tag>();
-
 }

@@ -40,9 +40,9 @@ public class ErrorHandling : IExceptionHandler
     {
         return exception switch
         {
-            ArgumentException => (StatusCodes.Status400BadRequest, "Invalid argument provided" + exception.Message),
-            UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Unauthorized access" + exception.Message),
-           _ =>(StatusCodes.Status500InternalServerError, "An unexpected error occured" + exception.Message),
+            ArgumentException => (StatusCodes.Status400BadRequest, $"Invalid argument provided: {exception.Message}"),
+            UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, $"Unauthorized access: {exception.Message}"),
+           _ => (StatusCodes.Status500InternalServerError, "An unexpected error occured."),
         };
     }
 }

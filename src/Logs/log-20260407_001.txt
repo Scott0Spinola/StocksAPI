@@ -1,0 +1,410 @@
+2026-04-07 14:56:18.138 +01:00 [INF] User profile is available. Using 'C:\Users\spino\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-07 14:56:18.275 +01:00 [ERR] Hosting failed to start
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5275: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+2026-04-07 14:57:13.493 +01:00 [INF] User profile is available. Using 'C:\Users\spino\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-07 14:57:13.620 +01:00 [ERR] Hosting failed to start
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5275: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+2026-04-07 15:14:53.990 +01:00 [INF] User profile is available. Using 'C:\Users\spino\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-07 15:14:54.106 +01:00 [INF] Now listening on: http://localhost:5275
+2026-04-07 15:14:54.109 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-07 15:14:54.110 +01:00 [INF] Hosting environment: Development
+2026-04-07 15:14:54.110 +01:00 [INF] Content root path: C:\Users\spino\Desktop\StocksAPI\src
+2026-04-07 15:15:01.715 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.html - null null
+2026-04-07 15:15:01.852 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.html - 304 null null 138.9663ms
+2026-04-07 15:15:02.118 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - null null
+2026-04-07 15:15:02.125 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - null null
+2026-04-07 15:15:02.125 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.css - null null
+2026-04-07 15:15:02.126 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.js - null null
+2026-04-07 15:15:02.126 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - null null
+2026-04-07 15:15:02.138 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.js - 304 null null 11.7174ms
+2026-04-07 15:15:02.152 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - 304 null null 33.9702ms
+2026-04-07 15:15:02.152 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - 304 null null 25.1239ms
+2026-04-07 15:15:02.152 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.css - 304 null null 26.1397ms
+2026-04-07 15:15:02.155 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - 304 null null 30.1921ms
+2026-04-07 15:15:02.320 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - null null
+2026-04-07 15:15:02.337 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - null null
+2026-04-07 15:15:02.340 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - 304 null null 2.9022ms
+2026-04-07 15:15:02.539 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 218.9047ms
+2026-04-07 15:15:12.622 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - null null
+2026-04-07 15:15:12.628 +01:00 [WRN] Failed to determine the https port for redirect.
+2026-04-07 15:15:12.706 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 15:15:12.931 +01:00 [INF] Route matched with {action = "GetAll", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Movimento]]] GetAll(PageParameters) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 15:15:14.449 +01:00 [INF] CRUD Read Cliente_Movimento pageNumber=1 pageSize=2
+2026-04-07 15:15:19.453 +01:00 [INF] Executed DbCommand (268ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [dbo].[Cliente_Movimentos] AS [c]
+2026-04-07 15:15:19.844 +01:00 [INF] Executed DbCommand (204ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Cliente], [c].[DataFormatada], [c].[Data], [c].[De], [c].[Descricao], [c].[MovementRID], [c].[Para], [c].[Quantidade]
+FROM [dbo].[Cliente_Movimentos] AS [c]
+ORDER BY [c].[Id]
+OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+2026-04-07 15:15:19.896 +01:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Movimento, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-07 15:15:19.965 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetAll (src) in 7025.7005ms
+2026-04-07 15:15:19.967 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 15:15:19.974 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 7351.2606ms
+2026-04-07 15:16:18.754 +01:00 [INF] Request starting HTTP/1.1 POST http://localhost:5275/api/Cliente_Tag_ - application/json 177
+2026-04-07 15:16:18.761 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_Tag_Controller.CreateTag (src)'
+2026-04-07 15:16:18.769 +01:00 [INF] Route matched with {action = "CreateTag", controller = "Cliente_Tag_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[src.Models.Cliente_Tag]] CreateTag(src.Dtos.Cliente_Tag_Dtos.CreateTag) on controller src.Controllers.Cliente_Tag_Controller (src).
+2026-04-07 15:16:19.010 +01:00 [INF] Executed DbCommand (38ms) [Parameters=[@p0='?' (DbType = DateTime), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [dbo].[Cliente_Tags] ([Data Ultimo Movimento], [EPC], [Estado], [Localizacao], [Produto], [Ultima Localização], [Ultima Unidade], [Unidade])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2026-04-07 15:16:19.034 +01:00 [INF] Created a new tag => src.Models.Cliente_Tag
+2026-04-07 15:16:19.037 +01:00 [INF] Executing CreatedAtActionResult, writing value of type 'src.Models.Cliente_Tag'.
+2026-04-07 15:16:19.054 +01:00 [INF] Executed action src.Controllers.Cliente_Tag_Controller.CreateTag (src) in 282.9403ms
+2026-04-07 15:16:19.056 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_Tag_Controller.CreateTag (src)'
+2026-04-07 15:16:19.058 +01:00 [INF] Request finished HTTP/1.1 POST http://localhost:5275/api/Cliente_Tag_ - 201 null application/json; charset=utf-8 303.3546ms
+2026-04-07 15:28:18.544 +01:00 [INF] Request starting HTTP/1.1 POST http://localhost:5275/api/Cliente_Tag_ - application/json 176
+2026-04-07 15:28:18.559 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_Tag_Controller.CreateTag (src)'
+2026-04-07 15:28:18.562 +01:00 [INF] Route matched with {action = "CreateTag", controller = "Cliente_Tag_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[src.Models.Cliente_Tag]] CreateTag(src.Dtos.Cliente_Tag_Dtos.CreateTag) on controller src.Controllers.Cliente_Tag_Controller (src).
+2026-04-07 15:28:18.648 +01:00 [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (DbType = DateTime), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [dbo].[Cliente_Tags] ([Data Ultimo Movimento], [EPC], [Estado], [Localizacao], [Produto], [Ultima Localização], [Ultima Unidade], [Unidade])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2026-04-07 15:28:18.652 +01:00 [INF] Created a new tag => src.Models.Cliente_Tag
+2026-04-07 15:28:18.654 +01:00 [INF] Executing CreatedAtActionResult, writing value of type 'src.Models.Cliente_Tag'.
+2026-04-07 15:28:18.658 +01:00 [INF] Executed action src.Controllers.Cliente_Tag_Controller.CreateTag (src) in 94.4851ms
+2026-04-07 15:28:18.659 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_Tag_Controller.CreateTag (src)'
+2026-04-07 15:28:18.661 +01:00 [INF] Request finished HTTP/1.1 POST http://localhost:5275/api/Cliente_Tag_ - 201 null application/json; charset=utf-8 117.3503ms
+2026-04-07 15:37:05.814 +01:00 [INF] Application is shutting down...
+2026-04-07 15:43:22.558 +01:00 [INF] User profile is available. Using 'C:\Users\spino\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-07 15:43:22.664 +01:00 [INF] Now listening on: http://localhost:5275
+2026-04-07 15:43:22.667 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-07 15:43:22.668 +01:00 [INF] Hosting environment: Development
+2026-04-07 15:43:22.669 +01:00 [INF] Content root path: C:\Users\spino\Desktop\StocksAPI\src
+2026-04-07 15:43:28.167 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.html - null null
+2026-04-07 15:43:28.333 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.html - 304 null null 168.2783ms
+2026-04-07 15:43:28.657 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - null null
+2026-04-07 15:43:28.660 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.css - null null
+2026-04-07 15:43:28.662 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - null null
+2026-04-07 15:43:28.662 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - null null
+2026-04-07 15:43:28.664 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.js - null null
+2026-04-07 15:43:28.678 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.js - 304 null null 13.5693ms
+2026-04-07 15:43:28.687 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - 304 null null 25.1094ms
+2026-04-07 15:43:28.687 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.css - 304 null null 26.9396ms
+2026-04-07 15:43:28.687 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - 304 null null 29.8472ms
+2026-04-07 15:43:28.689 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - 304 null null 27.3141ms
+2026-04-07 15:43:28.940 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - null null
+2026-04-07 15:43:29.009 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - null null
+2026-04-07 15:43:29.014 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - 304 null null 4.5984ms
+2026-04-07 15:43:29.193 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 253.0085ms
+2026-04-07 15:43:42.545 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - null null
+2026-04-07 15:43:42.572 +01:00 [WRN] Failed to determine the https port for redirect.
+2026-04-07 15:43:42.671 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 15:43:42.829 +01:00 [INF] Route matched with {action = "GetAll", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Movimento]]] GetAll(PageParameters) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 15:43:43.058 +01:00 [INF] CRUD Read Cliente_Movimento pageNumber=1 pageSize=2
+2026-04-07 15:43:45.743 +01:00 [INF] Executed DbCommand (169ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cliente_Movimentos] AS [c]
+2026-04-07 15:43:46.253 +01:00 [INF] Executed DbCommand (276ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Cliente], [c].[DataFormatada], [c].[Datetime], [c].[De], [c].[Descricao], [c].[MovementRID], [c].[Para], [c].[Quantidade]
+FROM [Cliente_Movimentos] AS [c]
+ORDER BY [c].[Id]
+OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+2026-04-07 15:43:46.279 +01:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Movimento, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-07 15:43:46.343 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetAll (src) in 3485.5648ms
+2026-04-07 15:43:46.345 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 15:43:46.355 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 3809.9396ms
+2026-04-07 15:44:02.407 +01:00 [INF] Request starting HTTP/1.1 POST http://localhost:5275/api/Cliente_movimento_ - application/json 160
+2026-04-07 15:44:02.428 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.CreateMovimento (src)'
+2026-04-07 15:44:02.442 +01:00 [INF] Route matched with {action = "CreateMovimento", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[src.Models.Cliente_Movimento]] CreateMovimento(src.Dtos.Cliente_Movimento_Dtos.Create) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 15:44:02.466 +01:00 [INF] CRUD Create Movimento
+2026-04-07 15:44:02.688 +01:00 [INF] Executed DbCommand (25ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000), @p2='?' (DbType = DateTime2), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Cliente_Movimentos] ([Cliente], [DataFormatada], [Datetime], [De], [Descricao], [MovementRID], [Para], [Quantidade])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2026-04-07 15:44:02.713 +01:00 [INF] Executing CreatedAtActionResult, writing value of type 'src.Models.Cliente_Movimento'.
+2026-04-07 15:44:02.739 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.CreateMovimento (src) in 294.3764ms
+2026-04-07 15:44:02.741 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.CreateMovimento (src)'
+2026-04-07 15:44:02.743 +01:00 [INF] Request finished HTTP/1.1 POST http://localhost:5275/api/Cliente_movimento_ - 201 null application/json; charset=utf-8 336.2383ms
+2026-04-07 15:44:09.353 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - null null
+2026-04-07 15:44:09.358 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 15:44:09.359 +01:00 [INF] Route matched with {action = "GetAll", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Movimento]]] GetAll(PageParameters) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 15:44:09.365 +01:00 [INF] CRUD Read Cliente_Movimento pageNumber=1 pageSize=2
+2026-04-07 15:44:09.402 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cliente_Movimentos] AS [c]
+2026-04-07 15:44:09.415 +01:00 [INF] Executed DbCommand (5ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Cliente], [c].[DataFormatada], [c].[Datetime], [c].[De], [c].[Descricao], [c].[MovementRID], [c].[Para], [c].[Quantidade]
+FROM [Cliente_Movimentos] AS [c]
+ORDER BY [c].[Id]
+OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+2026-04-07 15:44:09.424 +01:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Movimento, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-07 15:44:09.426 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetAll (src) in 64.2425ms
+2026-04-07 15:44:09.427 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 15:44:09.428 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 74.8556ms
+2026-04-07 15:44:42.126 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_/Por-Data?PageNumber=1&PageSize=2&start=01%2F01%2F2000&end=01%2F12%2F2026 - null null
+2026-04-07 15:44:42.130 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetintervaloDatePaged (src)'
+2026-04-07 15:44:42.136 +01:00 [INF] Route matched with {action = "GetintervaloDatePaged", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Movimento]]] GetintervaloDatePaged(PageParameters, System.DateTime, System.DateTime) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 15:44:42.210 +01:00 [INF] Executed DbCommand (32ms) [Parameters=[@start='?' (DbType = DateTime2), @end='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cliente_Movimentos] AS [c]
+WHERE [c].[Datetime] >= @start AND [c].[Datetime] <= @end
+2026-04-07 15:44:42.232 +01:00 [INF] Executed DbCommand (4ms) [Parameters=[@start='?' (DbType = DateTime2), @end='?' (DbType = DateTime2), @p='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Cliente], [c].[DataFormatada], [c].[Datetime], [c].[De], [c].[Descricao], [c].[MovementRID], [c].[Para], [c].[Quantidade]
+FROM [Cliente_Movimentos] AS [c]
+WHERE [c].[Datetime] >= @start AND [c].[Datetime] <= @end
+ORDER BY [c].[Id]
+OFFSET @p ROWS FETCH NEXT @p3 ROWS ONLY
+2026-04-07 15:44:42.236 +01:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Movimento, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-07 15:44:42.238 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetintervaloDatePaged (src) in 100.6928ms
+2026-04-07 15:44:42.240 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetintervaloDatePaged (src)'
+2026-04-07 15:44:42.241 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_/Por-Data?PageNumber=1&PageSize=2&start=01%2F01%2F2000&end=01%2F12%2F2026 - 200 null application/json; charset=utf-8 115.3774ms
+2026-04-07 15:44:58.576 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_/Por-Data?PageNumber=1&PageSize=2&start=01%2F01%2F2000&end=01%2F12%2F2027 - null null
+2026-04-07 15:44:58.579 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetintervaloDatePaged (src)'
+2026-04-07 15:44:58.585 +01:00 [INF] Route matched with {action = "GetintervaloDatePaged", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Movimento]]] GetintervaloDatePaged(PageParameters, System.DateTime, System.DateTime) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 15:44:58.598 +01:00 [INF] Executed DbCommand (6ms) [Parameters=[@start='?' (DbType = DateTime2), @end='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cliente_Movimentos] AS [c]
+WHERE [c].[Datetime] >= @start AND [c].[Datetime] <= @end
+2026-04-07 15:44:58.609 +01:00 [INF] Executed DbCommand (4ms) [Parameters=[@start='?' (DbType = DateTime2), @end='?' (DbType = DateTime2), @p='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Cliente], [c].[DataFormatada], [c].[Datetime], [c].[De], [c].[Descricao], [c].[MovementRID], [c].[Para], [c].[Quantidade]
+FROM [Cliente_Movimentos] AS [c]
+WHERE [c].[Datetime] >= @start AND [c].[Datetime] <= @end
+ORDER BY [c].[Id]
+OFFSET @p ROWS FETCH NEXT @p3 ROWS ONLY
+2026-04-07 15:44:58.613 +01:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Movimento, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-07 15:44:58.614 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetintervaloDatePaged (src) in 26.6422ms
+2026-04-07 15:44:58.615 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetintervaloDatePaged (src)'
+2026-04-07 15:44:58.617 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_/Por-Data?PageNumber=1&PageSize=2&start=01%2F01%2F2000&end=01%2F12%2F2027 - 200 null application/json; charset=utf-8 40.5996ms
+2026-04-07 15:45:06.040 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_/Por-Data?PageNumber=1&PageSize=4&start=01%2F01%2F2000&end=01%2F12%2F2027 - null null
+2026-04-07 15:45:06.045 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetintervaloDatePaged (src)'
+2026-04-07 15:45:06.047 +01:00 [INF] Route matched with {action = "GetintervaloDatePaged", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Movimento]]] GetintervaloDatePaged(PageParameters, System.DateTime, System.DateTime) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 15:45:06.053 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[@start='?' (DbType = DateTime2), @end='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cliente_Movimentos] AS [c]
+WHERE [c].[Datetime] >= @start AND [c].[Datetime] <= @end
+2026-04-07 15:45:06.059 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[@start='?' (DbType = DateTime2), @end='?' (DbType = DateTime2), @p='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Cliente], [c].[DataFormatada], [c].[Datetime], [c].[De], [c].[Descricao], [c].[MovementRID], [c].[Para], [c].[Quantidade]
+FROM [Cliente_Movimentos] AS [c]
+WHERE [c].[Datetime] >= @start AND [c].[Datetime] <= @end
+ORDER BY [c].[Id]
+OFFSET @p ROWS FETCH NEXT @p3 ROWS ONLY
+2026-04-07 15:45:06.064 +01:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Movimento, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-07 15:45:06.066 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetintervaloDatePaged (src) in 16.1458ms
+2026-04-07 15:45:06.068 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetintervaloDatePaged (src)'
+2026-04-07 15:45:06.070 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_/Por-Data?PageNumber=1&PageSize=4&start=01%2F01%2F2000&end=01%2F12%2F2027 - 200 null application/json; charset=utf-8 30.3503ms
+2026-04-07 15:45:19.677 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_/1 - null null
+2026-04-07 15:45:19.681 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetById (src)'
+2026-04-07 15:45:19.684 +01:00 [INF] Route matched with {action = "GetById", controller = "Cliente_movimento_"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[src.Models.Cliente_Movimento] GetById(Int32) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 15:45:19.687 +01:00 [INF] CRUD Read Cliente_Movimento id=1
+2026-04-07 15:45:19.689 +01:00 [INF] Finding id => 1.
+2026-04-07 15:45:19.736 +01:00 [INF] Executed DbCommand (20ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [c].[Id], [c].[Cliente], [c].[DataFormatada], [c].[Datetime], [c].[De], [c].[Descricao], [c].[MovementRID], [c].[Para], [c].[Quantidade]
+FROM [Cliente_Movimentos] AS [c]
+WHERE [c].[Id] = @id
+2026-04-07 15:45:19.743 +01:00 [INF] Executing ObjectResult, writing value of type 'src.Models.Cliente_Movimento'.
+2026-04-07 15:45:19.746 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetById (src) in 60.5711ms
+2026-04-07 15:45:19.747 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetById (src)'
+2026-04-07 15:45:19.750 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_/1 - 200 null application/json; charset=utf-8 72.3129ms
+2026-04-07 15:45:31.454 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_Tag_?PageNumber=1&PageSize=2 - null null
+2026-04-07 15:45:31.457 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_Tag_Controller.GetAll (src)'
+2026-04-07 15:45:31.476 +01:00 [INF] Route matched with {action = "GetAll", controller = "Cliente_Tag_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Tag]]] GetAll(PageParameters) on controller src.Controllers.Cliente_Tag_Controller (src).
+2026-04-07 15:45:31.486 +01:00 [INF] CRUD Read Cliente_Tag pageNumber=1 pageSize=2
+2026-04-07 15:45:31.507 +01:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cliente_Tags] AS [c]
+2026-04-07 15:45:31.529 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Data_Ultimo_Movimento], [c].[EPC], [c].[Estado], [c].[Localizacao], [c].[Produto], [c].[Ultima_Localizacao], [c].[Ultima_Unidade], [c].[Unidade]
+FROM [Cliente_Tags] AS [c]
+ORDER BY [c].[Id]
+OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+2026-04-07 15:45:31.532 +01:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Tag, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-07 15:45:31.540 +01:00 [INF] Executed action src.Controllers.Cliente_Tag_Controller.GetAll (src) in 60.9687ms
+2026-04-07 15:45:31.542 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_Tag_Controller.GetAll (src)'
+2026-04-07 15:45:31.544 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_Tag_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 89.7922ms
+2026-04-07 15:45:45.987 +01:00 [INF] Request starting HTTP/1.1 POST http://localhost:5275/api/Cliente_Tag_ - application/json 177
+2026-04-07 15:45:45.990 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_Tag_Controller.CreateTag (src)'
+2026-04-07 15:45:45.997 +01:00 [INF] Route matched with {action = "CreateTag", controller = "Cliente_Tag_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[src.Models.Cliente_Tag]] CreateTag(src.Dtos.Cliente_Tag_Dtos.CreateTag) on controller src.Controllers.Cliente_Tag_Controller (src).
+2026-04-07 15:45:46.037 +01:00 [INF] Executed DbCommand (6ms) [Parameters=[@p0='?' (DbType = DateTime2), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Cliente_Tags] ([Data_Ultimo_Movimento], [EPC], [Estado], [Localizacao], [Produto], [Ultima_Localizacao], [Ultima_Unidade], [Unidade])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2026-04-07 15:45:46.042 +01:00 [INF] Created a new tag => src.Models.Cliente_Tag
+2026-04-07 15:45:46.043 +01:00 [INF] Executing CreatedAtActionResult, writing value of type 'src.Models.Cliente_Tag'.
+2026-04-07 15:45:46.046 +01:00 [INF] Executed action src.Controllers.Cliente_Tag_Controller.CreateTag (src) in 45.6195ms
+2026-04-07 15:45:46.049 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_Tag_Controller.CreateTag (src)'
+2026-04-07 15:45:46.051 +01:00 [INF] Request finished HTTP/1.1 POST http://localhost:5275/api/Cliente_Tag_ - 201 null application/json; charset=utf-8 63.456ms
+2026-04-07 15:45:55.806 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_Tag_/Estado?estado=sss - null null
+2026-04-07 15:45:55.811 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_Tag_Controller.GetByEstado (src)'
+2026-04-07 15:45:55.815 +01:00 [INF] Route matched with {action = "GetByEstado", controller = "Cliente_Tag_"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[src.Models.Cliente_Tag] GetByEstado(System.String) on controller src.Controllers.Cliente_Tag_Controller (src).
+2026-04-07 15:45:55.877 +01:00 [INF] Executed DbCommand (39ms) [Parameters=[@Estado='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [c].[Id], [c].[Data_Ultimo_Movimento], [c].[EPC], [c].[Estado], [c].[Localizacao], [c].[Produto], [c].[Ultima_Localizacao], [c].[Ultima_Unidade], [c].[Unidade]
+FROM [Cliente_Tags] AS [c]
+WHERE [c].[Estado] = @Estado
+2026-04-07 15:45:55.879 +01:00 [INF] Executing ObjectResult, writing value of type 'src.Models.Cliente_Tag'.
+2026-04-07 15:45:55.881 +01:00 [INF] Executed action src.Controllers.Cliente_Tag_Controller.GetByEstado (src) in 64.6018ms
+2026-04-07 15:45:55.883 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_Tag_Controller.GetByEstado (src)'
+2026-04-07 15:45:55.884 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_Tag_/Estado?estado=sss - 200 null application/json; charset=utf-8 77.2051ms
+2026-04-07 15:50:29.241 +01:00 [INF] Application is shutting down...
+2026-04-07 15:50:33.903 +01:00 [INF] User profile is available. Using 'C:\Users\spino\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-07 15:50:34.008 +01:00 [INF] Now listening on: http://localhost:5275
+2026-04-07 15:50:34.011 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-07 15:50:34.012 +01:00 [INF] Hosting environment: Development
+2026-04-07 15:50:34.013 +01:00 [INF] Content root path: C:\Users\spino\Desktop\StocksAPI\src
+2026-04-07 15:50:36.823 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.html - null null
+2026-04-07 15:50:36.963 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.html - 304 null null 141.2182ms
+2026-04-07 15:50:37.039 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.css - null null
+2026-04-07 15:50:37.039 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - null null
+2026-04-07 15:50:37.039 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - null null
+2026-04-07 15:50:37.040 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - null null
+2026-04-07 15:50:37.042 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.js - null null
+2026-04-07 15:50:37.052 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.js - 304 null null 10.639ms
+2026-04-07 15:50:37.056 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - 304 null null 17.2882ms
+2026-04-07 15:50:37.056 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - 304 null null 16.1988ms
+2026-04-07 15:50:37.056 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.css - 304 null null 17.2882ms
+2026-04-07 15:50:37.056 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - 304 null null 17.43ms
+2026-04-07 15:50:37.188 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - null null
+2026-04-07 15:50:37.198 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - null null
+2026-04-07 15:50:37.206 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - 304 null null 7.5355ms
+2026-04-07 15:50:37.384 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 196.1568ms
+2026-04-07 15:50:47.342 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - null null
+2026-04-07 15:50:47.350 +01:00 [WRN] Failed to determine the https port for redirect.
+2026-04-07 15:50:47.369 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 15:50:47.397 +01:00 [INF] Route matched with {action = "GetAll", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Movimento]]] GetAll(PageParameters) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 15:50:47.507 +01:00 [INF] CRUD Read Cliente_Movimento pageNumber=1 pageSize=2
+2026-04-07 15:50:48.297 +01:00 [INF] Executed DbCommand (26ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cliente_Movimentos] AS [c]
+2026-04-07 15:50:48.407 +01:00 [INF] Executed DbCommand (13ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Cliente], [c].[DataFormatada], [c].[Datetime], [c].[De], [c].[Descricao], [c].[MovementRID], [c].[Para], [c].[Quantidade]
+FROM [Cliente_Movimentos] AS [c]
+ORDER BY [c].[Id]
+OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+2026-04-07 15:50:48.418 +01:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Movimento, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-07 15:50:48.445 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetAll (src) in 1040.6404ms
+2026-04-07 15:50:48.447 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 15:50:48.454 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 1111.883ms
+2026-04-07 15:54:22.008 +01:00 [INF] Application is shutting down...
+2026-04-07 15:59:36.713 +01:00 [INF] User profile is available. Using 'C:\Users\spino\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-07 15:59:36.828 +01:00 [INF] Now listening on: http://localhost:5275
+2026-04-07 15:59:36.830 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-07 15:59:36.832 +01:00 [INF] Hosting environment: Development
+2026-04-07 15:59:36.832 +01:00 [INF] Content root path: C:\Users\spino\Desktop\StocksAPI\src
+2026-04-07 15:59:44.532 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/ - null null
+2026-04-07 15:59:44.651 +01:00 [WRN] Failed to determine the https port for redirect.
+2026-04-07 15:59:44.662 +01:00 [INF] ApiKey was not authenticated. Failure message: Missing header: X-API-KEY.
+2026-04-07 15:59:44.718 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/ - 404 null application/problem+json 190.4095ms
+2026-04-07 15:59:44.723 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5275/, Response status code: 404
+2026-04-07 15:59:44.812 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/favicon.ico - null null
+2026-04-07 15:59:44.819 +01:00 [INF] ApiKey was not authenticated. Failure message: Missing header: X-API-KEY.
+2026-04-07 15:59:44.823 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/favicon.ico - 404 null application/problem+json 12.2923ms
+2026-04-07 15:59:44.827 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5275/favicon.ico, Response status code: 404
+2026-04-07 15:59:52.249 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger - null null
+2026-04-07 15:59:52.255 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger - 301 0 null 5.2263ms
+2026-04-07 15:59:52.264 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.html - null null
+2026-04-07 15:59:52.326 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.html - 200 null text/html;charset=utf-8 61.3257ms
+2026-04-07 15:59:52.370 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - null null
+2026-04-07 15:59:52.371 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.css - null null
+2026-04-07 15:59:52.372 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - null null
+2026-04-07 15:59:52.373 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - null null
+2026-04-07 15:59:52.373 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.js - null null
+2026-04-07 15:59:52.384 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.js - 200 null application/javascript;charset=utf-8 10.6626ms
+2026-04-07 15:59:52.388 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - 200 26248 text/css 18.003ms
+2026-04-07 15:59:52.388 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.css - 200 152 text/css 16.3994ms
+2026-04-07 15:59:52.410 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - 200 416963 text/javascript 37.1386ms
+2026-04-07 15:59:52.410 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - 200 76581 text/javascript 37.1131ms
+2026-04-07 15:59:52.620 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - null null
+2026-04-07 15:59:52.637 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - null null
+2026-04-07 15:59:52.641 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - 200 628 image/png 3.6443ms
+2026-04-07 15:59:52.782 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 161.5065ms
+2026-04-07 16:00:03.395 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - null null
+2026-04-07 16:00:03.415 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 16:00:03.450 +01:00 [INF] Route matched with {action = "GetAll", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Movimento]]] GetAll(PageParameters) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 16:00:03.631 +01:00 [INF] CRUD Read Cliente_Movimento pageNumber=1 pageSize=2
+2026-04-07 16:00:05.559 +01:00 [INF] Executed DbCommand (160ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cliente_Movimentos] AS [c]
+2026-04-07 16:00:05.703 +01:00 [INF] Executed DbCommand (46ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Cliente], [c].[DataFormatada], [c].[Datetime], [c].[De], [c].[Descricao], [c].[MovementRID], [c].[Para], [c].[Quantidade]
+FROM [Cliente_Movimentos] AS [c]
+ORDER BY [c].[Id]
+OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+2026-04-07 16:00:05.713 +01:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Movimento, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-07 16:00:05.734 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetAll (src) in 2278.7293ms
+2026-04-07 16:00:05.738 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 16:00:05.746 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 2350.258ms
+2026-04-07 16:01:08.806 +01:00 [INF] Request starting HTTP/1.1 POST http://localhost:5275/api/Cliente_movimento_ - application/json 164
+2026-04-07 16:01:08.810 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.CreateMovimento (src)'
+2026-04-07 16:01:08.823 +01:00 [INF] Route matched with {action = "CreateMovimento", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[src.Models.Cliente_Movimento]] CreateMovimento(src.Dtos.Cliente_Movimento_Dtos.Create) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 16:01:08.854 +01:00 [INF] CRUD Create Movimento
+2026-04-07 16:01:09.055 +01:00 [INF] Executed DbCommand (20ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000), @p2='?' (DbType = DateTime2), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Cliente_Movimentos] ([Cliente], [DataFormatada], [Datetime], [De], [Descricao], [MovementRID], [Para], [Quantidade])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2026-04-07 16:01:09.080 +01:00 [INF] Executing CreatedAtActionResult, writing value of type 'src.Models.Cliente_Movimento'.
+2026-04-07 16:01:09.098 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.CreateMovimento (src) in 272.8278ms
+2026-04-07 16:01:09.100 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.CreateMovimento (src)'
+2026-04-07 16:01:09.102 +01:00 [INF] Request finished HTTP/1.1 POST http://localhost:5275/api/Cliente_movimento_ - 201 null application/json; charset=utf-8 296.6681ms
+2026-04-07 16:01:13.979 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - null null
+2026-04-07 16:01:13.997 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 16:01:13.999 +01:00 [INF] Route matched with {action = "GetAll", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Movimento]]] GetAll(PageParameters) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 16:01:14.009 +01:00 [INF] CRUD Read Cliente_Movimento pageNumber=1 pageSize=2
+2026-04-07 16:01:14.042 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cliente_Movimentos] AS [c]
+2026-04-07 16:01:14.050 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Cliente], [c].[DataFormatada], [c].[Datetime], [c].[De], [c].[Descricao], [c].[MovementRID], [c].[Para], [c].[Quantidade]
+FROM [Cliente_Movimentos] AS [c]
+ORDER BY [c].[Id]
+OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+2026-04-07 16:01:14.052 +01:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Movimento, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-07 16:01:14.054 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetAll (src) in 51.0304ms
+2026-04-07 16:01:14.055 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 16:01:14.056 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 76.9892ms
