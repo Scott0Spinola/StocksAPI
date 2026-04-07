@@ -1,0 +1,79 @@
+2026-03-31 08:31:41.541 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-03-31 08:31:41.595 +00:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2026-03-31 08:31:41.609 +00:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-03-31 08:31:41.6019007+00:00');
+SELECT changes();
+2026-03-31 08:31:41.668 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2026-03-31 08:31:41.673 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-03-31 08:31:41.676 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-03-31 08:31:41.682 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-03-31 08:31:41.688 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2026-03-31 08:31:41.749 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+2026-03-31 08:31:41.750 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2026-03-31 08:31:41.760 +00:00 [INF] Creating key {38814cbe-a93d-4841-bdeb-ab876fb8acdb} with creation date 2026-03-31 08:31:41Z, activation date 2026-03-31 08:31:41Z, and expiration date 2026-06-29 08:31:41Z.
+2026-03-31 08:31:41.771 +00:00 [WRN] No XML encryptor configured. Key {38814cbe-a93d-4841-bdeb-ab876fb8acdb} may be persisted to storage in unencrypted form.
+2026-03-31 08:31:41.775 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-38814cbe-a93d-4841-bdeb-ab876fb8acdb.xml'.
+2026-03-31 08:31:41.793 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-03-31 08:31:41.839 +00:00 [INF] Now listening on: http://[::]:8080
+2026-03-31 08:31:41.840 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-31 08:31:41.840 +00:00 [INF] Hosting environment: Development
+2026-03-31 08:31:41.841 +00:00 [INF] Content root path: /app
+2026-03-31 08:32:19.700 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/swagger/index.html - null null
+2026-03-31 08:32:19.819 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/swagger/index.html - 200 null text/html;charset=utf-8 121.3244ms
+2026-03-31 08:32:19.832 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/swagger/swagger-ui.css - null null
+2026-03-31 08:32:19.832 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/swagger/swagger-ui-standalone-preset.js - null null
+2026-03-31 08:32:19.836 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/swagger/index.css - null null
+2026-03-31 08:32:19.840 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/swagger/swagger-ui-bundle.js - null null
+2026-03-31 08:32:19.841 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/swagger/index.js - null null
+2026-03-31 08:32:19.843 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/swagger/index.js - 304 null null 2.5051ms
+2026-03-31 08:32:19.847 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/swagger/index.css - 304 null null 11.0933ms
+2026-03-31 08:32:19.847 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/swagger/swagger-ui-standalone-preset.js - 304 null null 15.1069ms
+2026-03-31 08:32:19.848 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/swagger/swagger-ui.css - 304 null null 15.073ms
+2026-03-31 08:32:19.853 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/swagger/swagger-ui-bundle.js - 304 null null 13.6123ms
+2026-03-31 08:32:20.024 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/swagger/v1/swagger.json - null null
+2026-03-31 08:32:20.045 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/swagger/favicon-32x32.png - null null
+2026-03-31 08:32:20.047 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/swagger/favicon-32x32.png - 304 null null 1.2169ms
+2026-03-31 08:32:20.251 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 227.6778ms
+2026-03-31 09:42:45.659 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/api/Cliente_movimento_?PageNumber=1&PageSize=2 - null null
+2026-03-31 09:42:45.798 +00:00 [WRN] Failed to determine the https port for redirect.
+2026-03-31 09:42:45.880 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-03-31 09:42:46.000 +00:00 [INF] Route matched with {action = "GetAll", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Movimento]]] GetAll(PageParameters) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-03-31 09:42:46.062 +00:00 [INF] CRUD Read Cliente_Movimento pageNumber=1 pageSize=2
+2026-03-31 09:42:46.473 +00:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM "Cliente_Movimentos" AS "c"
+2026-03-31 09:42:46.557 +00:00 [INF] Executed DbCommand (9ms) [Parameters=[@p1='?' (DbType = Int32), @p='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."Id", "c"."Cliente", "c"."DataFormatada", "c"."Datetime", "c"."De", "c"."Descricao", "c"."MovementRID", "c"."Para", "c"."Quantidade"
+FROM "Cliente_Movimentos" AS "c"
+ORDER BY "c"."Id"
+LIMIT @p1 OFFSET @p
+2026-03-31 09:42:46.572 +00:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Movimento, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-31 09:42:46.629 +00:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetAll (src) in 625.5416ms
+2026-03-31 09:42:46.630 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-03-31 09:42:46.635 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 984.7903ms
+2026-03-31 09:42:57.375 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/api/Cliente_Tag_?PageNumber=1&PageSize=2 - null null
+2026-03-31 09:42:57.386 +00:00 [INF] Executing endpoint 'src.Controllers.Cliente_Tag_Controller.GetAll (src)'
+2026-03-31 09:42:57.401 +00:00 [INF] Route matched with {action = "GetAll", controller = "Cliente_Tag_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Tag]]] GetAll(PageParameters) on controller src.Controllers.Cliente_Tag_Controller (src).
+2026-03-31 09:42:57.465 +00:00 [INF] CRUD Read Cliente_Tag pageNumber=1 pageSize=2
+2026-03-31 09:42:57.473 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM "Cliente_Tags" AS "c"
+2026-03-31 09:42:57.483 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[@p1='?' (DbType = Int32), @p='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."Id", "c"."Data_Ultimo_Movimento", "c"."EPC", "c"."Estado", "c"."Localizacao", "c"."Produto", "c"."Ultima_Localizacao", "c"."Ultima_Unidade", "c"."Unidade"
+FROM "Cliente_Tags" AS "c"
+ORDER BY "c"."Id"
+LIMIT @p1 OFFSET @p
+2026-03-31 09:42:57.486 +00:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Tag, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-31 09:42:57.496 +00:00 [INF] Executed action src.Controllers.Cliente_Tag_Controller.GetAll (src) in 94.5544ms
+2026-03-31 09:42:57.497 +00:00 [INF] Executed endpoint 'src.Controllers.Cliente_Tag_Controller.GetAll (src)'
+2026-03-31 09:42:57.498 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/api/Cliente_Tag_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 122.9918ms

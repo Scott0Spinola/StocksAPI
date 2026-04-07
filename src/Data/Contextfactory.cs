@@ -22,7 +22,7 @@ public sealed class Contextfactory : IDesignTimeDbContextFactory<StocksContext>
         }
 
         var optionsBuilder = new DbContextOptionsBuilder<StocksContext>();
-        optionsBuilder.UseSqlite(connectionString);
+        optionsBuilder.UseSqlServer(connectionString);
 
         return new StocksContext(optionsBuilder.Options);
     }

@@ -1,0 +1,53 @@
+2026-04-06 12:28:16.219 +01:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-04-06 12:28:16.284 +01:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2026-04-06 12:28:16.298 +01:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-04-06 11:28:16.2912583+00:00');
+SELECT changes();
+2026-04-06 12:28:16.367 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2026-04-06 12:28:16.373 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-04-06 12:28:16.376 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-04-06 12:28:16.385 +01:00 [INF] No migrations were applied. The database is already up to date.
+2026-04-06 12:28:16.387 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2026-04-06 12:28:16.481 +01:00 [INF] User profile is available. Using 'C:\Users\spino\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-06 12:28:16.586 +01:00 [INF] Now listening on: http://localhost:5275
+2026-04-06 12:28:16.589 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-06 12:28:16.590 +01:00 [INF] Hosting environment: Development
+2026-04-06 12:28:16.590 +01:00 [INF] Content root path: C:\Users\spino\Desktop\StocksAPI\src
+2026-04-06 12:28:21.999 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/ - null null
+2026-04-06 12:28:22.083 +01:00 [WRN] Failed to determine the https port for redirect.
+2026-04-06 12:28:22.093 +01:00 [INF] ApiKey was not authenticated. Failure message: Missing header: X-API-KEY.
+2026-04-06 12:28:22.153 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/ - 404 null application/problem+json 157.1087ms
+2026-04-06 12:28:22.160 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5275/, Response status code: 404
+2026-04-06 12:28:22.255 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/favicon.ico - null null
+2026-04-06 12:28:22.263 +01:00 [INF] ApiKey was not authenticated. Failure message: Missing header: X-API-KEY.
+2026-04-06 12:28:22.266 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/favicon.ico - 404 null application/problem+json 10.5474ms
+2026-04-06 12:28:22.274 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5275/favicon.ico, Response status code: 404
+2026-04-06 12:28:39.515 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger - null null
+2026-04-06 12:28:39.520 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger - 301 0 null 4.6441ms
+2026-04-06 12:28:39.681 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.html - null null
+2026-04-06 12:28:39.989 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.html - 200 null text/html;charset=utf-8 308.682ms
+2026-04-06 12:28:40.027 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - null null
+2026-04-06 12:28:40.029 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.css - null null
+2026-04-06 12:28:40.032 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - null null
+2026-04-06 12:28:40.032 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - null null
+2026-04-06 12:28:40.032 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.js - null null
+2026-04-06 12:28:40.039 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.js - 200 null application/javascript;charset=utf-8 6.4003ms
+2026-04-06 12:28:40.041 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - 200 26248 text/css 14.1836ms
+2026-04-06 12:28:40.041 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.css - 200 152 text/css 12.0368ms
+2026-04-06 12:28:40.050 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - 200 76581 text/javascript 17.9857ms
+2026-04-06 12:28:40.050 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - 200 416963 text/javascript 17.9857ms
+2026-04-06 12:28:40.193 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - null null
+2026-04-06 12:28:40.204 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - null null
+2026-04-06 12:28:40.207 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - 200 628 image/png 3.214ms
+2026-04-06 12:28:40.342 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 149.5205ms
+2026-04-06 17:22:16.149 +01:00 [INF] Application is shutting down...

@@ -146,16 +146,16 @@
             <response code="404">Tag not found.</response>
             <response code="400">Invalid request.</response>
         </member>
-        <member name="T:src.Migrations.InitialCreate">
+        <member name="T:src.Data.Migrations.InitialCreate">
             <inheritdoc />
         </member>
-        <member name="M:src.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+        <member name="M:src.Data.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:src.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+        <member name="M:src.Data.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:src.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:src.Data.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
         <member name="M:src.Services.Cliente_Movimento_Services.#ctor(src.Data.StocksContext,Microsoft.Extensions.Logging.ILogger{src.Services.Cliente_Movimento_Services})">

@@ -28,7 +28,7 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 });
 
 builder.Services.AddDbContext<StocksContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<Cliente_Movimento_Services>();
 builder.Services.AddScoped<Cliente_Tag_Services>();
@@ -104,8 +104,9 @@ var app = builder.Build();
 app.UseStatusCodePages();
 app.UseExceptionHandler();
 
-// Ensure SQLite schema exists (esp. in Docker volumes) during development
-if (app.Environment.IsDevelopment())
+// Apply EF migrations only when explicitly enabled.
+// This avoids trying to recreate tables when you point at an existing database.
+if (app.Configuration.GetValue<bool>("Database:ApplyMigrations"))
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<StocksContext>();
