@@ -408,3 +408,69 @@ OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
 2026-04-07 16:01:14.054 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetAll (src) in 51.0304ms
 2026-04-07 16:01:14.055 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
 2026-04-07 16:01:14.056 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 76.9892ms
+2026-04-07 17:10:36.608 +01:00 [INF] User profile is available. Using 'C:\Users\spino\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-07 17:10:36.794 +01:00 [ERR] Hosting failed to start
+System.IO.IOException: Failed to bind to address http://[::1]:5275: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+2026-04-07 17:11:09.068 +01:00 [INF] User profile is available. Using 'C:\Users\spino\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-07 17:11:09.171 +01:00 [INF] Now listening on: http://localhost:5275
+2026-04-07 17:11:09.174 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-07 17:11:09.175 +01:00 [INF] Hosting environment: Development
+2026-04-07 17:11:09.176 +01:00 [INF] Content root path: C:\Users\spino\Desktop\StocksAPI\src
+2026-04-07 17:11:18.172 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/ - null null
+2026-04-07 17:11:18.278 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/ - 301 0 null 107.2215ms
+2026-04-07 17:11:18.287 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.html - null null
+2026-04-07 17:11:18.347 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.html - 200 null text/html;charset=utf-8 59.8893ms
+2026-04-07 17:11:18.425 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - null null
+2026-04-07 17:11:18.425 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.css - null null
+2026-04-07 17:11:18.428 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - null null
+2026-04-07 17:11:18.428 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - null null
+2026-04-07 17:11:18.428 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/index.js - null null
+2026-04-07 17:11:18.438 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.js - 304 null null 9.8599ms
+2026-04-07 17:11:18.448 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-standalone-preset.js - 304 null null 20.2006ms
+2026-04-07 17:11:18.448 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui.css - 304 null null 22.4086ms
+2026-04-07 17:11:18.448 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/index.css - 304 null null 22.3827ms
+2026-04-07 17:11:18.450 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/swagger-ui-bundle.js - 304 null null 22.1453ms
+2026-04-07 17:11:18.672 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - null null
+2026-04-07 17:11:18.696 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - null null
+2026-04-07 17:11:18.699 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/favicon-32x32.png - 304 null null 2.5048ms
+2026-04-07 17:11:18.852 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 179.4142ms
+2026-04-07 17:11:29.453 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - null null
+2026-04-07 17:11:29.459 +01:00 [WRN] Failed to determine the https port for redirect.
+2026-04-07 17:11:29.474 +01:00 [INF] Executing endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 17:11:29.510 +01:00 [INF] Route matched with {action = "GetAll", controller = "Cliente_movimento_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[IntervencoesAPI.Services.PagedList`1[src.Models.Cliente_Movimento]]] GetAll(PageParameters) on controller src.Controllers.Cliente_movimento_Controller (src).
+2026-04-07 17:11:29.694 +01:00 [INF] CRUD Read Cliente_Movimento pageNumber=1 pageSize=2
+2026-04-07 17:11:30.696 +01:00 [INF] Executed DbCommand (105ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cliente_Movimentos] AS [c]
+2026-04-07 17:11:30.832 +01:00 [INF] Executed DbCommand (40ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Cliente], [c].[DataFormatada], [c].[Datetime], [c].[De], [c].[Descricao], [c].[MovementRID], [c].[Para], [c].[Quantidade]
+FROM [Cliente_Movimentos] AS [c]
+ORDER BY [c].[Id]
+OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+2026-04-07 17:11:30.844 +01:00 [INF] Executing OkObjectResult, writing value of type 'IntervencoesAPI.Services.PagedList`1[[src.Models.Cliente_Movimento, src, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-07 17:11:30.876 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetAll (src) in 1360.62ms
+2026-04-07 17:11:30.878 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
+2026-04-07 17:11:30.888 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 1434.6317ms
