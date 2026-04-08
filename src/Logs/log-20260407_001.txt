@@ -474,3 +474,10 @@ OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
 2026-04-07 17:11:30.876 +01:00 [INF] Executed action src.Controllers.Cliente_movimento_Controller.GetAll (src) in 1360.62ms
 2026-04-07 17:11:30.878 +01:00 [INF] Executed endpoint 'src.Controllers.Cliente_movimento_Controller.GetAll (src)'
 2026-04-07 17:11:30.888 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 200 null application/json; charset=utf-8 1434.6317ms
+2026-04-07 17:19:51.967 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - null null
+2026-04-07 17:19:51.975 +01:00 [INF] ApiKey was not authenticated. Failure message: Missing header: X-API-KEY.
+2026-04-07 17:19:51.979 +01:00 [INF] ApiKey was not authenticated. Failure message: Missing header: X-API-KEY.
+2026-04-07 17:19:51.983 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-04-07 17:19:51.985 +01:00 [INF] AuthenticationScheme: ApiKey was challenged.
+2026-04-07 17:19:52.014 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5275/api/Cliente_movimento_?PageNumber=1&PageSize=2 - 401 null application/problem+json 47.5963ms

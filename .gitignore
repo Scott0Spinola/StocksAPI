@@ -1,0 +1,16 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# VS / VS Code
+**/.vs/
+**/.vscode/
+
+# Local artifacts
+src/Logs/
+*.db
+*.sqlite
+
+# Local/secret compose overrides
+secure-env.yaml
+secure-env.*.yaml
