@@ -1,0 +1,33 @@
+IF OBJECT_ID(N'[dbo].[Cliente_Movimentos]', N'U') IS NULL
+BEGIN
+    CREATE TABLE [dbo].[Cliente_Movimentos] (
+        [Id]            int            NOT NULL IDENTITY(1,1),
+        [MovementRID]   nvarchar(max)  NULL,
+        [De]            nvarchar(max)  NULL,
+        [Para]          nvarchar(max)  NULL,
+        [Cliente]       nvarchar(max)  NULL,
+        [Descricao]     nvarchar(max)  NULL,
+        [Datetime]      datetime2      NOT NULL,
+        [DataFormatada] nvarchar(max)  NULL,
+        [Quantidade]    int            NOT NULL,
+        CONSTRAINT [PK_Cliente_Movimentos] PRIMARY KEY ([Id])
+    );
+END;
+GO
+ 
+IF OBJECT_ID(N'[dbo].[Cliente_Tags]', N'U') IS NULL
+BEGIN
+    CREATE TABLE [dbo].[Cliente_Tags] (
+        [Id]                   int            NOT NULL IDENTITY(1,1),
+        [Unidade]              nvarchar(max)  NULL,
+        [Localizacao]          nvarchar(max)  NULL,
+        [Produto]              nvarchar(max)  NULL,
+        [EPC]                  nvarchar(max)  NULL,
+        [Estado]               nvarchar(max)  NULL,
+        [Data_Ultimo_Movimento] datetime2     NOT NULL,
+        [Ultima_Localizacao]   nvarchar(max)  NULL,
+        [Ultima_Unidade]       nvarchar(max)  NULL,
+        CONSTRAINT [PK_Cliente_Tags] PRIMARY KEY ([Id])
+    );
+END;
+GO
