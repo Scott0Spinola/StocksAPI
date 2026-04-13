@@ -20,6 +20,22 @@ Content-Type: application/json
 
 ###
 
+POST {{src_HostAddress}}/api/movimentos/proximasentregas?hotel=todas-unidades
+X-API-KEY: {{apiKey}}
+Content-Type: application/json
+
+{
+	"hotel": "todas-unidades",
+	"dataInicio": "2026-04-01T00:00:00",
+	"dataFim": "2026-12-31T23:59:59",
+	"numGuia": null,
+	"tipo": 2,
+	"pagina": 1,
+	"numRegistos": 12
+}
+
+###
+
 POST {{src_HostAddress}}/api/movimentos/pesquisa
 X-API-KEY: {{apiKey}}
 Content-Type: application/json

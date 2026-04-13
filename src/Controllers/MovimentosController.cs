@@ -52,4 +52,26 @@ public class MovimentosController : ControllerBase
         var result = await _movimentosService.EvolucaoAsync(request);
         return Ok(result);
     }
+
+    [HttpPost("proximasentregas")]
+    [ProducesResponseType(typeof(List<ProximaEntregaItem>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<List<ProximaEntregaItem>>> ProximasEntregas(
+        [FromQuery] string? hotel,
+        [FromBody] ProximasEntregasRequest request)
+    {
+        _logger.LogInformation(
+            "ProximasEntregas movimentos hotelQuery={HotelQuery} hotelBody={HotelBody} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo} numGuia={NumGuia} pagina={Pagina} numRegistos={NumRegistos}",
+            hotel,
+            request.Hotel,
+            request.DataInicio,
+            request.DataFim,
+            request.Tipo,
+            request.NumGuia,
+            request.Pagina,
+            request.NumRegistos);
+
+        var result = await _movimentosService.ProximasEntregasAsync(request, hotel);
+        return Ok(result);
+    }
 }

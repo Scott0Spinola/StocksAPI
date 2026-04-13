@@ -11,6 +11,8 @@ public class StocksContext(DbContextOptions<StocksContext> options) : DbContext(
 
     public DbSet<VwClienteMovimento> VwClienteMovimentos => Set<VwClienteMovimento>();
 
+    public DbSet<VwProximaEntrega> VwProximasEntregas => Set<VwProximaEntrega>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -20,6 +22,13 @@ public class StocksContext(DbContextOptions<StocksContext> options) : DbContext(
             entity.HasNoKey();
             entity.ToView("vw_ClienteMovimentos", "dbo");
         });
+
+        modelBuilder.Entity<VwProximaEntrega>(entity =>
+        {
+            entity.HasNoKey();
+            entity.ToView("vw_ProximasEntregas", "dbo");
+        });
     }
 }
+
  

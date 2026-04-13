@@ -16,6 +16,13 @@ public class Cliente_Movimento_Services
     private readonly ILogger<Cliente_Movimento_Services> _logger;
 
     private const string LavandariaPara = "Lavandaria";
+    private const string TodasUnidadesToken = "todas-unidades";
+
+    private sealed class ProximaEntregaProjection
+    {
+        public string UnidadeHotel { get; init; } = string.Empty;
+        public DateTime Data { get; init; }
+    }
 
 
     /// <summary>
@@ -358,6 +365,92 @@ public class Cliente_Movimento_Services
                     Qtd: i.Qtd))
                 .ToListAsync();
         }
+    }
+
+    public async Task<List<ProximaEntregaItem>> ProximasEntregasAsync(ProximasEntregasRequest request, string? hotelQuery)
+    {
+        if (request.DataInicio > request.DataFim)
+        {
+            throw new ArgumentException("'dataInicio' must be less than or equal to 'dataFim'.");
+        }
+
+        if (request.Tipo is < 0 or > 2)
+        {
+            throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ");
+        }
+
+        if (request.Pagina < 1)
+        {
+            throw new ArgumentException("'pagina' must be >= 1.");
+        }
+
+        if (request.NumRegistos < 1)
+        {
+            throw new ArgumentException("'numRegistos' must be >= 1.");
+        }
+
+        var hotelFiltro = string.IsNullOrWhiteSpace(hotelQuery) ? request.Hotel : hotelQuery;
+        var now = DateTime.Now;
+
+        IQueryable<Cliente_Movimento> baseQuery = _context.Cliente_Movimentos
+            .AsNoTracking()
+            .Where(m => m.Datetime >= request.DataInicio && m.Datetime <= request.DataFim)
+            .Where(m => m.Datetime >= now);
+
+        if (!string.IsNullOrWhiteSpace(request.NumGuia))
+        {
+            baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
+        }
+
+        var isTodasUnidades = string.Equals(hotelFiltro, TodasUnidadesToken, StringComparison.OrdinalIgnoreCase);
+
+        IQueryable<ProximaEntregaProjection> entradas = baseQuery
+            .Where(m => m.Para != null && m.Para != LavandariaPara)
+            .Where(m => isTodasUnidades || m.Para == hotelFiltro)
+            .GroupBy(m => m.Para!)
+            .Select(g => new ProximaEntregaProjection
+            {
+                UnidadeHotel = g.Key,
+                Data = g.Min(x => x.Datetime)
+            });
+
+        IQueryable<ProximaEntregaProjection> saidas = baseQuery
+            .Where(m => m.Para == LavandariaPara)
+            .Where(m => m.De != null)
+            .Where(m => isTodasUnidades || m.De == hotelFiltro)
+            .GroupBy(m => m.De!)
+            .Select(g => new ProximaEntregaProjection
+            {
+                UnidadeHotel = g.Key,
+                Data = g.Min(x => x.Datetime)
+            });
+
+        IQueryable<ProximaEntregaProjection> query = request.Tipo switch
+        {
+            0 => entradas,
+            1 => saidas,
+            2 => entradas.Concat(saidas)
+                .GroupBy(x => x.UnidadeHotel)
+                .Select(g => new ProximaEntregaProjection
+                {
+                    UnidadeHotel = g.Key,
+                    Data = g.Min(x => x.Data)
+                }),
+            _ => throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ")
+        };
+
+        var skip = (request.Pagina - 1) * request.NumRegistos;
+
+        return await query
+            .OrderBy(x => x.UnidadeHotel)
+            .Skip(skip)
+            .Take(request.NumRegistos)
+            .Select(x => new ProximaEntregaItem(
+                DataPrevista: x.Data.ToString("dd/MM/yyyy"),
+                HoraPrevista: x.Data.ToString("HH:mm"),
+                UnidadeHotel: x.UnidadeHotel,
+                Observacoes: string.Empty))
+            .ToListAsync();
     }
     
     /// <summary>
