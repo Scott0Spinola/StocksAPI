@@ -237,6 +237,128 @@ public class Cliente_Movimento_Services
                 IdDoc: i.Id))
             .ToListAsync();
     }
+
+    public async Task<List<EvolucaoItem>> EvolucaoAsync(EvolucaoRequest request)
+    {
+        if (request.DataInicio > request.DataFim)
+        {
+            throw new ArgumentException("'dataInicio' must be less than or equal to 'dataFim'.");
+        }
+
+        if (request.Tipo is < 0 or > 2)
+        {
+            throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ");
+        }
+
+        if (request.Pagina < 1)
+        {
+            throw new ArgumentException("'pagina' must be >= 1.");
+        }
+
+        if (request.NumRegistos < 1)
+        {
+            throw new ArgumentException("'numRegistos' must be >= 1.");
+        }
+
+        var isHourly = request.DataInicio.Date == request.DataFim.Date;
+
+        IQueryable<VwClienteMovimento> baseQuery = _context.VwClienteMovimentos
+            .AsNoTracking()
+            .Where(m => m.Datetime >= request.DataInicio && m.Datetime <= request.DataFim);
+
+        if (!string.IsNullOrWhiteSpace(request.NumGuia))
+        {
+            baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
+        }
+
+        var skip = (request.Pagina - 1) * request.NumRegistos;
+
+        if (isHourly)
+        {
+            var entradas = baseQuery
+                .Where(m => m.Para == request.Hotel)
+                .GroupBy(m => new { Dia = m.Datetime.Date, Hora = m.Datetime.Hour })
+                .Select(g => new
+                {
+                    g.Key.Dia,
+                    g.Key.Hora,
+                    Direcao = 0,
+                    Qtd = g.Sum(x => x.Quantidade)
+                });
+
+            var saidas = baseQuery
+                .Where(m => m.Para == LavandariaPara)
+                .GroupBy(m => new { Dia = m.Datetime.Date, Hora = m.Datetime.Hour })
+                .Select(g => new
+                {
+                    g.Key.Dia,
+                    g.Key.Hora,
+                    Direcao = 1,
+                    Qtd = g.Sum(x => x.Quantidade)
+                });
+
+            var query = request.Tipo switch
+            {
+                0 => entradas,
+                1 => saidas,
+                2 => entradas.Concat(saidas),
+                _ => throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ")
+            };
+
+            return await query
+                .OrderBy(i => i.Dia)
+                .ThenBy(i => i.Hora)
+                .Skip(skip)
+                .Take(request.NumRegistos)
+                .Select(i => new EvolucaoItem(
+                    Data: i.Dia.ToString("dd/MM"),
+                    Hora: i.Hora.ToString("00"),
+                    Direcao: i.Direcao,
+                    Qtd: i.Qtd))
+                .ToListAsync();
+        }
+        else
+        {
+            var entradas = baseQuery
+                .Where(m => m.Para == request.Hotel)
+                .GroupBy(m => m.Datetime.Date)
+                .Select(g => new
+                {
+                    Dia = g.Key,
+                    Direcao = 0,
+                    Qtd = g.Sum(x => x.Quantidade)
+                });
+
+            var saidas = baseQuery
+                .Where(m => m.Para == LavandariaPara)
+                .GroupBy(m => m.Datetime.Date)
+                .Select(g => new
+                {
+                    Dia = g.Key,
+                    Direcao = 1,
+                    Qtd = g.Sum(x => x.Quantidade)
+                });
+
+            var query = request.Tipo switch
+            {
+                0 => entradas,
+                1 => saidas,
+                2 => entradas.Concat(saidas),
+                _ => throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ")
+            };
+
+            return await query
+                .OrderBy(i => i.Dia)
+                .Skip(skip)
+                .Take(request.NumRegistos)
+                .Select(i => new EvolucaoItem(
+                    Data: i.Dia.ToString("dd/MM"),
+                    Hora: string.Empty,
+                    Direcao: i.Direcao,
+                    Qtd: i.Qtd))
+                .ToListAsync();
+        }
+    }
     
     /// <summary>
     /// Creates a new movimento from the provided data transfer object.
