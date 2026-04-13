@@ -1,6 +1,6 @@
 namespace src.Models;
 
-public class Cliente_Movimento
+public class VwClienteMovimento
 {
     public int Id { get; set; }
     public  string? MovementRID {get; set;}

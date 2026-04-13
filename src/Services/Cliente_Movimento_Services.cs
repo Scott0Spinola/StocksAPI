@@ -2,6 +2,7 @@ using System.Data;
 using src.Data;
 using src.Models;
 using src.Dtos.Cliente_Movimento_Dtos;
+using src.Dtos.Movimentos_Dtos;
 
 using Microsoft.EntityFrameworkCore;
 using IntervencoesAPI.Services;
@@ -13,6 +14,8 @@ public class Cliente_Movimento_Services
 {
     private readonly StocksContext _context;
     private readonly ILogger<Cliente_Movimento_Services> _logger;
+
+    private const string LavandariaPara = "Lavandaria";
 
 
     /// <summary>
@@ -166,6 +169,75 @@ public class Cliente_Movimento_Services
             throw;
         }
     }
+
+    public async Task<List<PesquisaItem>> PesquisaAsync(PesquisaRequest request)
+    {
+        if (request.DataInicio > request.DataFim)
+        {
+            throw new ArgumentException("'dataInicio' must be less than or equal to 'dataFim'.");
+        }
+
+        if (request.Tipo is < 0 or > 2)
+        {
+            throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ");
+        }
+
+        IQueryable<VwClienteMovimento> baseQuery = _context.VwClienteMovimentos
+            .AsNoTracking()
+            .Where(m => m.Datetime >= request.DataInicio && m.Datetime <= request.DataFim);
+
+        if (!string.IsNullOrWhiteSpace(request.NumGuia))
+        {
+            baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
+        }
+
+        var entradas = baseQuery
+            .Where(m => m.Para == request.Hotel)
+            .Select(m => new
+            {
+                m.Id,
+                m.MovementRID,
+                Data = m.Datetime,
+                Direcao = 0,
+                Tipo = "Renting",
+                Produto = m.Descricao,
+                Qtd = m.Quantidade
+            });
+
+        var saidas = baseQuery
+            .Where(m => m.Para == LavandariaPara)
+            .Select(m => new
+            {
+                m.Id,
+                m.MovementRID,
+                Data = m.Datetime,
+                Direcao = 1,
+                Tipo = "Renting",
+                Produto = m.Descricao,
+                Qtd = m.Quantidade
+            });
+
+        var query = request.Tipo switch
+        {
+            0 => entradas,
+            1 => saidas,
+            2 => entradas.Concat(saidas),
+            _ => throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ")
+        };
+
+        return await query
+            .OrderBy(i => i.Data)
+            .Select(i => new PesquisaItem(
+                NumDocumento: i.MovementRID,
+                Data: i.Data,
+                Direcao: i.Direcao,
+                Tipo: i.Tipo,
+                Produto: i.Produto,
+                Qtd: i.Qtd,
+                IdDoc: i.Id))
+            .ToListAsync();
+    }
+    
     /// <summary>
     /// Creates a new movimento from the provided data transfer object.
     /// </summary>

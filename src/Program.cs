@@ -19,6 +19,7 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
     Directory.CreateDirectory(logDirectory);
 
     loggerConfiguration
+        .Enrich.FromLogContext()
         .MinimumLevel.Information()
         .WriteTo.Console()
         .WriteTo.File(
@@ -91,23 +92,18 @@ builder.Services.AddSwaggerGen(options =>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 var app = builder.Build();
+
+Log.Information(
+    "Starting {Application} in {Environment}; logs at {LogDirectory}",
+    app.Environment.ApplicationName,
+    app.Environment.EnvironmentName,
+    Path.Combine(app.Environment.ContentRootPath, "Logs"));
 
 
 app.UseStatusCodePages();
 app.UseExceptionHandler();
+app.UseSerilogRequestLogging();
 
 // Apply EF migrations only when explicitly enabled.
 // This avoids trying to recreate tables when you point at an existing database.
@@ -133,5 +129,12 @@ app.UseAuthorization();
 
 app.MapControllers().RequireAuthorization();
 
-app.Run();
+try
+{
+    app.Run();
+}
+finally
+{
+    Log.CloseAndFlush();
+}
 

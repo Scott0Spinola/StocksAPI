@@ -1,6 +1,49 @@
 @src_HostAddress = http://localhost:5275
+@apiKey = REPLACE_ME
 
 GET {{src_HostAddress}}/weatherforecast/
 Accept: application/json
+
+###
+
+POST {{src_HostAddress}}/api/movimentos/pesquisa
+X-API-KEY: {{apiKey}}
+Content-Type: application/json
+
+{
+	"hotel": "HotelA",
+	"dataInicio": "2026-04-01T00:00:00",
+	"dataFim": "2026-04-30T23:59:59",
+	"numGuia": null,
+	"tipo": 0
+}
+
+###
+
+POST {{src_HostAddress}}/api/movimentos/pesquisa
+X-API-KEY: {{apiKey}}
+Content-Type: application/json
+
+{
+	"hotel": "HotelA",
+	"dataInicio": "2026-04-01T00:00:00",
+	"dataFim": "2026-04-30T23:59:59",
+	"numGuia": null,
+	"tipo": 1
+}
+
+###
+
+POST {{src_HostAddress}}/api/movimentos/pesquisa
+X-API-KEY: {{apiKey}}
+Content-Type: application/json
+
+{
+	"hotel": "HotelA",
+	"dataInicio": "2026-04-01T00:00:00",
+	"dataFim": "2026-04-30T23:59:59",
+	"numGuia": null,
+	"tipo": 2
+}
 
 ###

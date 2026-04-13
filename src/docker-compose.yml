@@ -2,10 +2,10 @@ services:
   src:
     build:
       context: .
-      dockerfile: .dockerfile
+      dockerfile: Dockerfile
     image: src:dev
     ports:
-      - "8080:8080"
+      - "5275:5275"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:

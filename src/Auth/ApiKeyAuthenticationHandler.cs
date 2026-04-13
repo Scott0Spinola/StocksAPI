@@ -28,17 +28,20 @@ public class ApiKeyAuthenticationHandler : AuthenticationHandler<AuthenticationS
         var expectedKey = _configuration["Authentication:ApiKey"];
         if (string.IsNullOrWhiteSpace(expectedKey))
         {
+            Logger.LogError("API key auth misconfigured: missing Authentication:ApiKey (path={Path})", Request.Path);
             return Task.FromResult(AuthenticateResult.Fail("Server API key not configured (Authentication:ApiKey)."));
         }
 
         if (!Request.Headers.TryGetValue(HeaderName, out var providedKeyValues))
         {
+            Logger.LogWarning("API key auth failed: missing header {HeaderName} (path={Path})", HeaderName, Request.Path);
             return Task.FromResult(AuthenticateResult.Fail($"Missing header: {HeaderName}."));
         }
 
         var providedKey = providedKeyValues.ToString();
         if (!string.Equals(providedKey, expectedKey, StringComparison.Ordinal))
         {
+            Logger.LogWarning("API key auth failed: invalid API key (path={Path})", Request.Path);
             return Task.FromResult(AuthenticateResult.Fail("Invalid API key."));
         }
 
