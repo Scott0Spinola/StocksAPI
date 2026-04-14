@@ -247,14 +247,11 @@
             <returns>A list of <see cref="T:src.Dtos.Movimentos_Dtos.EvolucaoItem"/> ordered by date (and hour when applicable).</returns>
             <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
         </member>
-        <member name="M:src.Services.Cliente_Movimento_Services.ProximasEntregasAsync(src.Dtos.Movimentos_Dtos.ProximasEntregasRequest,System.String)">
+        <member name="M:src.Services.Cliente_Movimento_Services.ProximasEntregasAsync(src.Dtos.Movimentos_Dtos.ProximasEntregasRequest)">
             <summary>
             Lists upcoming deliveries within the given date range.
             </summary>
             <param name="request">Criteria including date range, direction type, paging, and optional movement document number.</param>
-            <param name="hotelQuery">
-            Optional query-string override for the hotel filter; when set to <c>todas-unidades</c> returns results for all units.
-            </param>
             <returns>A paged list of <see cref="T:src.Dtos.Movimentos_Dtos.ProximaEntregaItem"/> ordered by scheduled date/time.</returns>
             <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
         </member>

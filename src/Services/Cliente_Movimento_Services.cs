@@ -19,13 +19,11 @@ public class Cliente_Movimento_Services
     private readonly ILogger<Cliente_Movimento_Services> _logger;
 
     private const string LavandariaPara = "Lavandaria";
-    private const string TodasUnidadesToken = "todas-unidades";
 
     private sealed class ProximaEntregaProjection
     {
         public string UnidadeHotel { get; init; } = string.Empty;
         public DateTime Data { get; init; }
-        public string Observacoes { get; init; } = string.Empty;
     }
 
 
@@ -401,12 +399,9 @@ public class Cliente_Movimento_Services
     /// Lists upcoming deliveries within the given date range.
     /// </summary>
     /// <param name="request">Criteria including date range, direction type, paging, and optional movement document number.</param>
-    /// <param name="hotelQuery">
-    /// Optional query-string override for the hotel filter; when set to <c>todas-unidades</c> returns results for all units.
-    /// </param>
     /// <returns>A paged list of <see cref="ProximaEntregaItem"/> ordered by scheduled date/time.</returns>
     /// <exception cref="ArgumentException">Thrown when request parameters are invalid.</exception>
-    public async Task<List<ProximaEntregaItem>> ProximasEntregasAsync(ProximasEntregasRequest request, string? hotelQuery)
+    public async Task<List<ProximaEntregaItem>> ProximasEntregasAsync(ProximasEntregasRequest request)
     {
         // Validate request parameters.
         if (request.DataInicio > request.DataFim)
@@ -429,8 +424,11 @@ public class Cliente_Movimento_Services
             throw new ArgumentException("'numRegistos' must be >= 1.");
         }
 
-        // Allow query-string to override the request payload (useful for UI filtering).
-        var hotelFiltro = string.IsNullOrWhiteSpace(hotelQuery) ? request.Hotel : hotelQuery;
+        if (string.IsNullOrWhiteSpace(request.Hotel))
+        {
+            throw new ArgumentException("'hotel' is required.");
+        }
+
         var now = DateTime.Now;
 
         // Only future movements (>= now) are relevant for "next delivery".
@@ -439,35 +437,31 @@ public class Cliente_Movimento_Services
             .Where(m => m.Datetime >= request.DataInicio && m.Datetime <= request.DataFim)
             .Where(m => m.Datetime >= now);
 
+        // Scope results to the requested client/hotel.
+        baseQuery = baseQuery.Where(m => m.Cliente == request.Hotel);
+
         if (!string.IsNullOrWhiteSpace(request.NumGuia))
         {
             baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
         }
 
-        // Special token supports "all units" queries.
-        var isTodasUnidades = string.Equals(hotelFiltro, TodasUnidadesToken, StringComparison.OrdinalIgnoreCase);
-
         // Entries: future movements going to hotel units (Para).
         IQueryable<ProximaEntregaProjection> entradas = baseQuery
             .Where(m => m.Para != null && m.Para != LavandariaPara)
-            .Where(m => isTodasUnidades || m.Para == hotelFiltro)
             .Select(m => new ProximaEntregaProjection
             {
                 UnidadeHotel = m.Para!,
-                Data = m.Datetime,
-                Observacoes = m.Descricao ?? string.Empty
+                Data = m.Datetime
             });
 
         // Exits: future movements leaving hotel units (De) towards the laundry.
         IQueryable<ProximaEntregaProjection> saidas = baseQuery
             .Where(m => m.Para == LavandariaPara)
             .Where(m => m.De != null)
-            .Where(m => isTodasUnidades || m.De == hotelFiltro)
             .Select(m => new ProximaEntregaProjection
             {
                 UnidadeHotel = m.De!,
-                Data = m.Datetime,
-                Observacoes = m.Descricao ?? string.Empty
+                Data = m.Datetime
             });
 
         IQueryable<ProximaEntregaProjection> query = request.Tipo switch
@@ -490,7 +484,7 @@ public class Cliente_Movimento_Services
                 DataPrevista: x.Data.ToString("dd/MM/yyyy"),
                 HoraPrevista: x.Data.ToString("HH:mm"),
                 UnidadeHotel: x.UnidadeHotel,
-                Observacoes: x.Observacoes))
+                Observacoes: string.Empty))
             .ToListAsync();
     }
     

@@ -26,21 +26,50 @@ public class MovimentosProximasEntregasTests
     }
 
     [Fact]
+    public async Task ScopesResultsByClienteFromBody()
+    {
+        var service = CreateService(out var context);
+        var now = DateTime.Now;
+
+        context.Cliente_Movimentos.AddRange(
+            new Cliente_Movimento { MovementRID = "C1-A", Cliente = "Cliente1", Para = "HotelA", De = "Lavandaria", Datetime = now.AddHours(1), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "C1-B", Cliente = "Cliente1", De = "HotelA", Para = "Lavandaria", Datetime = now.AddHours(2), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "C2-A", Cliente = "Cliente2", Para = "HotelX", De = "Lavandaria", Datetime = now.AddHours(1), Quantidade = 1 });
+
+        await context.SaveChangesAsync();
+
+        var request = new ProximasEntregasRequest(
+            Hotel: "Cliente1",
+            DataInicio: now.AddDays(-1),
+            DataFim: now.AddDays(1),
+            NumGuia: null,
+            Tipo: 2,
+            Pagina: 1,
+            NumRegistos: 50);
+
+        var result = await service.ProximasEntregasAsync(request);
+
+        Assert.Equal(2, result.Count);
+        Assert.DoesNotContain(result, r => r.UnidadeHotel == "HotelX");
+    }
+
+    [Fact]
     public async Task Tipo0_Entradas_ReturnsUpcomingEntries()
     {
         var service = CreateService(out var context);
         var now = DateTime.Now;
 
         context.Cliente_Movimentos.AddRange(
-            new Cliente_Movimento { MovementRID = "A-1", Para = "HotelA", De = "Lavandaria", Datetime = now.AddHours(2), Quantidade = 1 },
-            new Cliente_Movimento { MovementRID = "A-2", Para = "HotelA", De = "Lavandaria", Datetime = now.AddHours(1), Quantidade = 1 },
-            new Cliente_Movimento { MovementRID = "B-1", Para = "HotelB", De = "Lavandaria", Datetime = now.AddHours(3), Quantidade = 1 },
-            new Cliente_Movimento { MovementRID = "PAST", Para = "HotelA", De = "Lavandaria", Datetime = now.AddDays(-1), Quantidade = 1 });
+            new Cliente_Movimento { MovementRID = "A-1", Cliente = "Cliente1", Para = "HotelA", De = "Lavandaria", Datetime = now.AddHours(2), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "A-2", Cliente = "Cliente1", Para = "HotelA", De = "Lavandaria", Datetime = now.AddHours(1), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "B-1", Cliente = "Cliente1", Para = "HotelB", De = "Lavandaria", Datetime = now.AddHours(3), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "PAST", Cliente = "Cliente1", Para = "HotelA", De = "Lavandaria", Datetime = now.AddDays(-1), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "OTHER", Cliente = "Cliente2", Para = "HotelZ", De = "Lavandaria", Datetime = now.AddHours(1), Quantidade = 1 });
 
         await context.SaveChangesAsync();
 
         var request = new ProximasEntregasRequest(
-            Hotel: "todas-unidades",
+            Hotel: "Cliente1",
             DataInicio: now.AddDays(-2),
             DataFim: now.AddDays(2),
             NumGuia: null,
@@ -48,7 +77,7 @@ public class MovimentosProximasEntregasTests
             Pagina: 1,
             NumRegistos: 50);
 
-        var result = await service.ProximasEntregasAsync(request, hotelQuery: "todas-unidades");
+        var result = await service.ProximasEntregasAsync(request);
 
         Assert.Equal(3, result.Count);
         Assert.Equal("HotelA", result[0].UnidadeHotel);
@@ -65,14 +94,16 @@ public class MovimentosProximasEntregasTests
         var now = DateTime.Now;
 
         context.Cliente_Movimentos.AddRange(
-            new Cliente_Movimento { MovementRID = "S-1", De = "HotelA", Para = "Lavandaria", Datetime = now.AddMinutes(30), Quantidade = 1 },
-            new Cliente_Movimento { MovementRID = "S-2", De = "HotelA", Para = "Lavandaria", Datetime = now.AddHours(2), Quantidade = 1 },
-            new Cliente_Movimento { MovementRID = "NOT-S", De = "HotelA", Para = "HotelA", Datetime = now.AddMinutes(10), Quantidade = 1 });
+            new Cliente_Movimento { MovementRID = "S-1", Cliente = "Cliente1", De = "HotelA", Para = "Lavandaria", Datetime = now.AddMinutes(30), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "S-2", Cliente = "Cliente1", De = "HotelA", Para = "Lavandaria", Datetime = now.AddHours(2), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "S-3", Cliente = "Cliente1", De = "HotelB", Para = "Lavandaria", Datetime = now.AddMinutes(45), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "NOT-S", Cliente = "Cliente1", De = "HotelA", Para = "HotelA", Datetime = now.AddMinutes(10), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "OTHER", Cliente = "Cliente2", De = "HotelX", Para = "Lavandaria", Datetime = now.AddMinutes(40), Quantidade = 1 });
 
         await context.SaveChangesAsync();
 
         var request = new ProximasEntregasRequest(
-            Hotel: "HotelA",
+            Hotel: "Cliente1",
             DataInicio: now.AddDays(-1),
             DataFim: now.AddDays(1),
             NumGuia: null,
@@ -80,12 +111,15 @@ public class MovimentosProximasEntregasTests
             Pagina: 1,
             NumRegistos: 50);
 
-        var result = await service.ProximasEntregasAsync(request, hotelQuery: "HotelA");
+        var result = await service.ProximasEntregasAsync(request);
 
-        Assert.Equal(2, result.Count);
-        Assert.All(result, i => Assert.Equal("HotelA", i.UnidadeHotel));
+        Assert.Equal(3, result.Count);
+        Assert.Equal("HotelA", result[0].UnidadeHotel);
         Assert.Equal(now.AddMinutes(30).ToString("HH:mm"), result[0].HoraPrevista);
-        Assert.Equal(now.AddHours(2).ToString("HH:mm"), result[1].HoraPrevista);
+        Assert.Equal("HotelB", result[1].UnidadeHotel);
+        Assert.Equal(now.AddMinutes(45).ToString("HH:mm"), result[1].HoraPrevista);
+        Assert.Equal("HotelA", result[2].UnidadeHotel);
+        Assert.Equal(now.AddHours(2).ToString("HH:mm"), result[2].HoraPrevista);
     }
 
     [Fact]
@@ -95,14 +129,15 @@ public class MovimentosProximasEntregasTests
         var now = DateTime.Now;
 
         context.Cliente_Movimentos.AddRange(
-            new Cliente_Movimento { MovementRID = "ENT-A", Para = "HotelA", De = "Lavandaria", Datetime = now.AddHours(1), Quantidade = 1 },
-            new Cliente_Movimento { MovementRID = "SAI-A", De = "HotelA", Para = "Lavandaria", Datetime = now.AddMinutes(20), Quantidade = 1 },
-            new Cliente_Movimento { MovementRID = "ENT-B", Para = "HotelB", De = "Lavandaria", Datetime = now.AddMinutes(50), Quantidade = 1 });
+            new Cliente_Movimento { MovementRID = "ENT-A", Cliente = "Cliente1", Para = "HotelA", De = "Lavandaria", Datetime = now.AddHours(1), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "SAI-A", Cliente = "Cliente1", De = "HotelA", Para = "Lavandaria", Datetime = now.AddMinutes(20), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "ENT-B", Cliente = "Cliente1", Para = "HotelB", De = "Lavandaria", Datetime = now.AddMinutes(50), Quantidade = 1 },
+            new Cliente_Movimento { MovementRID = "OTHER", Cliente = "Cliente2", Para = "HotelX", De = "Lavandaria", Datetime = now.AddMinutes(10), Quantidade = 1 });
 
         await context.SaveChangesAsync();
 
         var request = new ProximasEntregasRequest(
-            Hotel: "todas-unidades",
+            Hotel: "Cliente1",
             DataInicio: now.AddDays(-1),
             DataFim: now.AddDays(1),
             NumGuia: null,
@@ -110,7 +145,7 @@ public class MovimentosProximasEntregasTests
             Pagina: 1,
             NumRegistos: 50);
 
-        var result = await service.ProximasEntregasAsync(request, hotelQuery: "todas-unidades");
+        var result = await service.ProximasEntregasAsync(request);
 
         Assert.Equal(3, result.Count);
         Assert.Equal("HotelA", result[0].UnidadeHotel);
