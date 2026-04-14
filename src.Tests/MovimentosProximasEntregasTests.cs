@@ -26,7 +26,7 @@ public class MovimentosProximasEntregasTests
     }
 
     [Fact]
-    public async Task Tipo0_Entradas_ReturnsNextDeliveryPerHotel()
+    public async Task Tipo0_Entradas_ReturnsUpcomingEntries()
     {
         var service = CreateService(out var context);
         var now = DateTime.Now;
@@ -50,12 +50,12 @@ public class MovimentosProximasEntregasTests
 
         var result = await service.ProximasEntregasAsync(request, hotelQuery: "todas-unidades");
 
-        Assert.Equal(2, result.Count);
-        Assert.Contains(result, r => r.UnidadeHotel == "HotelA");
-        Assert.Contains(result, r => r.UnidadeHotel == "HotelB");
-
-        var hotelA = result.Single(r => r.UnidadeHotel == "HotelA");
-        Assert.Equal(now.AddHours(1).ToString("dd/MM/yyyy"), hotelA.DataPrevista);
+        Assert.Equal(3, result.Count);
+        Assert.Equal("HotelA", result[0].UnidadeHotel);
+        Assert.Equal(now.AddHours(1).ToString("HH:mm"), result[0].HoraPrevista);
+        Assert.Equal("HotelA", result[1].UnidadeHotel);
+        Assert.Equal(now.AddHours(2).ToString("HH:mm"), result[1].HoraPrevista);
+        Assert.Equal("HotelB", result[2].UnidadeHotel);
     }
 
     [Fact]
@@ -82,14 +82,14 @@ public class MovimentosProximasEntregasTests
 
         var result = await service.ProximasEntregasAsync(request, hotelQuery: "HotelA");
 
-        Assert.Single(result);
-        var item = result[0];
-        Assert.Equal("HotelA", item.UnidadeHotel);
-        Assert.Equal(now.AddMinutes(30).ToString("HH:mm"), item.HoraPrevista);
+        Assert.Equal(2, result.Count);
+        Assert.All(result, i => Assert.Equal("HotelA", i.UnidadeHotel));
+        Assert.Equal(now.AddMinutes(30).ToString("HH:mm"), result[0].HoraPrevista);
+        Assert.Equal(now.AddHours(2).ToString("HH:mm"), result[1].HoraPrevista);
     }
 
     [Fact]
-    public async Task Tipo2_Ambos_PicksEarliestOfEntryOrExitPerHotel()
+    public async Task Tipo2_Ambos_ReturnsUpcomingEntriesAndExits()
     {
         var service = CreateService(out var context);
         var now = DateTime.Now;
@@ -112,8 +112,12 @@ public class MovimentosProximasEntregasTests
 
         var result = await service.ProximasEntregasAsync(request, hotelQuery: "todas-unidades");
 
-        Assert.Equal(2, result.Count);
-        var hotelA = result.Single(r => r.UnidadeHotel == "HotelA");
-        Assert.Equal(now.AddMinutes(20).ToString("HH:mm"), hotelA.HoraPrevista);
+        Assert.Equal(3, result.Count);
+        Assert.Equal("HotelA", result[0].UnidadeHotel);
+        Assert.Equal(now.AddMinutes(20).ToString("HH:mm"), result[0].HoraPrevista);
+        Assert.Equal("HotelB", result[1].UnidadeHotel);
+        Assert.Equal(now.AddMinutes(50).ToString("HH:mm"), result[1].HoraPrevista);
+        Assert.Equal("HotelA", result[2].UnidadeHotel);
+        Assert.Equal(now.AddHours(1).ToString("HH:mm"), result[2].HoraPrevista);
     }
 }

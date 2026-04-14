@@ -249,13 +249,13 @@
         </member>
         <member name="M:src.Services.Cliente_Movimento_Services.ProximasEntregasAsync(src.Dtos.Movimentos_Dtos.ProximasEntregasRequest,System.String)">
             <summary>
-            Lists the next scheduled delivery per hotel unit within the given date range.
+            Lists upcoming deliveries within the given date range.
             </summary>
             <param name="request">Criteria including date range, direction type, paging, and optional movement document number.</param>
             <param name="hotelQuery">
             Optional query-string override for the hotel filter; when set to <c>todas-unidades</c> returns results for all units.
             </param>
-            <returns>A paged list of <see cref="T:src.Dtos.Movimentos_Dtos.ProximaEntregaItem"/> ordered by unit name.</returns>
+            <returns>A paged list of <see cref="T:src.Dtos.Movimentos_Dtos.ProximaEntregaItem"/> ordered by scheduled date/time.</returns>
             <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
         </member>
         <member name="M:src.Services.Cliente_Movimento_Services.CreateMovimento(src.Dtos.Cliente_Movimento_Dtos.Create)">

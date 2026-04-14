@@ -25,6 +25,7 @@ public class Cliente_Movimento_Services
     {
         public string UnidadeHotel { get; init; } = string.Empty;
         public DateTime Data { get; init; }
+        public string Observacoes { get; init; } = string.Empty;
     }
 
 
@@ -227,6 +228,7 @@ public class Cliente_Movimento_Services
         // "Saidas" are movements going to the laundry.
         var saidas = baseQuery
             .Where(m => m.Para == LavandariaPara)
+            .Where(m => m.De == request.Hotel)
             .Select(m => new
             {
                 m.Id,
@@ -396,13 +398,13 @@ public class Cliente_Movimento_Services
     }
 
     /// <summary>
-    /// Lists the next scheduled delivery per hotel unit within the given date range.
+    /// Lists upcoming deliveries within the given date range.
     /// </summary>
     /// <param name="request">Criteria including date range, direction type, paging, and optional movement document number.</param>
     /// <param name="hotelQuery">
     /// Optional query-string override for the hotel filter; when set to <c>todas-unidades</c> returns results for all units.
     /// </param>
-    /// <returns>A paged list of <see cref="ProximaEntregaItem"/> ordered by unit name.</returns>
+    /// <returns>A paged list of <see cref="ProximaEntregaItem"/> ordered by scheduled date/time.</returns>
     /// <exception cref="ArgumentException">Thrown when request parameters are invalid.</exception>
     public async Task<List<ProximaEntregaItem>> ProximasEntregasAsync(ProximasEntregasRequest request, string? hotelQuery)
     {
@@ -445,41 +447,34 @@ public class Cliente_Movimento_Services
         // Special token supports "all units" queries.
         var isTodasUnidades = string.Equals(hotelFiltro, TodasUnidadesToken, StringComparison.OrdinalIgnoreCase);
 
-        // Entries: next movement going to each hotel unit (Para).
+        // Entries: future movements going to hotel units (Para).
         IQueryable<ProximaEntregaProjection> entradas = baseQuery
             .Where(m => m.Para != null && m.Para != LavandariaPara)
             .Where(m => isTodasUnidades || m.Para == hotelFiltro)
-            .GroupBy(m => m.Para!)
-            .Select(g => new ProximaEntregaProjection
+            .Select(m => new ProximaEntregaProjection
             {
-                UnidadeHotel = g.Key,
-                Data = g.Min(x => x.Datetime)
+                UnidadeHotel = m.Para!,
+                Data = m.Datetime,
+                Observacoes = m.Descricao ?? string.Empty
             });
 
-        // Exits: next movement leaving each hotel unit (De) towards the laundry.
+        // Exits: future movements leaving hotel units (De) towards the laundry.
         IQueryable<ProximaEntregaProjection> saidas = baseQuery
             .Where(m => m.Para == LavandariaPara)
             .Where(m => m.De != null)
             .Where(m => isTodasUnidades || m.De == hotelFiltro)
-            .GroupBy(m => m.De!)
-            .Select(g => new ProximaEntregaProjection
+            .Select(m => new ProximaEntregaProjection
             {
-                UnidadeHotel = g.Key,
-                Data = g.Min(x => x.Datetime)
+                UnidadeHotel = m.De!,
+                Data = m.Datetime,
+                Observacoes = m.Descricao ?? string.Empty
             });
 
         IQueryable<ProximaEntregaProjection> query = request.Tipo switch
         {
             0 => entradas,
             1 => saidas,
-            2 => entradas.Concat(saidas)
-                // When combining directions, keep the earliest date per unit.
-                .GroupBy(x => x.UnidadeHotel)
-                .Select(g => new ProximaEntregaProjection
-                {
-                    UnidadeHotel = g.Key,
-                    Data = g.Min(x => x.Data)
-                }),
+            2 => entradas.Concat(saidas),
             _ => throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ")
         };
 
@@ -487,14 +482,15 @@ public class Cliente_Movimento_Services
         var skip = (request.Pagina - 1) * request.NumRegistos;
 
         return await query
-            .OrderBy(x => x.UnidadeHotel)
+            .OrderBy(x => x.Data)
+            .ThenBy(x => x.UnidadeHotel)
             .Skip(skip)
             .Take(request.NumRegistos)
             .Select(x => new ProximaEntregaItem(
                 DataPrevista: x.Data.ToString("dd/MM/yyyy"),
                 HoraPrevista: x.Data.ToString("HH:mm"),
                 UnidadeHotel: x.UnidadeHotel,
-                Observacoes: string.Empty))
+                Observacoes: x.Observacoes))
             .ToListAsync();
     }
     
