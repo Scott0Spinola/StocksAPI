@@ -10,6 +10,9 @@ using IntervencoesAPI.Services;
 
 namespace src.Services;
 
+/// <summary>
+/// Application service for querying and managing <see cref="Cliente_Movimento"/> records.
+/// </summary>
 public class Cliente_Movimento_Services
 {
     private readonly StocksContext _context;
@@ -177,8 +180,15 @@ public class Cliente_Movimento_Services
         }
     }
 
+    /// <summary>
+    /// Searches movimentos within a date range and returns entries/exits (or both) for a given hotel.
+    /// </summary>
+    /// <param name="request">Search criteria including date range, hotel, optional document number, and direction type.</param>
+    /// <returns>A list of <see cref="PesquisaItem"/> ordered by movement date.</returns>
+    /// <exception cref="ArgumentException">Thrown when request parameters are invalid.</exception>
     public async Task<List<PesquisaItem>> PesquisaAsync(PesquisaRequest request)
     {
+        // Validate date interval and direction selector early for predictable API behavior.
         if (request.DataInicio > request.DataFim)
         {
             throw new ArgumentException("'dataInicio' must be less than or equal to 'dataFim'.");
@@ -189,15 +199,18 @@ public class Cliente_Movimento_Services
             throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ");
         }
 
+        // Base query uses the view (already joins/denormalizes as needed) and is filtered by date range.
         IQueryable<VwClienteMovimento> baseQuery = _context.VwClienteMovimentos
             .AsNoTracking()
             .Where(m => m.Datetime >= request.DataInicio && m.Datetime <= request.DataFim);
 
         if (!string.IsNullOrWhiteSpace(request.NumGuia))
         {
+            // Optional filter for a specific movement document/RID.
             baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
         }
 
+        // "Entradas" are movements going to the hotel.
         var entradas = baseQuery
             .Where(m => m.Para == request.Hotel)
             .Select(m => new
@@ -211,6 +224,7 @@ public class Cliente_Movimento_Services
                 Qtd = m.Quantidade
             });
 
+        // "Saidas" are movements going to the laundry.
         var saidas = baseQuery
             .Where(m => m.Para == LavandariaPara)
             .Select(m => new
@@ -245,8 +259,15 @@ public class Cliente_Movimento_Services
             .ToListAsync();
     }
 
+    /// <summary>
+    /// Computes an evolution series of quantities (hourly for a single day, daily otherwise) for entries/exits (or both).
+    /// </summary>
+    /// <param name="request">Evolution criteria including date range, hotel, optional document number, direction type, and pagination.</param>
+    /// <returns>A list of <see cref="EvolucaoItem"/> ordered by date (and hour when applicable).</returns>
+    /// <exception cref="ArgumentException">Thrown when request parameters are invalid.</exception>
     public async Task<List<EvolucaoItem>> EvolucaoAsync(EvolucaoRequest request)
     {
+        // Validate required invariants up front.
         if (request.DataInicio > request.DataFim)
         {
             throw new ArgumentException("'dataInicio' must be less than or equal to 'dataFim'.");
@@ -267,8 +288,10 @@ public class Cliente_Movimento_Services
             throw new ArgumentException("'numRegistos' must be >= 1.");
         }
 
+        // If the interval is a single calendar day, the API returns an hourly series.
         var isHourly = request.DataInicio.Date == request.DataFim.Date;
 
+        // Base query from the view filtered by date range, with an optional RID filter.
         IQueryable<VwClienteMovimento> baseQuery = _context.VwClienteMovimentos
             .AsNoTracking()
             .Where(m => m.Datetime >= request.DataInicio && m.Datetime <= request.DataFim);
@@ -278,10 +301,12 @@ public class Cliente_Movimento_Services
             baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
         }
 
+        // API pagination is applied after the grouping.
         var skip = (request.Pagina - 1) * request.NumRegistos;
 
         if (isHourly)
         {
+            // Hourly entries: group by date+hour and sum quantities.
             var entradas = baseQuery
                 .Where(m => m.Para == request.Hotel)
                 .GroupBy(m => new { Dia = m.Datetime.Date, Hora = m.Datetime.Hour })
@@ -293,6 +318,7 @@ public class Cliente_Movimento_Services
                     Qtd = g.Sum(x => x.Quantidade)
                 });
 
+            // Hourly exits: group by date+hour and sum quantities.
             var saidas = baseQuery
                 .Where(m => m.Para == LavandariaPara)
                 .GroupBy(m => new { Dia = m.Datetime.Date, Hora = m.Datetime.Hour })
@@ -326,6 +352,7 @@ public class Cliente_Movimento_Services
         }
         else
         {
+            // Daily entries: group by date and sum quantities.
             var entradas = baseQuery
                 .Where(m => m.Para == request.Hotel)
                 .GroupBy(m => m.Datetime.Date)
@@ -336,6 +363,7 @@ public class Cliente_Movimento_Services
                     Qtd = g.Sum(x => x.Quantidade)
                 });
 
+            // Daily exits: group by date and sum quantities.
             var saidas = baseQuery
                 .Where(m => m.Para == LavandariaPara)
                 .GroupBy(m => m.Datetime.Date)
@@ -367,8 +395,18 @@ public class Cliente_Movimento_Services
         }
     }
 
+    /// <summary>
+    /// Lists the next scheduled delivery per hotel unit within the given date range.
+    /// </summary>
+    /// <param name="request">Criteria including date range, direction type, paging, and optional movement document number.</param>
+    /// <param name="hotelQuery">
+    /// Optional query-string override for the hotel filter; when set to <c>todas-unidades</c> returns results for all units.
+    /// </param>
+    /// <returns>A paged list of <see cref="ProximaEntregaItem"/> ordered by unit name.</returns>
+    /// <exception cref="ArgumentException">Thrown when request parameters are invalid.</exception>
     public async Task<List<ProximaEntregaItem>> ProximasEntregasAsync(ProximasEntregasRequest request, string? hotelQuery)
     {
+        // Validate request parameters.
         if (request.DataInicio > request.DataFim)
         {
             throw new ArgumentException("'dataInicio' must be less than or equal to 'dataFim'.");
@@ -389,9 +427,11 @@ public class Cliente_Movimento_Services
             throw new ArgumentException("'numRegistos' must be >= 1.");
         }
 
+        // Allow query-string to override the request payload (useful for UI filtering).
         var hotelFiltro = string.IsNullOrWhiteSpace(hotelQuery) ? request.Hotel : hotelQuery;
         var now = DateTime.Now;
 
+        // Only future movements (>= now) are relevant for "next delivery".
         IQueryable<Cliente_Movimento> baseQuery = _context.Cliente_Movimentos
             .AsNoTracking()
             .Where(m => m.Datetime >= request.DataInicio && m.Datetime <= request.DataFim)
@@ -402,8 +442,10 @@ public class Cliente_Movimento_Services
             baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
         }
 
+        // Special token supports "all units" queries.
         var isTodasUnidades = string.Equals(hotelFiltro, TodasUnidadesToken, StringComparison.OrdinalIgnoreCase);
 
+        // Entries: next movement going to each hotel unit (Para).
         IQueryable<ProximaEntregaProjection> entradas = baseQuery
             .Where(m => m.Para != null && m.Para != LavandariaPara)
             .Where(m => isTodasUnidades || m.Para == hotelFiltro)
@@ -414,6 +456,7 @@ public class Cliente_Movimento_Services
                 Data = g.Min(x => x.Datetime)
             });
 
+        // Exits: next movement leaving each hotel unit (De) towards the laundry.
         IQueryable<ProximaEntregaProjection> saidas = baseQuery
             .Where(m => m.Para == LavandariaPara)
             .Where(m => m.De != null)
@@ -430,6 +473,7 @@ public class Cliente_Movimento_Services
             0 => entradas,
             1 => saidas,
             2 => entradas.Concat(saidas)
+                // When combining directions, keep the earliest date per unit.
                 .GroupBy(x => x.UnidadeHotel)
                 .Select(g => new ProximaEntregaProjection
                 {
@@ -439,6 +483,7 @@ public class Cliente_Movimento_Services
             _ => throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ")
         };
 
+        // Paging is applied after aggregation.
         var skip = (request.Pagina - 1) * request.NumRegistos;
 
         return await query

@@ -9,6 +9,9 @@ using src.Dtos.Cliente_Tag_Dtos;
 
 namespace src.Services;
 
+/// <summary>
+/// Application service for querying and managing <see cref="Cliente_Tag"/> records.
+/// </summary>
 public class Cliente_Tag_Services
 {
 
@@ -25,7 +28,7 @@ public class Cliente_Tag_Services
     /// <summary>
     /// Initializes a new instance of <see cref="Cliente_Tag_Services"/>.
     /// </summary>
-    /// <param name="context">EF Core database context used to access <see cref="Cliente_Movimento"/> entities.</param>
+    /// <param name="context">EF Core database context used to access <see cref="Cliente_Tag"/> entities.</param>
     /// <param name="logger">Logger used to record failures and operational errors.</param>
     public Cliente_Tag_Services(StocksContext context, ILogger<Cliente_Tag_Services> logger)
     {
@@ -186,7 +189,7 @@ public class Cliente_Tag_Services
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error in {Method}", nameof(EPC));
+            _logger.LogError(ex, "Error in {Method}", nameof(GetByEPC));
             throw;
         }
     }
@@ -266,7 +269,7 @@ public class Cliente_Tag_Services
             tag.Unidade = dto.Unidade;
             tag.Localizacao = dto.Localizacao;
             tag.Produto = dto.Produto;
-            tag.EPC = dto.Produto;
+            tag.EPC = dto.EPC;
             tag.Estado = dto.Estado;
             tag.Ultima_Localizacao = dto.Ultima_Localizacao;
             tag.Ultima_Unidade = dto.Ultima_Unidade;

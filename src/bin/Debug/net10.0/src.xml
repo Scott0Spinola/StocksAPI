@@ -158,6 +158,11 @@
         <member name="M:src.Data.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:src.Services.Cliente_Movimento_Services">
+            <summary>
+            Application service for querying and managing <see cref="T:src.Models.Cliente_Movimento"/> records.
+            </summary>
+        </member>
         <member name="M:src.Services.Cliente_Movimento_Services.#ctor(src.Data.StocksContext,Microsoft.Extensions.Logging.ILogger{src.Services.Cliente_Movimento_Services})">
             <summary>
             Initializes a new instance of <see cref="T:src.Services.Cliente_Movimento_Services"/>.
@@ -226,6 +231,33 @@
             then materializes it as a paged list according to the supplied pagination settings.
             </remarks>
         </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.PesquisaAsync(src.Dtos.Movimentos_Dtos.PesquisaRequest)">
+            <summary>
+            Searches movimentos within a date range and returns entries/exits (or both) for a given hotel.
+            </summary>
+            <param name="request">Search criteria including date range, hotel, optional document number, and direction type.</param>
+            <returns>A list of <see cref="T:src.Dtos.Movimentos_Dtos.PesquisaItem"/> ordered by movement date.</returns>
+            <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
+        </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.EvolucaoAsync(src.Dtos.Movimentos_Dtos.EvolucaoRequest)">
+            <summary>
+            Computes an evolution series of quantities (hourly for a single day, daily otherwise) for entries/exits (or both).
+            </summary>
+            <param name="request">Evolution criteria including date range, hotel, optional document number, direction type, and pagination.</param>
+            <returns>A list of <see cref="T:src.Dtos.Movimentos_Dtos.EvolucaoItem"/> ordered by date (and hour when applicable).</returns>
+            <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
+        </member>
+        <member name="M:src.Services.Cliente_Movimento_Services.ProximasEntregasAsync(src.Dtos.Movimentos_Dtos.ProximasEntregasRequest,System.String)">
+            <summary>
+            Lists the next scheduled delivery per hotel unit within the given date range.
+            </summary>
+            <param name="request">Criteria including date range, direction type, paging, and optional movement document number.</param>
+            <param name="hotelQuery">
+            Optional query-string override for the hotel filter; when set to <c>todas-unidades</c> returns results for all units.
+            </param>
+            <returns>A paged list of <see cref="T:src.Dtos.Movimentos_Dtos.ProximaEntregaItem"/> ordered by unit name.</returns>
+            <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
+        </member>
         <member name="M:src.Services.Cliente_Movimento_Services.CreateMovimento(src.Dtos.Cliente_Movimento_Dtos.Create)">
             <summary>
             Creates a new movimento from the provided data transfer object.
@@ -257,6 +289,11 @@
             and returns true on successful deletion or false if the record does not exist.
             </remarks>
         </member>
+        <member name="T:src.Services.Cliente_Tag_Services">
+            <summary>
+            Application service for querying and managing <see cref="T:src.Models.Cliente_Tag"/> records.
+            </summary>
+        </member>
         <member name="F:src.Services.Cliente_Tag_Services._context">
             <summary>
             EF Core database context used to access <see cref="T:src.Models.Cliente_Tag"/> entities.
@@ -271,7 +308,7 @@
             <summary>
             Initializes a new instance of <see cref="T:src.Services.Cliente_Tag_Services"/>.
             </summary>
-            <param name="context">EF Core database context used to access <see cref="T:src.Models.Cliente_Movimento"/> entities.</param>
+            <param name="context">EF Core database context used to access <see cref="T:src.Models.Cliente_Tag"/> entities.</param>
             <param name="logger">Logger used to record failures and operational errors.</param>
         </member>
         <member name="M:src.Services.Cliente_Tag_Services.GetAll">
@@ -372,6 +409,33 @@
             <returns>True if the tag was deleted; otherwise, false.</returns>
             <exception cref="T:System.Exception">Rethrows any exception encountered during deletion.</exception>
         </member>
+        <member name="T:src.Services.ErrorHandling">
+            <summary>
+            Centralized exception handler that converts unhandled exceptions into RFC 7807 Problem Details responses.
+            </summary>
+        </member>
+        <member name="M:src.Services.ErrorHandling.#ctor(Microsoft.Extensions.Logging.ILogger{src.Services.ErrorHandling})">
+            <summary>
+            Initializes a new instance of <see cref="T:src.Services.ErrorHandling"/>.
+            </summary>
+            <param name="logger">Logger used to record exceptions and correlation identifiers.</param>
+        </member>
+        <member name="M:src.Services.ErrorHandling.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)">
+            <summary>
+            Attempts to handle an exception by logging it and returning a Problem Details response.
+            </summary>
+            <param name="httpContext">Current HTTP request context.</param>
+            <param name="exception">The exception to handle.</param>
+            <param name="cancellationToken">Cancellation token (not currently used).</param>
+            <returns><c>true</c> to indicate the exception was handled.</returns>
+        </member>
+        <member name="M:src.Services.ErrorHandling.GetPromblemDetails(System.Exception)">
+            <summary>
+            Maps an exception to a problem details HTTP status code and title.
+            </summary>
+            <param name="exception">The exception to map.</param>
+            <returns>A tuple containing the HTTP status code and title.</returns>
+        </member>
         <member name="T:PageParameters">
             <summary>
             Represents page parameters
@@ -391,6 +455,66 @@
             <summary>
             Auto-generated public partial Program class for top-level statement apps.
             </summary>
+        </member>
+        <member name="T:IntervencoesAPI.Services.PagedList`1">
+            <summary>
+            Represents a single page of results along with paging metadata.
+            </summary>
+            <typeparam name="T">Type of the items returned in the page.</typeparam>
+        </member>
+        <member name="M:IntervencoesAPI.Services.PagedList`1.#ctor(System.Collections.Generic.List{`0},System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Represents a single page of results along with paging metadata.
+            </summary>
+            <typeparam name="T">Type of the items returned in the page.</typeparam>
+        </member>
+        <member name="P:IntervencoesAPI.Services.PagedList`1.Items">
+            <summary>
+            Items in the requested page.
+            </summary>
+        </member>
+        <member name="P:IntervencoesAPI.Services.PagedList`1.Page">
+            <summary>
+            Current page number (1-based).
+            </summary>
+        </member>
+        <member name="P:IntervencoesAPI.Services.PagedList`1.PageSize">
+            <summary>
+            Maximum number of items per page.
+            </summary>
+        </member>
+        <member name="P:IntervencoesAPI.Services.PagedList`1.TotalCount">
+            <summary>
+            Total number of items across all pages.
+            </summary>
+        </member>
+        <member name="P:IntervencoesAPI.Services.PagedList`1.HasNextPage">
+            <summary>
+            True when there is at least one page after the current page.
+            </summary>
+        </member>
+        <member name="P:IntervencoesAPI.Services.PagedList`1.HasPreviousPage">
+            <summary>
+            True when there is at least one page before the current page.
+            </summary>
+        </member>
+        <member name="M:IntervencoesAPI.Services.PagedList`1.CreateAsync(System.Linq.IQueryable{`0},System.Int32,System.Int32)">
+            <summary>
+            Creates a <see cref="T:IntervencoesAPI.Services.PagedList`1"/> from an <see cref="T:System.Linq.IQueryable`1"/> using database-side paging.
+            </summary>
+            <param name="query">Base query to page over.</param>
+            <param name="page">Page number (1-based).</param>
+            <param name="pageSize">Page size.</param>
+            <returns>A populated <see cref="T:IntervencoesAPI.Services.PagedList`1"/>.</returns>
+        </member>
+        <member name="M:IntervencoesAPI.Services.PagedList`1.Create(System.Collections.Generic.IEnumerable{`0},System.Int32,System.Int32)">
+            <summary>
+            Creates a <see cref="T:IntervencoesAPI.Services.PagedList`1"/> from an in-memory <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </summary>
+            <param name="query">Sequence to page over.</param>
+            <param name="page">Page number (1-based).</param>
+            <param name="pageSize">Page size.</param>
+            <returns>A populated <see cref="T:IntervencoesAPI.Services.PagedList`1"/>.</returns>
         </member>
         <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.CreateDocumentationId(System.Type)">
             <summary>
