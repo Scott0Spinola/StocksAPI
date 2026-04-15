@@ -639,44 +639,53 @@ public class Cliente_Movimento_Services
         IQueryable<Cliente_Movimento> baseQuery = _context.Cliente_Movimentos
             .AsNoTracking()
             .Where(m => m.Datetime >= request.DataInicio && m.Datetime <= request.DataFim)
-            .Where(m => m.Datetime >= now);
-
-        // Scope results to the requested client/hotel.
-        baseQuery = baseQuery.Where(m => m.Cliente == request.Hotel);
+            .Where(m => m.Datetime >= now)
+            .Where(m => m.Cliente == request.Hotel);
 
         if (!string.IsNullOrWhiteSpace(request.NumGuia))
         {
             baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
         }
 
-        // Entries: future movements going to hotel units (Para).
-        IQueryable<ProximaEntregaProjection> entradas = baseQuery
-            .Where(m => m.Para != null && m.Para != LavandariaPara)
-            .Select(m => new ProximaEntregaProjection
-            {
-                UnidadeHotel = m.Para!,
-                Data = m.Datetime
-            });
-
-        // Exits: future movements leaving hotel units (De) towards the laundry.
-        IQueryable<ProximaEntregaProjection> saidas = baseQuery
-            .Where(m => m.Para == LavandariaPara)
-            .Where(m => m.De != null)
-            .Select(m => new ProximaEntregaProjection
-            {
-                UnidadeHotel = m.De!,
-                Data = m.Datetime
-            });
-
+        // Return a single row per unidade (hotel unit), selecting MIN(Datetime) in the window.
         IQueryable<ProximaEntregaProjection> query = request.Tipo switch
         {
-            0 => entradas,
-            1 => saidas,
-            2 => entradas.Concat(saidas),
+            0 => baseQuery
+                .Where(m => m.Para != null && m.Para != LavandariaPara)
+                .GroupBy(m => m.Para!)
+                .Select(g => new ProximaEntregaProjection
+                {
+                    UnidadeHotel = g.Key,
+                    Data = g.Min(x => x.Datetime)
+                }),
+
+            1 => baseQuery
+                .Where(m => m.Para == LavandariaPara && m.De != null)
+                .GroupBy(m => m.De!)
+                .Select(g => new ProximaEntregaProjection
+                {
+                    UnidadeHotel = g.Key,
+                    Data = g.Min(x => x.Datetime)
+                }),
+
+            2 => baseQuery
+                .Where(m => (m.Para != null && m.Para != LavandariaPara)
+                            || (m.Para == LavandariaPara && m.De != null))
+                .Select(m => new ProximaEntregaProjection
+                {
+                    UnidadeHotel = m.Para != null && m.Para != LavandariaPara ? m.Para! : m.De!,
+                    Data = m.Datetime
+                })
+                .GroupBy(x => x.UnidadeHotel)
+                .Select(g => new ProximaEntregaProjection
+                {
+                    UnidadeHotel = g.Key,
+                    Data = g.Min(x => x.Data)
+                }),
+
             _ => throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ")
         };
 
-        // Paging is applied after aggregation.
         var skip = (request.Pagina - 1) * request.NumRegistos;
 
         return await query
