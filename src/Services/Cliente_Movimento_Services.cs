@@ -2,6 +2,7 @@ using System.Data;
 using src.Data;
 using src.Models;
 using src.Dtos.Cliente_Movimento_Dtos;
+using System.Globalization;
 using src.Dtos.Movimentos_Dtos;
 
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,61 @@ public class Cliente_Movimento_Services
     {
         public string UnidadeHotel { get; init; } = string.Empty;
         public DateTime Data { get; init; }
+    }
+
+    private enum PesquisaGranularity
+    {
+        Hour,
+        Day,
+        Month
+    }
+
+    private static IEnumerable<DateTime> GetBuckets(DateTime startInclusive, DateTime endInclusive, PesquisaGranularity granularity)
+    {
+        if (granularity == PesquisaGranularity.Hour)
+        {
+            var start = new DateTime(startInclusive.Year, startInclusive.Month, startInclusive.Day, 0, 0, 0);
+            for (var hour = 0; hour < 24; hour++)
+            {
+                yield return start.AddHours(hour);
+            }
+
+            yield break;
+        }
+
+        if (granularity == PesquisaGranularity.Day)
+        {
+            for (var day = startInclusive.Date; day <= endInclusive.Date; day = day.AddDays(1))
+            {
+                yield return day;
+            }
+
+            yield break;
+        }
+
+        // Month
+        var startMonth = new DateTime(startInclusive.Year, startInclusive.Month, 1);
+        var endMonth = new DateTime(endInclusive.Year, endInclusive.Month, 1);
+        for (var month = startMonth; month <= endMonth; month = month.AddMonths(1))
+        {
+            yield return month;
+        }
+    }
+
+    private static (DateTime startInclusive, DateTime endInclusive, PesquisaGranularity granularity) GetPesquisaWindow(PesquisaRequest request)
+    {
+        // For preset tabs, use DataFim as the anchor "current" day for deterministic behavior.
+        var anchorDay = request.DataFim.Date;
+
+        return request.Tab switch
+        {
+            0 => (anchorDay, anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Hour),
+            1 => (anchorDay.AddDays(-6), anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Day),
+            2 => (anchorDay.AddDays(-30), anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Day),
+            3 => (new DateTime(anchorDay.Year, anchorDay.Month, 1).AddMonths(-11), anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Month),
+            4 => (request.DataInicio, request.DataFim, request.DataInicio.Date == request.DataFim.Date ? PesquisaGranularity.Hour : PesquisaGranularity.Day),
+            _ => (request.DataInicio, request.DataFim, PesquisaGranularity.Day)
+        };
     }
 
 
@@ -193,15 +249,28 @@ public class Cliente_Movimento_Services
             throw new ArgumentException("'dataInicio' must be less than or equal to 'dataFim'.");
         }
 
+        if (request.Tab is < 0 or > 4)
+        {
+            throw new ArgumentException("'tab' must be 0 (dia), 1 (semana), 2 (mes), 3 (ano), or 4 (personalizado). ");
+        }
+
         if (request.Tipo is < 0 or > 2)
         {
             throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ");
         }
 
-        // Base query uses the view (already joins/denormalizes as needed) and is filtered by date range.
-        IQueryable<VwClienteMovimento> baseQuery = _context.VwClienteMovimentos
+        if (string.IsNullOrWhiteSpace(request.Hotel))
+        {
+            throw new ArgumentException("'hotel' is required.");
+        }
+
+        var (startInclusive, endInclusive, granularity) = GetPesquisaWindow(request);
+        var buckets = GetBuckets(startInclusive, endInclusive, granularity).ToList();
+
+        // Base query uses the movements table filtered by the computed window.
+        IQueryable<Cliente_Movimento> baseQuery = _context.Cliente_Movimentos
             .AsNoTracking()
-            .Where(m => m.Datetime >= request.DataInicio && m.Datetime <= request.DataFim);
+            .Where(m => m.Datetime >= startInclusive && m.Datetime <= endInclusive);
 
         if (!string.IsNullOrWhiteSpace(request.NumGuia))
         {
@@ -209,54 +278,112 @@ public class Cliente_Movimento_Services
             baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
         }
 
-        // "Entradas" are movements going to the hotel.
-        var entradas = baseQuery
-            .Where(m => m.Para == request.Hotel)
-            .Select(m => new
-            {
-                m.Id,
-                m.MovementRID,
-                Data = m.Datetime,
-                Direcao = 0,
-                Tipo = "Renting",
-                Produto = m.Descricao,
-                Qtd = m.Quantidade
-            });
-
-        // "Saidas" are movements going to the laundry.
-        var saidas = baseQuery
-            .Where(m => m.Para == LavandariaPara)
-            .Where(m => m.De == request.Hotel)
-            .Select(m => new
-            {
-                m.Id,
-                m.MovementRID,
-                Data = m.Datetime,
-                Direcao = 1,
-                Tipo = "Renting",
-                Produto = m.Descricao,
-                Qtd = m.Quantidade
-            });
-
-        var query = request.Tipo switch
+        async Task<List<PesquisaItem>> BuildSerieAsync(int direcao)
         {
-            0 => entradas,
-            1 => saidas,
-            2 => entradas.Concat(saidas),
-            _ => throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ")
-        };
+            IQueryable<Cliente_Movimento> movimentos = direcao == 0
+                ? baseQuery.Where(m => m.Para == request.Hotel)
+                : baseQuery.Where(m => m.Para == LavandariaPara).Where(m => m.De == request.Hotel);
 
-        return await query
-            .OrderBy(i => i.Data)
-            .Select(i => new PesquisaItem(
-                NumDocumento: i.MovementRID,
-                Data: i.Data,
-                Direcao: i.Direcao,
-                Tipo: i.Tipo,
-                Produto: i.Produto,
-                Qtd: i.Qtd,
-                IdDoc: i.Id))
-            .ToListAsync();
+            Dictionary<DateTime, (int Qtd, int MinId)> map;
+
+            if (granularity == PesquisaGranularity.Hour)
+            {
+                var aggregates = await movimentos
+                    .GroupBy(m => new { m.Datetime.Year, m.Datetime.Month, m.Datetime.Day, m.Datetime.Hour })
+                    .Select(g => new
+                    {
+                        g.Key.Year,
+                        g.Key.Month,
+                        g.Key.Day,
+                        g.Key.Hour,
+                        Qtd = g.Sum(x => x.Quantidade),
+                        MinId = g.Min(x => x.Id)
+                    })
+                    .ToListAsync();
+
+                map = aggregates.ToDictionary(
+                    x => new DateTime(x.Year, x.Month, x.Day, x.Hour, 0, 0),
+                    x => (x.Qtd, x.MinId));
+            }
+            else if (granularity == PesquisaGranularity.Day)
+            {
+                var aggregates = await movimentos
+                    .GroupBy(m => new { m.Datetime.Year, m.Datetime.Month, m.Datetime.Day })
+                    .Select(g => new
+                    {
+                        g.Key.Year,
+                        g.Key.Month,
+                        g.Key.Day,
+                        Qtd = g.Sum(x => x.Quantidade),
+                        MinId = g.Min(x => x.Id)
+                    })
+                    .ToListAsync();
+
+                map = aggregates.ToDictionary(
+                    x => new DateTime(x.Year, x.Month, x.Day),
+                    x => (x.Qtd, x.MinId));
+            }
+            else
+            {
+                var aggregates = await movimentos
+                    .GroupBy(m => new { m.Datetime.Year, m.Datetime.Month })
+                    .Select(g => new
+                    {
+                        g.Key.Year,
+                        g.Key.Month,
+                        Qtd = g.Sum(x => x.Quantidade),
+                        MinId = g.Min(x => x.Id)
+                    })
+                    .ToListAsync();
+
+                map = aggregates.ToDictionary(
+                    x => new DateTime(x.Year, x.Month, 1),
+                    x => (x.Qtd, x.MinId));
+            }
+
+            return buckets
+                .Select(bucket =>
+                {
+                    if (map.TryGetValue(bucket, out var value))
+                    {
+                        return new PesquisaItem(
+                            NumDocumento: null,
+                            Data: bucket,
+                            Direcao: direcao,
+                            Tipo: "Renting",
+                            Produto: null,
+                            Qtd: value.Qtd,
+                            IdDoc: value.MinId);
+                    }
+
+                    return new PesquisaItem(
+                        NumDocumento: null,
+                        Data: bucket,
+                        Direcao: direcao,
+                        Tipo: "Renting",
+                        Produto: null,
+                        Qtd: 0,
+                        IdDoc: 0);
+                })
+                .ToList();
+        }
+
+        var result = new List<PesquisaItem>();
+
+        if (request.Tipo is 0 or 2)
+        {
+            result.AddRange(await BuildSerieAsync(0));
+        }
+
+        if (request.Tipo is 1 or 2)
+        {
+            result.AddRange(await BuildSerieAsync(1));
+        }
+
+        return result
+            .OrderBy(r => r.Data)
+            .ThenBy(r => r.Direcao)
+            .ToList();
     }
 
     /// <summary>
@@ -500,6 +627,7 @@ public class Cliente_Movimento_Services
     {
         try
         {
+            var now = DateTime.UtcNow;
             var clientemovimento = new Cliente_Movimento
             {
                 MovementRID = dto.MovementRID,
@@ -507,8 +635,8 @@ public class Cliente_Movimento_Services
                 Para = dto.Para,
                 Cliente = dto.Cliente,
                 Descricao = dto.Descricao,
-                DataFormatada = dto.DataFormatada,
-                Datetime = DateTime.UtcNow,
+                Datetime = now,
+                DataFormatada = now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture),
                 Quantidade = dto.Quantidade
             };
 
@@ -543,13 +671,15 @@ public class Cliente_Movimento_Services
             {
                 return null;
             }
+
+            var now = DateTime.UtcNow;
             c.MovementRID = dto.MovementRID;
             c.De = dto.De;
             c.Para = dto.Para;
             c.Cliente = dto.Cliente;
             c.Descricao = dto.Descricao;
-            c.DataFormatada = dto.DataFormatada;
-            c.Datetime = DateTime.UtcNow;
+            c.Datetime = now;
+            c.DataFormatada = now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
             c.Quantidade = dto.Quantidade;
 
             await _context.SaveChangesAsync();

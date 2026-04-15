@@ -26,9 +26,5 @@ public record Create
     string Descricao,
 
     [Required]
-    [MaxLength (10)]
-    string DataFormatada,
-
-    [Required]
     int Quantidade
 );

@@ -23,8 +23,9 @@ public class MovimentosController : ControllerBase
     public async Task<ActionResult<List<PesquisaItem>>> Pesquisa([FromBody] PesquisaRequest request)
     {
         _logger.LogInformation(
-            "Pesquisa movimentos hotel={Hotel} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo} numGuia={NumGuia}",
+            "Pesquisa movimentos hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo} numGuia={NumGuia}",
             request.Hotel,
+            request.Tab,
             request.DataInicio,
             request.DataFim,
             request.Tipo,

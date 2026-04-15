@@ -26,9 +26,8 @@ public record  Update
     [MaxLength (100)]
     string Descricao,
 
-    [Required]
     [MaxLength (10)]
-    string DataFormatada,
+    string? DataFormatada,
 
     [Required]
     int Quantidade

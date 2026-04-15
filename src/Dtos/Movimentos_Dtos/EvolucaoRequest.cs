@@ -8,6 +8,10 @@ public record EvolucaoRequest
     [Required]
     [MaxLength(80)]
     string Hotel,
+        
+    [Required]
+    [Range(0, 4)]
+    int Tab,
 
     [Required]
     DateTime DataInicio,
