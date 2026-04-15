@@ -241,7 +241,7 @@
         </member>
         <member name="M:src.Services.Cliente_Movimento_Services.EvolucaoAsync(src.Dtos.Movimentos_Dtos.EvolucaoRequest)">
             <summary>
-            Computes an evolution series of quantities (hourly for a single day, daily otherwise) for entries/exits (or both).
+            Computes an evolution series of quantities for entries/exits (or both), honoring preset tabs (day/week/month/year/custom).
             </summary>
             <param name="request">Evolution criteria including date range, hotel, optional document number, direction type, and pagination.</param>
             <returns>A list of <see cref="T:src.Dtos.Movimentos_Dtos.EvolucaoItem"/> ordered by date (and hour when applicable).</returns>

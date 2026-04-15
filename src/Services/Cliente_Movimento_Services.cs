@@ -82,6 +82,22 @@ public class Cliente_Movimento_Services
         };
     }
 
+    private static (DateTime startInclusive, DateTime endInclusive, PesquisaGranularity granularity) GetEvolucaoWindow(EvolucaoRequest request)
+    {
+        // For preset tabs, use DataFim as the anchor "current" day for deterministic behavior.
+        var anchorDay = request.DataFim.Date;
+
+        return request.Tab switch
+        {
+            0 => (anchorDay, anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Hour),
+            1 => (anchorDay.AddDays(-6), anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Day),
+            2 => (anchorDay.AddDays(-30), anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Day),
+            3 => (new DateTime(anchorDay.Year, anchorDay.Month, 1).AddMonths(-11), anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Month),
+            4 => (request.DataInicio, request.DataFim, request.DataInicio.Date == request.DataFim.Date ? PesquisaGranularity.Hour : PesquisaGranularity.Day),
+            _ => (request.DataInicio, request.DataFim, PesquisaGranularity.Day)
+        };
+    }
+
     private static string? ToProduto(string? descricao)
     {
         if (string.IsNullOrWhiteSpace(descricao))
@@ -417,7 +433,7 @@ public class Cliente_Movimento_Services
     }
 
     /// <summary>
-    /// Computes an evolution series of quantities (hourly for a single day, daily otherwise) for entries/exits (or both).
+    /// Computes an evolution series of quantities for entries/exits (or both), honoring preset tabs (day/week/month/year/custom).
     /// </summary>
     /// <param name="request">Evolution criteria including date range, hotel, optional document number, direction type, and pagination.</param>
     /// <returns>A list of <see cref="EvolucaoItem"/> ordered by date (and hour when applicable).</returns>
@@ -425,7 +441,17 @@ public class Cliente_Movimento_Services
     public async Task<List<EvolucaoItem>> EvolucaoAsync(EvolucaoRequest request)
     {
         // Validate required invariants up front.
-        if (request.DataInicio > request.DataFim)
+        if (request.Tab is < 0 or > 4)
+        {
+            throw new ArgumentException("'tab' must be 0 (dia), 1 (semana), 2 (mes), 3 (ano), or 4 (personalizado). ");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Hotel))
+        {
+            throw new ArgumentException("'hotel' is required.");
+        }
+
+        if (request.Tab == 4 && request.DataInicio > request.DataFim)
         {
             throw new ArgumentException("'dataInicio' must be less than or equal to 'dataFim'.");
         }
@@ -445,111 +471,132 @@ public class Cliente_Movimento_Services
             throw new ArgumentException("'numRegistos' must be >= 1.");
         }
 
-        // If the interval is a single calendar day, the API returns an hourly series.
-        var isHourly = request.DataInicio.Date == request.DataFim.Date;
+        var (startInclusive, endInclusive, granularity) = GetEvolucaoWindow(request);
+        var buckets = GetBuckets(startInclusive, endInclusive, granularity).ToList();
 
-        // Base query from the view filtered by date range, with an optional RID filter.
-        IQueryable<VwClienteMovimento> baseQuery = _context.VwClienteMovimentos
+        // Base query from the movements table filtered by the computed window, with an optional RID filter.
+        IQueryable<Cliente_Movimento> baseQuery = _context.Cliente_Movimentos
             .AsNoTracking()
-            .Where(m => m.Datetime >= request.DataInicio && m.Datetime <= request.DataFim);
+            .Where(m => m.Datetime >= startInclusive && m.Datetime <= endInclusive);
 
         if (!string.IsNullOrWhiteSpace(request.NumGuia))
         {
             baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
         }
 
-        // API pagination is applied after the grouping.
+        Task<Dictionary<DateTime, int>> LoadAggregatesAsync(IQueryable<Cliente_Movimento> movimentos)
+        {
+            if (granularity == PesquisaGranularity.Hour)
+            {
+                return movimentos
+                    .GroupBy(m => new { m.Datetime.Year, m.Datetime.Month, m.Datetime.Day, m.Datetime.Hour })
+                    .Select(g => new
+                    {
+                        Bucket = new DateTime(g.Key.Year, g.Key.Month, g.Key.Day, g.Key.Hour, 0, 0),
+                        Qtd = g.Sum(x => x.Quantidade)
+                    })
+                    .ToDictionaryAsync(x => x.Bucket, x => x.Qtd);
+            }
+
+            if (granularity == PesquisaGranularity.Day)
+            {
+                return movimentos
+                    .GroupBy(m => m.Datetime.Date)
+                    .Select(g => new
+                    {
+                        Bucket = g.Key,
+                        Qtd = g.Sum(x => x.Quantidade)
+                    })
+                    .ToDictionaryAsync(x => x.Bucket, x => x.Qtd);
+            }
+
+            // Month
+            return movimentos
+                .GroupBy(m => new { m.Datetime.Year, m.Datetime.Month })
+                .Select(g => new
+                {
+                    Bucket = new DateTime(g.Key.Year, g.Key.Month, 1),
+                    Qtd = g.Sum(x => x.Quantidade)
+                })
+                .ToDictionaryAsync(x => x.Bucket, x => x.Qtd);
+        }
+
+        Dictionary<DateTime, int> entradasMap = new();
+        Dictionary<DateTime, int> saidasMap = new();
+
+        if (request.Tipo is 0 or 2)
+        {
+            entradasMap = await LoadAggregatesAsync(baseQuery.Where(m => m.Para == request.Hotel));
+        }
+
+        if (request.Tipo is 1 or 2)
+        {
+            saidasMap = await LoadAggregatesAsync(
+                baseQuery.Where(m => m.Para == LavandariaPara)
+                         .Where(m => m.De == request.Hotel));
+        }
+
+        static string FormatData(DateTime bucket, PesquisaGranularity granularity)
+        {
+            return granularity == PesquisaGranularity.Month
+                ? bucket.ToString("MM/yyyy")
+                : bucket.ToString("dd/MM");
+        }
+
+        static string FormatHora(DateTime bucket, PesquisaGranularity granularity)
+        {
+            return granularity == PesquisaGranularity.Hour
+                ? bucket.Hour.ToString("00")
+                : string.Empty;
+        }
+
+        // API pagination is applied after building the (zero-filled) series.
         var skip = (request.Pagina - 1) * request.NumRegistos;
+        var result = new List<EvolucaoItem>(capacity: Math.Min(request.NumRegistos, 512));
 
-        if (isHourly)
+        var index = 0;
+        foreach (var bucket in buckets)
         {
-            // Hourly entries: group by date+hour and sum quantities.
-            var entradas = baseQuery
-                .Where(m => m.Para == request.Hotel)
-                .GroupBy(m => new { Dia = m.Datetime.Date, Hora = m.Datetime.Hour })
-                .Select(g => new
-                {
-                    g.Key.Dia,
-                    g.Key.Hora,
-                    Direcao = 0,
-                    Qtd = g.Sum(x => x.Quantidade)
-                });
-
-            // Hourly exits: group by date+hour and sum quantities.
-            var saidas = baseQuery
-                .Where(m => m.Para == LavandariaPara)
-                .GroupBy(m => new { Dia = m.Datetime.Date, Hora = m.Datetime.Hour })
-                .Select(g => new
-                {
-                    g.Key.Dia,
-                    g.Key.Hora,
-                    Direcao = 1,
-                    Qtd = g.Sum(x => x.Quantidade)
-                });
-
-            var query = request.Tipo switch
+            if (request.Tipo is 0 or 2)
             {
-                0 => entradas,
-                1 => saidas,
-                2 => entradas.Concat(saidas),
-                _ => throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ")
-            };
-
-            return await query
-                .OrderBy(i => i.Dia)
-                .ThenBy(i => i.Hora)
-                .Skip(skip)
-                .Take(request.NumRegistos)
-                .Select(i => new EvolucaoItem(
-                    Data: i.Dia.ToString("dd/MM"),
-                    Hora: i.Hora.ToString("00"),
-                    Direcao: i.Direcao,
-                    Qtd: i.Qtd))
-                .ToListAsync();
-        }
-        else
-        {
-            // Daily entries: group by date and sum quantities.
-            var entradas = baseQuery
-                .Where(m => m.Para == request.Hotel)
-                .GroupBy(m => m.Datetime.Date)
-                .Select(g => new
+                var qtd = entradasMap.TryGetValue(bucket, out var value) ? value : 0;
+                if (index >= skip && result.Count < request.NumRegistos)
                 {
-                    Dia = g.Key,
-                    Direcao = 0,
-                    Qtd = g.Sum(x => x.Quantidade)
-                });
+                    result.Add(new EvolucaoItem(
+                        Data: FormatData(bucket, granularity),
+                        Hora: FormatHora(bucket, granularity),
+                        Direcao: 0,
+                        Qtd: qtd));
+                }
 
-            // Daily exits: group by date and sum quantities.
-            var saidas = baseQuery
-                .Where(m => m.Para == LavandariaPara)
-                .GroupBy(m => m.Datetime.Date)
-                .Select(g => new
+                index++;
+                if (result.Count >= request.NumRegistos)
                 {
-                    Dia = g.Key,
-                    Direcao = 1,
-                    Qtd = g.Sum(x => x.Quantidade)
-                });
+                    break;
+                }
+            }
 
-            var query = request.Tipo switch
+            if (request.Tipo is 1 or 2)
             {
-                0 => entradas,
-                1 => saidas,
-                2 => entradas.Concat(saidas),
-                _ => throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ")
-            };
+                var qtd = saidasMap.TryGetValue(bucket, out var value) ? value : 0;
+                if (index >= skip && result.Count < request.NumRegistos)
+                {
+                    result.Add(new EvolucaoItem(
+                        Data: FormatData(bucket, granularity),
+                        Hora: FormatHora(bucket, granularity),
+                        Direcao: 1,
+                        Qtd: qtd));
+                }
 
-            return await query
-                .OrderBy(i => i.Dia)
-                .Skip(skip)
-                .Take(request.NumRegistos)
-                .Select(i => new EvolucaoItem(
-                    Data: i.Dia.ToString("dd/MM"),
-                    Hora: string.Empty,
-                    Direcao: i.Direcao,
-                    Qtd: i.Qtd))
-                .ToListAsync();
+                index++;
+                if (result.Count >= request.NumRegistos)
+                {
+                    break;
+                }
+            }
         }
+
+        return result;
     }
 
     /// <summary>

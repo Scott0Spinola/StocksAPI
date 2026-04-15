@@ -41,8 +41,9 @@ public class MovimentosController : ControllerBase
     public async Task<ActionResult<List<EvolucaoItem>>> Evolucao([FromBody] EvolucaoRequest request)
     {
         _logger.LogInformation(
-            "Evolucao movimentos hotel={Hotel} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo} numGuia={NumGuia} pagina={Pagina} numRegistos={NumRegistos}",
+            "Evolucao movimentos hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo} numGuia={NumGuia} pagina={Pagina} numRegistos={NumRegistos}",
             request.Hotel,
+            request.Tab,
             request.DataInicio,
             request.DataFim,
             request.Tipo,
