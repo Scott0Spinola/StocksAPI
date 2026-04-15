@@ -49,7 +49,7 @@ public class MovimentosProximasEntregasTests
 
         var result = await service.ProximasEntregasAsync(request);
 
-        Assert.Single(result);
+        Assert.Equal(2, result.Count);
         Assert.DoesNotContain(result, r => r.UnidadeHotel == "HotelX");
     }
 
@@ -79,10 +79,12 @@ public class MovimentosProximasEntregasTests
 
         var result = await service.ProximasEntregasAsync(request);
 
-        Assert.Equal(2, result.Count);
+        Assert.Equal(3, result.Count);
         Assert.Equal("HotelA", result[0].UnidadeHotel);
         Assert.Equal(now.AddHours(1).ToString("HH:mm"), result[0].HoraPrevista);
-        Assert.Equal("HotelB", result[1].UnidadeHotel);
+        Assert.Equal("HotelA", result[1].UnidadeHotel);
+        Assert.Equal(now.AddHours(2).ToString("HH:mm"), result[1].HoraPrevista);
+        Assert.Equal("HotelB", result[2].UnidadeHotel);
     }
 
     [Fact]
@@ -111,11 +113,13 @@ public class MovimentosProximasEntregasTests
 
         var result = await service.ProximasEntregasAsync(request);
 
-        Assert.Equal(2, result.Count);
+        Assert.Equal(3, result.Count);
         Assert.Equal("HotelA", result[0].UnidadeHotel);
         Assert.Equal(now.AddMinutes(30).ToString("HH:mm"), result[0].HoraPrevista);
         Assert.Equal("HotelB", result[1].UnidadeHotel);
         Assert.Equal(now.AddMinutes(45).ToString("HH:mm"), result[1].HoraPrevista);
+        Assert.Equal("HotelA", result[2].UnidadeHotel);
+        Assert.Equal(now.AddHours(2).ToString("HH:mm"), result[2].HoraPrevista);
     }
 
     [Fact]
@@ -143,10 +147,12 @@ public class MovimentosProximasEntregasTests
 
         var result = await service.ProximasEntregasAsync(request);
 
-        Assert.Equal(2, result.Count);
+        Assert.Equal(3, result.Count);
         Assert.Equal("HotelA", result[0].UnidadeHotel);
         Assert.Equal(now.AddMinutes(20).ToString("HH:mm"), result[0].HoraPrevista);
         Assert.Equal("HotelB", result[1].UnidadeHotel);
         Assert.Equal(now.AddMinutes(50).ToString("HH:mm"), result[1].HoraPrevista);
+        Assert.Equal("HotelA", result[2].UnidadeHotel);
+        Assert.Equal(now.AddHours(1).ToString("HH:mm"), result[2].HoraPrevista);
     }
 }

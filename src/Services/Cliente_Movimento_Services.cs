@@ -647,24 +647,25 @@ public class Cliente_Movimento_Services
             baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
         }
 
-        // Return a single row per unidade (hotel unit), selecting MIN(Datetime) in the window.
+        // Return rows per unidade + scheduled datetime, selecting MIN(Datetime) per group.
+        // This shows all deliveries within the window while still deduping same-time duplicates.
         IQueryable<ProximaEntregaProjection> query = request.Tipo switch
         {
             0 => baseQuery
                 .Where(m => m.Para != null && m.Para != LavandariaPara)
-                .GroupBy(m => m.Para!)
+                .GroupBy(m => new { UnidadeHotel = m.Para!, m.Datetime })
                 .Select(g => new ProximaEntregaProjection
                 {
-                    UnidadeHotel = g.Key,
+                    UnidadeHotel = g.Key.UnidadeHotel,
                     Data = g.Min(x => x.Datetime)
                 }),
 
             1 => baseQuery
                 .Where(m => m.Para == LavandariaPara && m.De != null)
-                .GroupBy(m => m.De!)
+                .GroupBy(m => new { UnidadeHotel = m.De!, m.Datetime })
                 .Select(g => new ProximaEntregaProjection
                 {
-                    UnidadeHotel = g.Key,
+                    UnidadeHotel = g.Key.UnidadeHotel,
                     Data = g.Min(x => x.Datetime)
                 }),
 
@@ -676,10 +677,10 @@ public class Cliente_Movimento_Services
                     UnidadeHotel = m.Para != null && m.Para != LavandariaPara ? m.Para! : m.De!,
                     Data = m.Datetime
                 })
-                .GroupBy(x => x.UnidadeHotel)
+                .GroupBy(x => new { x.UnidadeHotel, x.Data })
                 .Select(g => new ProximaEntregaProjection
                 {
-                    UnidadeHotel = g.Key,
+                    UnidadeHotel = g.Key.UnidadeHotel,
                     Data = g.Min(x => x.Data)
                 }),
 
