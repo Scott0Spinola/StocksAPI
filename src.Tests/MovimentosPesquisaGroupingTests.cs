@@ -36,7 +36,7 @@ public class MovimentosPesquisaGroupingTests
         var d3 = new DateTime(2026, 4, 14, 11, 0, 0);
 
         context.Cliente_Movimentos.AddRange(
-            new Cliente_Movimento { MovementRID = "E1", Para = "HotelA", De = "Lavandaria", Datetime = d1, Quantidade = 2 },
+            new Cliente_Movimento { MovementRID = "E1", Para = "HotelA", De = "Lavandaria", Descricao = "Desc E1", Datetime = d1, Quantidade = 2 },
             new Cliente_Movimento { MovementRID = "E2", Para = "HotelA", De = "Lavandaria", Datetime = d2, Quantidade = 3 },
             new Cliente_Movimento { MovementRID = "S1", Para = "Lavandaria", De = "HotelA", Datetime = d3, Quantidade = 4 }
         );
@@ -60,6 +60,7 @@ public class MovimentosPesquisaGroupingTests
 
         var h10Entrada = Assert.Single(result, r => r.Data == new DateTime(2026, 4, 14, 10, 0, 0) && r.Direcao == 0);
         Assert.Equal(2, h10Entrada.Qtd);
+        Assert.Equal("Desc E1", h10Entrada.Produto);
 
         var h11Saida = Assert.Single(result, r => r.Data == new DateTime(2026, 4, 14, 11, 0, 0) && r.Direcao == 1);
         Assert.Equal(4, h11Saida.Qtd);

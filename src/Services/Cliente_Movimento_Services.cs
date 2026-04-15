@@ -82,6 +82,16 @@ public class Cliente_Movimento_Services
         };
     }
 
+    private static string? ToProduto(string? descricao)
+    {
+        if (string.IsNullOrWhiteSpace(descricao))
+        {
+            return null;
+        }
+
+        return descricao.Length <= 100 ? descricao : descricao[..100];
+    }
+
 
     /// <summary>
     /// Initializes a new instance of <see cref="Cliente_Movimento_Services"/>.
@@ -285,6 +295,7 @@ public class Cliente_Movimento_Services
                 : baseQuery.Where(m => m.Para == LavandariaPara).Where(m => m.De == request.Hotel);
 
             Dictionary<DateTime, (int Qtd, int MinId)> map;
+            Dictionary<int, string?> descricaoById;
 
             if (granularity == PesquisaGranularity.Hour)
             {
@@ -300,6 +311,12 @@ public class Cliente_Movimento_Services
                         MinId = g.Min(x => x.Id)
                     })
                     .ToListAsync();
+
+                var ids = aggregates.Select(x => x.MinId).Distinct().ToList();
+                descricaoById = await movimentos
+                    .Where(m => ids.Contains(m.Id))
+                    .Select(m => new { m.Id, m.Descricao })
+                    .ToDictionaryAsync(x => x.Id, x => x.Descricao);
 
                 map = aggregates.ToDictionary(
                     x => new DateTime(x.Year, x.Month, x.Day, x.Hour, 0, 0),
@@ -319,6 +336,12 @@ public class Cliente_Movimento_Services
                     })
                     .ToListAsync();
 
+                var ids = aggregates.Select(x => x.MinId).Distinct().ToList();
+                descricaoById = await movimentos
+                    .Where(m => ids.Contains(m.Id))
+                    .Select(m => new { m.Id, m.Descricao })
+                    .ToDictionaryAsync(x => x.Id, x => x.Descricao);
+
                 map = aggregates.ToDictionary(
                     x => new DateTime(x.Year, x.Month, x.Day),
                     x => (x.Qtd, x.MinId));
@@ -336,6 +359,12 @@ public class Cliente_Movimento_Services
                     })
                     .ToListAsync();
 
+                var ids = aggregates.Select(x => x.MinId).Distinct().ToList();
+                descricaoById = await movimentos
+                    .Where(m => ids.Contains(m.Id))
+                    .Select(m => new { m.Id, m.Descricao })
+                    .ToDictionaryAsync(x => x.Id, x => x.Descricao);
+
                 map = aggregates.ToDictionary(
                     x => new DateTime(x.Year, x.Month, 1),
                     x => (x.Qtd, x.MinId));
@@ -346,12 +375,13 @@ public class Cliente_Movimento_Services
                 {
                     if (map.TryGetValue(bucket, out var value))
                     {
+                        descricaoById.TryGetValue(value.MinId, out var descricao);
                         return new PesquisaItem(
                             NumDocumento: null,
                             Data: bucket,
                             Direcao: direcao,
                             Tipo: "Renting",
-                            Produto: null,
+                            Produto: ToProduto(descricao),
                             Qtd: value.Qtd,
                             IdDoc: value.MinId);
                     }
