@@ -14,7 +14,6 @@ Content-Type: application/json
 	"hotel": "HotelA",
 	"dataInicio": "2026-04-01T00:00:00",
 	"dataFim": "2026-04-30T23:59:59",
-	"numGuia": null,
 	"tipo": 0
 }
 
@@ -28,7 +27,6 @@ Content-Type: application/json
 	"hotel": "HotelA",
 	"dataInicio": "2026-04-01T00:00:00",
 	"dataFim": "2026-12-31T23:59:59",
-	"numGuia": null,
 	"tipo": 2,
 	"pagina": 1,
 	"numRegistos": 12
@@ -44,7 +42,6 @@ Content-Type: application/json
 	"hotel": "HotelA",
 	"dataInicio": "2026-04-01T00:00:00",
 	"dataFim": "2026-04-30T23:59:59",
-	"numGuia": null,
 	"tipo": 1
 }
 
@@ -58,7 +55,6 @@ Content-Type: application/json
 	"hotel": "HotelA",
 	"dataInicio": "2026-04-01T00:00:00",
 	"dataFim": "2026-04-30T23:59:59",
-	"numGuia": null,
 	"tipo": 2
 }
 

@@ -47,7 +47,6 @@ public class MovimentosEvolucaoGroupingTests
             Tab: 0,
             DataInicio: anchor,
             DataFim: anchor,
-            NumGuia: null,
             Tipo: 2,
             Pagina: 1,
             NumRegistos: 1000);
@@ -91,7 +90,6 @@ public class MovimentosEvolucaoGroupingTests
             Tab: 1,
             DataInicio: anchor,
             DataFim: anchor,
-            NumGuia: null,
             Tipo: 0,
             Pagina: 1,
             NumRegistos: 1000);
@@ -128,7 +126,6 @@ public class MovimentosEvolucaoGroupingTests
             Tab: 3,
             DataInicio: anchor,
             DataFim: anchor,
-            NumGuia: null,
             Tipo: 0,
             Pagina: 1,
             NumRegistos: 1000);

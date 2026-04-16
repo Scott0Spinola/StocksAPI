@@ -48,7 +48,6 @@ public class MovimentosPesquisaGroupingTests
             Tab: 0,
             DataInicio: anchor,
             DataFim: anchor,
-            NumGuia: null,
             Tipo: 2);
 
         var result = await service.PesquisaAsync(request);
@@ -67,6 +66,37 @@ public class MovimentosPesquisaGroupingTests
 
         var h9Entrada = Assert.Single(result, r => r.Data == new DateTime(2026, 4, 14, 9, 0, 0) && r.Direcao == 0);
         Assert.Equal(0, h9Entrada.Qtd);
+    }
+
+    [Fact]
+    public async Task Tab0_Dia_PaginatesAfterSortingByDateAndDirection()
+    {
+        var service = CreateService(out var context);
+
+        var anchor = new DateTime(2026, 4, 14, 15, 0, 0);
+        context.Cliente_Movimentos.AddRange(
+            new Cliente_Movimento { MovementRID = "E1", Para = "HotelA", De = "Lavandaria", Datetime = new DateTime(2026, 4, 14, 10, 0, 0), Quantidade = 2 },
+            new Cliente_Movimento { MovementRID = "S1", Para = "Lavandaria", De = "HotelA", Datetime = new DateTime(2026, 4, 14, 11, 0, 0), Quantidade = 4 }
+        );
+
+        await context.SaveChangesAsync();
+
+        var request = new PesquisaRequest(
+            Hotel: "HotelA",
+            Tab: 0,
+            DataInicio: anchor,
+            DataFim: anchor,
+            Tipo: 2,
+            Pagina: 2,
+            NumRegistos: 10);
+
+        var result = await service.PesquisaAsync(request);
+
+        Assert.Equal(10, result.Count);
+        Assert.Equal(new DateTime(2026, 4, 14, 5, 0, 0), result.First().Data);
+        Assert.Equal(0, result.First().Direcao);
+        Assert.Equal(new DateTime(2026, 4, 14, 9, 0, 0), result.Last().Data);
+        Assert.Equal(1, result.Last().Direcao);
     }
 
     [Fact]
@@ -92,7 +122,6 @@ public class MovimentosPesquisaGroupingTests
             Tab: 1,
             DataInicio: anchor,
             DataFim: anchor,
-            NumGuia: null,
             Tipo: 0);
 
         var result = await service.PesquisaAsync(request);
@@ -127,7 +156,6 @@ public class MovimentosPesquisaGroupingTests
             Tab: 2,
             DataInicio: anchor,
             DataFim: anchor,
-            NumGuia: null,
             Tipo: 0);
 
         var result = await service.PesquisaAsync(request);
@@ -162,7 +190,6 @@ public class MovimentosPesquisaGroupingTests
             Tab: 3,
             DataInicio: anchor,
             DataFim: anchor,
-            NumGuia: null,
             Tipo: 0);
 
         var result = await service.PesquisaAsync(request);
@@ -196,7 +223,6 @@ public class MovimentosPesquisaGroupingTests
             Tab: 4,
             DataInicio: new DateTime(2026, 4, 14, 0, 0, 0),
             DataFim: new DateTime(2026, 4, 15, 23, 59, 59),
-            NumGuia: null,
             Tipo: 2);
 
         var result = await service.PesquisaAsync(request);

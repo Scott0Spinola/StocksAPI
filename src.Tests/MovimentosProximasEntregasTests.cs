@@ -42,7 +42,6 @@ public class MovimentosProximasEntregasTests
             Hotel: "Cliente1",
             DataInicio: now.AddDays(-1),
             DataFim: now.AddDays(1),
-            NumGuia: null,
             Tipo: 2,
             Pagina: 1,
             NumRegistos: 50);
@@ -72,7 +71,6 @@ public class MovimentosProximasEntregasTests
             Hotel: "Cliente1",
             DataInicio: now.AddDays(-2),
             DataFim: now.AddDays(2),
-            NumGuia: null,
             Tipo: 0,
             Pagina: 1,
             NumRegistos: 50);
@@ -106,7 +104,6 @@ public class MovimentosProximasEntregasTests
             Hotel: "Cliente1",
             DataInicio: now.AddDays(-1),
             DataFim: now.AddDays(1),
-            NumGuia: null,
             Tipo: 1,
             Pagina: 1,
             NumRegistos: 50);
@@ -140,7 +137,6 @@ public class MovimentosProximasEntregasTests
             Hotel: "Cliente1",
             DataInicio: now.AddDays(-1),
             DataFim: now.AddDays(1),
-            NumGuia: null,
             Tipo: 2,
             Pagina: 1,
             NumRegistos: 50);

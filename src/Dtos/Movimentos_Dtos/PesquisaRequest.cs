@@ -19,10 +19,15 @@ public record PesquisaRequest
     [Required]
     DateTime DataFim,
 
-    [MaxLength(80)]
-    string? NumGuia,
+    
 
     [Required]
     [Range(0, 2)]
-    int Tipo
+    int Tipo,
+
+    [Range(1, int.MaxValue)]
+    int Pagina = 1,
+
+    [Range(1, 500)]
+    int NumRegistos = 500
 );

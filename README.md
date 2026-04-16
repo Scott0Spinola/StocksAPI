@@ -133,3 +133,5 @@ Base: `/api/Cliente_movimento_`
 ```powershell
 dotnet test .\src.Tests\src.Tests.csproj
 ```
+## Docker
+docker run -p 5275:5275  kbairesearch/development:movimentoapi.3.0 

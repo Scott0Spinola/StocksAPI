@@ -15,9 +15,6 @@ public record ProximasEntregasRequest
     [Required]
     DateTime DataFim,
 
-    [MaxLength(80)]
-    string? NumGuia,
-
     [Required]
     [Range(0, 2)]
     int Tipo,

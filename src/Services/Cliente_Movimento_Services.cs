@@ -290,6 +290,16 @@ public class Cliente_Movimento_Services
             throw new ArgumentException("'hotel' is required.");
         }
 
+        if (request.Pagina < 1)
+        {
+            throw new ArgumentException("'pagina' must be >= 1.");
+        }
+
+        if (request.NumRegistos < 1)
+        {
+            throw new ArgumentException("'numRegistos' must be >= 1.");
+        }
+
         var (startInclusive, endInclusive, granularity) = GetPesquisaWindow(request);
         var buckets = GetBuckets(startInclusive, endInclusive, granularity).ToList();
 
@@ -298,11 +308,7 @@ public class Cliente_Movimento_Services
             .AsNoTracking()
             .Where(m => m.Datetime >= startInclusive && m.Datetime <= endInclusive);
 
-        if (!string.IsNullOrWhiteSpace(request.NumGuia))
-        {
-            // Optional filter for a specific movement document/RID.
-            baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
-        }
+        
 
         async Task<List<PesquisaItem>> BuildSerieAsync(int direcao)
         {
@@ -426,9 +432,13 @@ public class Cliente_Movimento_Services
             result.AddRange(await BuildSerieAsync(1));
         }
 
+        var skip = (request.Pagina - 1) * request.NumRegistos;
+
         return result
             .OrderBy(r => r.Data)
             .ThenBy(r => r.Direcao)
+            .Skip(skip)
+            .Take(request.NumRegistos)
             .ToList();
     }
 
@@ -479,11 +489,7 @@ public class Cliente_Movimento_Services
             .AsNoTracking()
             .Where(m => m.Datetime >= startInclusive && m.Datetime <= endInclusive);
 
-        if (!string.IsNullOrWhiteSpace(request.NumGuia))
-        {
-            baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
-        }
-
+      
         Task<Dictionary<DateTime, int>> LoadAggregatesAsync(IQueryable<Cliente_Movimento> movimentos)
         {
             if (granularity == PesquisaGranularity.Hour)
@@ -641,11 +647,6 @@ public class Cliente_Movimento_Services
             .Where(m => m.Datetime >= request.DataInicio && m.Datetime <= request.DataFim)
             .Where(m => m.Datetime >= now)
             .Where(m => m.Cliente == request.Hotel);
-
-        if (!string.IsNullOrWhiteSpace(request.NumGuia))
-        {
-            baseQuery = baseQuery.Where(m => m.MovementRID == request.NumGuia);
-        }
 
         // Return rows per unidade + scheduled datetime, selecting MIN(Datetime) per group.
         // This shows all deliveries within the window while still deduping same-time duplicates.

@@ -23,13 +23,14 @@ public class MovimentosController : ControllerBase
     public async Task<ActionResult<List<PesquisaItem>>> Pesquisa([FromBody] PesquisaRequest request)
     {
         _logger.LogInformation(
-            "Pesquisa movimentos hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo} numGuia={NumGuia}",
+            "Pesquisa movimentos hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo}  pagina={Pagina} numRegistos={NumRegistos}",
             request.Hotel,
             request.Tab,
             request.DataInicio,
             request.DataFim,
             request.Tipo,
-            request.NumGuia);
+            request.Pagina,
+            request.NumRegistos);
 
         var result = await _movimentosService.PesquisaAsync(request);
         return Ok(result);
@@ -41,13 +42,12 @@ public class MovimentosController : ControllerBase
     public async Task<ActionResult<List<EvolucaoItem>>> Evolucao([FromBody] EvolucaoRequest request)
     {
         _logger.LogInformation(
-            "Evolucao movimentos hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo} numGuia={NumGuia} pagina={Pagina} numRegistos={NumRegistos}",
+            "Evolucao movimentos hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo}  pagina={Pagina} numRegistos={NumRegistos}",
             request.Hotel,
             request.Tab,
             request.DataInicio,
             request.DataFim,
             request.Tipo,
-            request.NumGuia,
             request.Pagina,
             request.NumRegistos);
 
@@ -61,12 +61,11 @@ public class MovimentosController : ControllerBase
     public async Task<ActionResult<List<ProximaEntregaItem>>> ProximasEntregas([FromBody] ProximasEntregasRequest request)
     {
         _logger.LogInformation(
-            "ProximasEntregas movimentos hotel={Hotel} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo} numGuia={NumGuia} pagina={Pagina} numRegistos={NumRegistos}",
+            "ProximasEntregas movimentos hotel={Hotel} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo} pagina={Pagina} numRegistos={NumRegistos}",
             request.Hotel,
             request.DataInicio,
             request.DataFim,
             request.Tipo,
-            request.NumGuia,
             request.Pagina,
             request.NumRegistos);
 
