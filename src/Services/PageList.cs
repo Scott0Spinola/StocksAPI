@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace IntervencoesAPI.Services;
+namespace Pages.Services;
 
 /// <summary>
 /// Represents a single page of results along with paging metadata.

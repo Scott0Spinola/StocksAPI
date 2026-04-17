@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using src.Dtos.Movimentos_Dtos;
-using src.Services;
+using src.Services.EntradasSaidasService;
 
 namespace src.Controllers;
 
@@ -8,10 +8,10 @@ namespace src.Controllers;
 [Route("api/movimentos")]
 public class MovimentosController : ControllerBase
 {
-    private readonly Cliente_Movimento_Services _movimentosService;
+    private readonly EntradasSaidasService _movimentosService;
     private readonly ILogger<MovimentosController> _logger;
 
-    public MovimentosController(Cliente_Movimento_Services movimentosService, ILogger<MovimentosController> logger)
+    public MovimentosController(EntradasSaidasService movimentosService, ILogger<MovimentosController> logger)
     {
         _movimentosService = movimentosService;
         _logger = logger;

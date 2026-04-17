@@ -1,5 +1,6 @@
 using src.Data;
 using src.Services;
+using src.Services.EntradasSaidasService;
 using src.Auth;
 
 using Microsoft.AspNetCore.Authorization;
@@ -38,6 +39,7 @@ builder.Services.AddDbContext<StocksContext>(options =>
 
 builder.Services.AddScoped<Cliente_Movimento_Services>();
 builder.Services.AddScoped<Cliente_Tag_Services>();
+builder.Services.AddScoped<EntradasSaidasService>();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ErrorHandling>();
 

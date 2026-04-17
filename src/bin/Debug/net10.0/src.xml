@@ -231,30 +231,6 @@
             then materializes it as a paged list according to the supplied pagination settings.
             </remarks>
         </member>
-        <member name="M:src.Services.Cliente_Movimento_Services.PesquisaAsync(src.Dtos.Movimentos_Dtos.PesquisaRequest)">
-            <summary>
-            Searches movimentos within a date range and returns entries/exits (or both) for a given hotel.
-            </summary>
-            <param name="request">Search criteria including date range, hotel, optional document number, and direction type.</param>
-            <returns>A list of <see cref="T:src.Dtos.Movimentos_Dtos.PesquisaItem"/> ordered by movement date.</returns>
-            <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
-        </member>
-        <member name="M:src.Services.Cliente_Movimento_Services.EvolucaoAsync(src.Dtos.Movimentos_Dtos.EvolucaoRequest)">
-            <summary>
-            Computes an evolution series of quantities for entries/exits (or both), honoring preset tabs (day/week/month/year/custom).
-            </summary>
-            <param name="request">Evolution criteria including date range, hotel, optional document number, direction type, and pagination.</param>
-            <returns>A list of <see cref="T:src.Dtos.Movimentos_Dtos.EvolucaoItem"/> ordered by date (and hour when applicable).</returns>
-            <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
-        </member>
-        <member name="M:src.Services.Cliente_Movimento_Services.ProximasEntregasAsync(src.Dtos.Movimentos_Dtos.ProximasEntregasRequest)">
-            <summary>
-            Lists upcoming deliveries within the given date range.
-            </summary>
-            <param name="request">Criteria including date range, direction type, paging, and optional movement document number.</param>
-            <returns>A paged list of <see cref="T:src.Dtos.Movimentos_Dtos.ProximaEntregaItem"/> ordered by scheduled date/time.</returns>
-            <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
-        </member>
         <member name="M:src.Services.Cliente_Movimento_Services.CreateMovimento(src.Dtos.Cliente_Movimento_Dtos.Create)">
             <summary>
             Creates a new movimento from the provided data transfer object.
@@ -406,6 +382,37 @@
             <returns>True if the tag was deleted; otherwise, false.</returns>
             <exception cref="T:System.Exception">Rethrows any exception encountered during deletion.</exception>
         </member>
+        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.#ctor(src.Data.StocksContext,Microsoft.Extensions.Logging.ILogger{src.Services.EntradasSaidasService.EntradasSaidasService})">
+            <summary>
+            Initializes a new instance of <see cref="T:src.Services.EntradasSaidasService.EntradasSaidasService"/>.
+            </summary>
+            <param name="context">EF Core database context used to access <see cref="T:src.Models.Cliente_Movimento"/> entities.</param>
+            <param name="logger">Logger used to record failures and operational errors.</param>
+        </member>
+        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.PesquisaAsync(src.Dtos.Movimentos_Dtos.PesquisaRequest)">
+            <summary>
+            Searches movimentos within a date range and returns entries/exits (or both) for a given hotel.
+            </summary>
+            <param name="request">Search criteria including date range, hotel, optional document number, and direction type.</param>
+            <returns>A list of <see cref="T:src.Dtos.Movimentos_Dtos.PesquisaItem"/> ordered by movement date.</returns>
+            <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
+        </member>
+        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.EvolucaoAsync(src.Dtos.Movimentos_Dtos.EvolucaoRequest)">
+            <summary>
+            Computes an evolution series of quantities for entries/exits (or both), honoring preset tabs (day/week/month/year/custom).
+            </summary>
+            <param name="request">Evolution criteria including date range, hotel, optional document number, direction type, and pagination.</param>
+            <returns>A list of <see cref="T:src.Dtos.Movimentos_Dtos.EvolucaoItem"/> ordered by date (and hour when applicable).</returns>
+            <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
+        </member>
+        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.ProximasEntregasAsync(src.Dtos.Movimentos_Dtos.ProximasEntregasRequest)">
+            <summary>
+            Lists upcoming deliveries within the given date range.
+            </summary>
+            <param name="request">Criteria including date range, direction type, paging, and optional movement document number.</param>
+            <returns>A paged list of <see cref="T:src.Dtos.Movimentos_Dtos.ProximaEntregaItem"/> ordered by scheduled date/time.</returns>
+            <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
+        </member>
         <member name="T:src.Services.ErrorHandling">
             <summary>
             Centralized exception handler that converts unhandled exceptions into RFC 7807 Problem Details responses.
@@ -453,65 +460,65 @@
             Auto-generated public partial Program class for top-level statement apps.
             </summary>
         </member>
-        <member name="T:IntervencoesAPI.Services.PagedList`1">
+        <member name="T:Pages.Services.PagedList`1">
             <summary>
             Represents a single page of results along with paging metadata.
             </summary>
             <typeparam name="T">Type of the items returned in the page.</typeparam>
         </member>
-        <member name="M:IntervencoesAPI.Services.PagedList`1.#ctor(System.Collections.Generic.List{`0},System.Int32,System.Int32,System.Int32)">
+        <member name="M:Pages.Services.PagedList`1.#ctor(System.Collections.Generic.List{`0},System.Int32,System.Int32,System.Int32)">
             <summary>
             Represents a single page of results along with paging metadata.
             </summary>
             <typeparam name="T">Type of the items returned in the page.</typeparam>
         </member>
-        <member name="P:IntervencoesAPI.Services.PagedList`1.Items">
+        <member name="P:Pages.Services.PagedList`1.Items">
             <summary>
             Items in the requested page.
             </summary>
         </member>
-        <member name="P:IntervencoesAPI.Services.PagedList`1.Page">
+        <member name="P:Pages.Services.PagedList`1.Page">
             <summary>
             Current page number (1-based).
             </summary>
         </member>
-        <member name="P:IntervencoesAPI.Services.PagedList`1.PageSize">
+        <member name="P:Pages.Services.PagedList`1.PageSize">
             <summary>
             Maximum number of items per page.
             </summary>
         </member>
-        <member name="P:IntervencoesAPI.Services.PagedList`1.TotalCount">
+        <member name="P:Pages.Services.PagedList`1.TotalCount">
             <summary>
             Total number of items across all pages.
             </summary>
         </member>
-        <member name="P:IntervencoesAPI.Services.PagedList`1.HasNextPage">
+        <member name="P:Pages.Services.PagedList`1.HasNextPage">
             <summary>
             True when there is at least one page after the current page.
             </summary>
         </member>
-        <member name="P:IntervencoesAPI.Services.PagedList`1.HasPreviousPage">
+        <member name="P:Pages.Services.PagedList`1.HasPreviousPage">
             <summary>
             True when there is at least one page before the current page.
             </summary>
         </member>
-        <member name="M:IntervencoesAPI.Services.PagedList`1.CreateAsync(System.Linq.IQueryable{`0},System.Int32,System.Int32)">
+        <member name="M:Pages.Services.PagedList`1.CreateAsync(System.Linq.IQueryable{`0},System.Int32,System.Int32)">
             <summary>
-            Creates a <see cref="T:IntervencoesAPI.Services.PagedList`1"/> from an <see cref="T:System.Linq.IQueryable`1"/> using database-side paging.
+            Creates a <see cref="T:Pages.Services.PagedList`1"/> from an <see cref="T:System.Linq.IQueryable`1"/> using database-side paging.
             </summary>
             <param name="query">Base query to page over.</param>
             <param name="page">Page number (1-based).</param>
             <param name="pageSize">Page size.</param>
-            <returns>A populated <see cref="T:IntervencoesAPI.Services.PagedList`1"/>.</returns>
+            <returns>A populated <see cref="T:Pages.Services.PagedList`1"/>.</returns>
         </member>
-        <member name="M:IntervencoesAPI.Services.PagedList`1.Create(System.Collections.Generic.IEnumerable{`0},System.Int32,System.Int32)">
+        <member name="M:Pages.Services.PagedList`1.Create(System.Collections.Generic.IEnumerable{`0},System.Int32,System.Int32)">
             <summary>
-            Creates a <see cref="T:IntervencoesAPI.Services.PagedList`1"/> from an in-memory <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            Creates a <see cref="T:Pages.Services.PagedList`1"/> from an in-memory <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </summary>
             <param name="query">Sequence to page over.</param>
             <param name="page">Page number (1-based).</param>
             <param name="pageSize">Page size.</param>
-            <returns>A populated <see cref="T:IntervencoesAPI.Services.PagedList`1"/>.</returns>
+            <returns>A populated <see cref="T:Pages.Services.PagedList`1"/>.</returns>
         </member>
         <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.CreateDocumentationId(System.Type)">
             <summary>

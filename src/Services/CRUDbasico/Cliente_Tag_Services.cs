@@ -1,10 +1,8 @@
 using System.Data;
 using src.Data;
 using src.Models;
-using src.Dtos;
-
+using Pages.Services;
 using Microsoft.EntityFrameworkCore;
-using IntervencoesAPI.Services;
 using src.Dtos.Cliente_Tag_Dtos;
 
 namespace src.Services;

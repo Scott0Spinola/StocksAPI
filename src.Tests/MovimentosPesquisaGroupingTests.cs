@@ -4,14 +4,14 @@ using Microsoft.Extensions.Logging.Abstractions;
 using src.Data;
 using src.Dtos.Movimentos_Dtos;
 using src.Models;
-using src.Services;
+using src.Services.EntradasSaidasService;
 using Xunit;
 
 namespace src.Tests;
 
 public class MovimentosPesquisaGroupingTests
 {
-    private static Cliente_Movimento_Services CreateService(out StocksContext context)
+    private static EntradasSaidasService CreateService(out StocksContext context)
     {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
@@ -22,7 +22,7 @@ public class MovimentosPesquisaGroupingTests
 
         context = new StocksContext(options);
         context.Database.EnsureCreated();
-        return new Cliente_Movimento_Services(context, NullLogger<Cliente_Movimento_Services>.Instance);
+        return new EntradasSaidasService(context, NullLogger<EntradasSaidasService>.Instance);
     }
 
     [Fact]
