@@ -67,7 +67,11 @@ public class DashboardEntradasSaidasIndicadorTests
         Assert.Equal(3, result.Saidas.NumPecas);
         Assert.Equal(11, result.Saidas.NumPecasAnterior);
 
+        Assert.Equal(3 - 7, result.Diferenca.NumPecas);
+        Assert.Equal(11 - 7, result.Diferenca.NumPecasAnterior);
+
         Assert.Equal(0m, result.Entradas.Peso);
         Assert.Equal(0m, result.Saidas.Peso);
+        Assert.Equal(0m, result.Diferenca.Peso);
     }
 }

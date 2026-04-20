@@ -10,5 +10,6 @@ public record IndicadorDirecao
 public record EntradasSaidasIndicadorResponse
 (
     IndicadorDirecao Saidas,
-    IndicadorDirecao Entradas
+    IndicadorDirecao Entradas,
+    IndicadorDirecao Diferenca
 );

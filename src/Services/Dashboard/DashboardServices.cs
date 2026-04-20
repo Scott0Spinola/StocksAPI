@@ -68,28 +68,22 @@ public class DashboardService
             .AsNoTracking()
             .Where(m => m.Datetime >= previousStartInclusive && m.Datetime <= previousEndInclusive);
 
-        var entradasCurrentTask = current
+        // EF Core DbContext instances are not thread-safe; run queries sequentially.
+        var entradasCurrent = await current
             .Where(m => m.Para == request.Hotel)
-            .SumAsync(m => (int?)m.Quantidade);
+            .SumAsync(m => (int?)m.Quantidade) ?? 0;
 
-        var entradasPreviousTask = previous
+        var entradasPrevious = await previous
             .Where(m => m.Para == request.Hotel)
-            .SumAsync(m => (int?)m.Quantidade);
+            .SumAsync(m => (int?)m.Quantidade) ?? 0;
 
-        var saidasCurrentTask = current
+        var saidasCurrent = await current
             .Where(m => m.Para == LavandariaPara && m.De == request.Hotel)
-            .SumAsync(m => (int?)m.Quantidade);
+            .SumAsync(m => (int?)m.Quantidade) ?? 0;
 
-        var saidasPreviousTask = previous
+        var saidasPrevious = await previous
             .Where(m => m.Para == LavandariaPara && m.De == request.Hotel)
-            .SumAsync(m => (int?)m.Quantidade);
-
-        await Task.WhenAll(entradasCurrentTask, entradasPreviousTask, saidasCurrentTask, saidasPreviousTask);
-
-        var entradasCurrent = entradasCurrentTask.Result ?? 0;
-        var entradasPrevious = entradasPreviousTask.Result ?? 0;
-        var saidasCurrent = saidasCurrentTask.Result ?? 0;
-        var saidasPrevious = saidasPreviousTask.Result ?? 0;
+            .SumAsync(m => (int?)m.Quantidade) ?? 0;
 
         _logger.LogInformation(
             "IndicadorEntradasSaidas hotel={Hotel} tab={Tab} current={Start}-{End} previous={PrevStart}-{PrevEnd} entradas={Entradas} saidas={Saidas}",
@@ -105,8 +99,12 @@ public class DashboardService
         // Peso ainda nao esta disponibilizado no feed de movimentos.
         const decimal pesoKg = 0m;
 
+        var diferencaCurrent = saidasCurrent - entradasCurrent;
+        var diferencaPrevious = saidasPrevious - entradasPrevious;
+
         return new EntradasSaidasIndicadorResponse(
             Saidas: new IndicadorDirecao(NumPecas: saidasCurrent, NumPecasAnterior: saidasPrevious, Peso: pesoKg),
-            Entradas: new IndicadorDirecao(NumPecas: entradasCurrent, NumPecasAnterior: entradasPrevious, Peso: pesoKg));
+            Entradas: new IndicadorDirecao(NumPecas: entradasCurrent, NumPecasAnterior: entradasPrevious, Peso: pesoKg),
+            Diferenca: new IndicadorDirecao(NumPecas: diferencaCurrent, NumPecasAnterior: diferencaPrevious, Peso: pesoKg));
     }
 }
