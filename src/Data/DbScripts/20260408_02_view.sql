@@ -13,6 +13,23 @@ SELECT
 FROM dbo.Cliente_Movimentos;
 GO
 
+-- View dedicada ao feed/seleção de movimentos (IDSP).
+-- Mantem a mesma estrutura base de dbo.Cliente_Movimentos.
+CREATE OR ALTER VIEW dbo.vw_Movimentos_IDSP
+AS
+SELECT
+	[Id],
+	[MovementRID],
+	[De],
+	[Para],
+	[Cliente],
+	[Descricao],
+	[Datetime],
+	[DataFormatada],
+	[Quantidade]
+FROM dbo.Cliente_Movimentos;
+GO
+
 CREATE OR ALTER VIEW dbo.vw_ProximasEntregas
 AS
 SELECT

@@ -1,12 +1,10 @@
 using System.Data;
 using src.Data;
 using src.Models;
-using src.Dtos.Cliente_Movimento_Dtos;
-using System.Globalization;
 using src.Dtos.Movimentos_Dtos;
 
 using Microsoft.EntityFrameworkCore;
-using Pages.Services;
+
 
 namespace src.Services.EntradasSaidasService;
 
@@ -115,7 +113,7 @@ public class EntradasSaidasService
     }
     
 
-     /// <summary>
+    /// <summary>
     /// Searches movimentos within a date range and returns entries/exits (or both) for a given hotel.
     /// </summary>
     /// <param name="request">Search criteria including date range, hotel, optional document number, and direction type.</param>
