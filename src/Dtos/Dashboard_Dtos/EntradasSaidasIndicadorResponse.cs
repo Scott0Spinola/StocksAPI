@@ -11,5 +11,6 @@ public record EntradasSaidasIndicadorResponse
 (
     IndicadorDirecao Saidas,
     IndicadorDirecao Entradas,
-    IndicadorDirecao Diferenca
+    IndicadorDirecao Diferenca,
+    int NumPecasSemMovimento30dias
 );

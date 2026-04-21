@@ -32,4 +32,21 @@ public class DashboardController : ControllerBase
         var result = await _dashboardService.IndicadorEntradasSaidasAsync(request);
         return Ok(result);
     }
+
+    [HttpPost("ultimasdescargas")]
+    [ProducesResponseType(typeof(List<UltimasDescargasItem>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<List<UltimasDescargasItem>>> UltimasDescargas([FromBody] UltimasDescargasRequest request)
+    {
+        _logger.LogInformation(
+            "Dashboard ultimasdescargas hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo}",
+            request.Hotel,
+            request.Tab,
+            request.DataInicio,
+            request.DataFim,
+            request.Tipo);
+
+        var result = await _dashboardService.UltimasDescargasAsync(request);
+        return Ok(result);
+    }
 }

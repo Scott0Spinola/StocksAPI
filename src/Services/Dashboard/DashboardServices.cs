@@ -11,6 +11,44 @@ public class DashboardService
 
     private const string LavandariaPara = "Lavandaria";
 
+    private enum DescargasGranularity
+    {
+        Hour,
+        Day,
+        Month
+    }
+
+    private static IEnumerable<DateTime> GetBuckets(DateTime startInclusive, DateTime endInclusive, DescargasGranularity granularity)
+    {
+        if (granularity == DescargasGranularity.Hour)
+        {
+            var start = new DateTime(startInclusive.Year, startInclusive.Month, startInclusive.Day, 0, 0, 0);
+            for (var hour = 0; hour < 24; hour++)
+            {
+                yield return start.AddHours(hour);
+            }
+
+            yield break;
+        }
+
+        if (granularity == DescargasGranularity.Day)
+        {
+            for (var day = startInclusive.Date; day <= endInclusive.Date; day = day.AddDays(1))
+            {
+                yield return day;
+            }
+
+            yield break;
+        }
+
+        var startMonth = new DateTime(startInclusive.Year, startInclusive.Month, 1);
+        var endMonth = new DateTime(endInclusive.Year, endInclusive.Month, 1);
+        for (var month = startMonth; month <= endMonth; month = month.AddMonths(1))
+        {
+            yield return month;
+        }
+    }
+
     public DashboardService(StocksContext context, ILogger<DashboardService> logger)
     {
         _context = context;
@@ -29,6 +67,21 @@ public class DashboardService
             3 => (new DateTime(anchorDay.Year, anchorDay.Month, 1).AddMonths(-11), anchorDay.AddDays(1).AddTicks(-1)),
             4 => (request.DataInicio, request.DataFim),
             _ => (request.DataInicio, request.DataFim)
+        };
+    }
+
+    private static (DateTime startInclusive, DateTime endInclusive, DescargasGranularity granularity) GetUltimasDescargasWindow(UltimasDescargasRequest request)
+    {
+        var anchorDay = request.DataFim.Date;
+
+        return request.Tab switch
+        {
+            0 => (anchorDay, anchorDay.AddDays(1).AddTicks(-1), DescargasGranularity.Hour),
+            1 => (anchorDay.AddDays(-6), anchorDay.AddDays(1).AddTicks(-1), DescargasGranularity.Day),
+            2 => (anchorDay.AddDays(-30), anchorDay.AddDays(1).AddTicks(-1), DescargasGranularity.Day),
+            3 => (new DateTime(anchorDay.Year, anchorDay.Month, 1).AddMonths(-11), anchorDay.AddDays(1).AddTicks(-1), DescargasGranularity.Month),
+            4 => (request.DataInicio, request.DataFim, request.DataInicio.Date == request.DataFim.Date ? DescargasGranularity.Hour : DescargasGranularity.Day),
+            _ => (request.DataInicio, request.DataFim, DescargasGranularity.Day)
         };
     }
 
@@ -60,6 +113,14 @@ public class DashboardService
         var (startInclusive, endInclusive) = GetWindow(request);
         var (previousStartInclusive, previousEndInclusive) = GetPreviousWindow(startInclusive, endInclusive);
 
+        var referenceDate = request.DataFim.Date;
+        var cutoffDate = referenceDate.AddDays(-30);
+
+        var numPecasSemMovimento30dias = await _context.Cliente_Tags
+            .AsNoTracking()
+            .Where(t => t.Unidade == request.Hotel && t.Data_Ultimo_Movimento <= cutoffDate)
+            .CountAsync();
+
         IQueryable<Models.Cliente_Movimento> current = _context.Cliente_Movimentos
             .AsNoTracking()
             .Where(m => m.Datetime >= startInclusive && m.Datetime <= endInclusive);
@@ -77,7 +138,7 @@ public class DashboardService
             .Where(m => m.Para == request.Hotel)
             .SumAsync(m => (int?)m.Quantidade) ?? 0;
 
-        var saidasCurrent = await current
+        var saidasCurrent = await current 
             .Where(m => m.Para == LavandariaPara && m.De == request.Hotel)
             .SumAsync(m => (int?)m.Quantidade) ?? 0;
 
@@ -86,7 +147,7 @@ public class DashboardService
             .SumAsync(m => (int?)m.Quantidade) ?? 0;
 
         _logger.LogInformation(
-            "IndicadorEntradasSaidas hotel={Hotel} tab={Tab} current={Start}-{End} previous={PrevStart}-{PrevEnd} entradas={Entradas} saidas={Saidas}",
+            "IndicadorEntradasSaidas hotel={Hotel} tab={Tab} current={Start}-{End} previous={PrevStart}-{PrevEnd} entradas={Entradas} saidas={Saidas} semMovimento30d={SemMovimento30d} refDate={ReferenceDate}",
             request.Hotel,
             request.Tab,
             startInclusive,
@@ -94,7 +155,9 @@ public class DashboardService
             previousStartInclusive,
             previousEndInclusive,
             entradasCurrent,
-            saidasCurrent);
+            saidasCurrent,
+            numPecasSemMovimento30dias,
+            referenceDate);
 
         // Peso ainda nao esta disponibilizado no feed de movimentos.
         const decimal pesoKg = 0m;
@@ -105,6 +168,138 @@ public class DashboardService
         return new EntradasSaidasIndicadorResponse(
             Saidas: new IndicadorDirecao(NumPecas: saidasCurrent, NumPecasAnterior: saidasPrevious, Peso: pesoKg),
             Entradas: new IndicadorDirecao(NumPecas: entradasCurrent, NumPecasAnterior: entradasPrevious, Peso: pesoKg),
-            Diferenca: new IndicadorDirecao(NumPecas: diferencaCurrent, NumPecasAnterior: diferencaPrevious, Peso: pesoKg));
+            Diferenca: new IndicadorDirecao(NumPecas: diferencaCurrent, NumPecasAnterior: diferencaPrevious, Peso: pesoKg),
+            NumPecasSemMovimento30dias: numPecasSemMovimento30dias);
+    }
+
+    public async Task<List<UltimasDescargasItem>> UltimasDescargasAsync(UltimasDescargasRequest request)
+    {
+        if (request.Tab is < 0 or > 4)
+        {
+            throw new ArgumentException("'tab' must be 0 (dia), 1 (semana), 2 (mes), 3 (ano), or 4 (personalizado). ");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Hotel))
+        {
+            throw new ArgumentException("'hotel' is required.");
+        }
+
+        if (request.Tipo is < 0 or > 2)
+        {
+            throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ");
+        }
+
+        if (request.Tab == 4 && request.DataInicio > request.DataFim)
+        {
+            throw new ArgumentException("'dataInicio' must be less than or equal to 'dataFim'.");
+        }
+
+        var (startInclusive, endInclusive, granularity) = GetUltimasDescargasWindow(request);
+        var buckets = GetBuckets(startInclusive, endInclusive, granularity).ToList();
+
+        IQueryable<Models.Cliente_Movimento> baseQuery = _context.Cliente_Movimentos
+            .AsNoTracking()
+            .Where(m => m.Datetime >= startInclusive && m.Datetime <= endInclusive);
+
+        Task<Dictionary<DateTime, int>> LoadAggregatesAsync(IQueryable<Models.Cliente_Movimento> movimentos)
+        {
+            if (granularity == DescargasGranularity.Hour)
+            {
+                return movimentos
+                    .GroupBy(m => new { m.Datetime.Year, m.Datetime.Month, m.Datetime.Day, m.Datetime.Hour })
+                    .Select(g => new
+                    {
+                        Bucket = new DateTime(g.Key.Year, g.Key.Month, g.Key.Day, g.Key.Hour, 0, 0),
+                        Qtd = g.Sum(x => x.Quantidade)
+                    })
+                    .ToDictionaryAsync(x => x.Bucket, x => x.Qtd);
+            }
+
+            if (granularity == DescargasGranularity.Day)
+            {
+                return movimentos
+                    .GroupBy(m => m.Datetime.Date)
+                    .Select(g => new
+                    {
+                        Bucket = g.Key,
+                        Qtd = g.Sum(x => x.Quantidade)
+                    })
+                    .ToDictionaryAsync(x => x.Bucket, x => x.Qtd);
+            }
+
+            return movimentos
+                .GroupBy(m => new { m.Datetime.Year, m.Datetime.Month })
+                .Select(g => new
+                {
+                    Bucket = new DateTime(g.Key.Year, g.Key.Month, 1),
+                    Qtd = g.Sum(x => x.Quantidade)
+                })
+                .ToDictionaryAsync(x => x.Bucket, x => x.Qtd);
+        }
+
+        Dictionary<DateTime, int> entradasMap = new();
+        Dictionary<DateTime, int> saidasMap = new();
+
+        if (request.Tipo is 0 or 2)
+        {
+            entradasMap = await LoadAggregatesAsync(baseQuery.Where(m => m.Para == request.Hotel));
+        }
+
+        if (request.Tipo is 1 or 2)
+        {
+            saidasMap = await LoadAggregatesAsync(
+                baseQuery.Where(m => m.Para == LavandariaPara)
+                         .Where(m => m.De == request.Hotel));
+        }
+
+        static string FormatData(DateTime bucket, DescargasGranularity granularity)
+        {
+            return granularity == DescargasGranularity.Month
+                ? bucket.ToString("MM/yyyy")
+                : bucket.ToString("dd/MM");
+        }
+
+        static string FormatHora(DateTime bucket, DescargasGranularity granularity)
+        {
+            return granularity == DescargasGranularity.Hour
+                ? bucket.Hour.ToString("00")
+                : string.Empty;
+        }
+
+        var ordered = new List<UltimasDescargasItem>(capacity: buckets.Count * (request.Tipo == 2 ? 2 : 1));
+
+        foreach (var bucket in buckets)
+        {
+            if (request.Tipo is 0 or 2)
+            {
+                var qtd = entradasMap.TryGetValue(bucket, out var value) ? value : 0;
+                ordered.Add(new UltimasDescargasItem(
+                    Data: FormatData(bucket, granularity),
+                    Hora: FormatHora(bucket, granularity),
+                    Direcao: 0,
+                    Qtd: qtd));
+            }
+
+            if (request.Tipo is 1 or 2)
+            {
+                var qtd = saidasMap.TryGetValue(bucket, out var value) ? value : 0;
+                ordered.Add(new UltimasDescargasItem(
+                    Data: FormatData(bucket, granularity),
+                    Hora: FormatHora(bucket, granularity),
+                    Direcao: 1,
+                    Qtd: qtd));
+            }
+        }
+
+        _logger.LogInformation(
+            "UltimasDescargas hotel={Hotel} tab={Tab} tipo={Tipo} window={Start}-{End} rows={Rows}",
+            request.Hotel,
+            request.Tab,
+            request.Tipo,
+            startInclusive,
+            endInclusive,
+            ordered.Count);
+
+        return ordered;
     }
 }
