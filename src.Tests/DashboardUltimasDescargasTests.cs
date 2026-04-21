@@ -1,4 +1,3 @@
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using src.Data;
@@ -13,11 +12,8 @@ public class DashboardUltimasDescargasTests
 {
     private static DashboardService CreateService(out StocksContext context)
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
-
         var options = new DbContextOptionsBuilder<StocksContext>()
-            .UseSqlite(connection)
+            .UseInMemoryDatabase(databaseName: $"{nameof(DashboardUltimasDescargasTests)}_{Guid.NewGuid()}")
             .Options;
 
         context = new StocksContext(options);
