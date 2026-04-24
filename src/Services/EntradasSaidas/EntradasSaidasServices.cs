@@ -2,6 +2,7 @@ using System.Data;
 using src.Data;
 using src.Models;
 using src.Dtos.Movimentos_Dtos;
+using src.Services.TimeSeries;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -31,76 +32,7 @@ public class EntradasSaidasService
         public DateTime Data { get; init; }
     }
 
-    private enum PesquisaGranularity
-    {
-        Hour,
-        Day,
-        Month
-    }
 
-    private static IEnumerable<DateTime> GetBuckets(DateTime startInclusive, DateTime endInclusive, PesquisaGranularity granularity)
-    {
-        if (granularity == PesquisaGranularity.Hour)
-        {
-            var start = new DateTime(startInclusive.Year, startInclusive.Month, startInclusive.Day, 0, 0, 0);
-            for (var hour = 0; hour < 24; hour++)
-            {
-                yield return start.AddHours(hour);
-            }
-
-            yield break;
-        }
-
-        if (granularity == PesquisaGranularity.Day)
-        {
-            for (var day = startInclusive.Date; day <= endInclusive.Date; day = day.AddDays(1))
-            {
-                yield return day;
-            }
-
-            yield break;
-        }
-
-        // Month
-        var startMonth = new DateTime(startInclusive.Year, startInclusive.Month, 1);
-        var endMonth = new DateTime(endInclusive.Year, endInclusive.Month, 1);
-        for (var month = startMonth; month <= endMonth; month = month.AddMonths(1))
-        {
-            yield return month;
-        }
-    }
-
-    private static (DateTime startInclusive, DateTime endInclusive, PesquisaGranularity granularity) GetPesquisaWindow(PesquisaRequest request)
-    {
-        // For preset tabs, use DataFim as the anchor "current" day for deterministic behavior.
-        var anchorDay = request.DataFim.Date;
-
-        return request.Tab switch
-        {
-            0 => (anchorDay, anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Hour),
-            1 => (anchorDay.AddDays(-6), anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Day),
-            2 => (anchorDay.AddDays(-30), anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Day),
-            3 => (new DateTime(anchorDay.Year, anchorDay.Month, 1).AddMonths(-11), anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Month),
-            4 => (request.DataInicio, request.DataFim, request.DataInicio.Date == request.DataFim.Date ? PesquisaGranularity.Hour : PesquisaGranularity.Day),
-            _ => (request.DataInicio, request.DataFim, PesquisaGranularity.Day)
-        };
-    }
-
-    private static (DateTime startInclusive, DateTime endInclusive, PesquisaGranularity granularity) GetEvolucaoWindow(EvolucaoRequest request)
-    {
-        // For preset tabs, use DataFim as the anchor "current" day for deterministic behavior.
-        var anchorDay = request.DataFim.Date;
-
-        return request.Tab switch
-        {
-            0 => (anchorDay, anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Hour),
-            1 => (anchorDay.AddDays(-6), anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Day),
-            2 => (anchorDay.AddDays(-30), anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Day),
-            3 => (new DateTime(anchorDay.Year, anchorDay.Month, 1).AddMonths(-11), anchorDay.AddDays(1).AddTicks(-1), PesquisaGranularity.Month),
-            4 => (request.DataInicio, request.DataFim, request.DataInicio.Date == request.DataFim.Date ? PesquisaGranularity.Hour : PesquisaGranularity.Day),
-            _ => (request.DataInicio, request.DataFim, PesquisaGranularity.Day)
-        };
-    }
 
     private static string? ToProduto(string? descricao)
     {
@@ -152,8 +84,8 @@ public class EntradasSaidasService
             throw new ArgumentException("'numRegistos' must be >= 1.");
         }
 
-        var (startInclusive, endInclusive, granularity) = GetPesquisaWindow(request);
-        var buckets = GetBuckets(startInclusive, endInclusive, granularity).ToList();
+        var (startInclusive, endInclusive, granularity) = TimeSeriesTabs.GetWindowWithGranularity(request.DataInicio, request.DataFim, request.Tab);
+        var buckets = TimeSeriesTabs.GetBuckets(startInclusive, endInclusive, granularity).ToList();
 
         // Base query uses the movements table filtered by the computed window.
         IQueryable<Cliente_Movimento> baseQuery = _context.Cliente_Movimentos
@@ -171,7 +103,7 @@ public class EntradasSaidasService
             Dictionary<DateTime, (int Qtd, int MinId)> map;
             Dictionary<int, string?> descricaoById;
 
-            if (granularity == PesquisaGranularity.Hour)
+            if (granularity == TimeSeriesGranularity.Hour)
             {
                 var aggregates = await movimentos
                     .GroupBy(m => new { m.Datetime.Year, m.Datetime.Month, m.Datetime.Day, m.Datetime.Hour })
@@ -196,7 +128,7 @@ public class EntradasSaidasService
                     x => new DateTime(x.Year, x.Month, x.Day, x.Hour, 0, 0),
                     x => (x.Qtd, x.MinId));
             }
-            else if (granularity == PesquisaGranularity.Day)
+            else if (granularity == TimeSeriesGranularity.Day)
             {
                 var aggregates = await movimentos
                     .GroupBy(m => new { m.Datetime.Year, m.Datetime.Month, m.Datetime.Day })
@@ -333,8 +265,8 @@ public class EntradasSaidasService
             throw new ArgumentException("'numRegistos' must be >= 1.");
         }
 
-        var (startInclusive, endInclusive, granularity) = GetEvolucaoWindow(request);
-        var buckets = GetBuckets(startInclusive, endInclusive, granularity).ToList();
+        var (startInclusive, endInclusive, granularity) = TimeSeriesTabs.GetWindowWithGranularity(request.DataInicio, request.DataFim, request.Tab);
+        var buckets = TimeSeriesTabs.GetBuckets(startInclusive, endInclusive, granularity).ToList();
 
         // Base query from the movements table filtered by the computed window, with an optional RID filter.
         IQueryable<Cliente_Movimento> baseQuery = _context.Cliente_Movimentos
@@ -344,7 +276,7 @@ public class EntradasSaidasService
       
         Task<Dictionary<DateTime, int>> LoadAggregatesAsync(IQueryable<Cliente_Movimento> movimentos)
         {
-            if (granularity == PesquisaGranularity.Hour)
+            if (granularity == TimeSeriesGranularity.Hour)
             {
                 return movimentos
                     .GroupBy(m => new { m.Datetime.Year, m.Datetime.Month, m.Datetime.Day, m.Datetime.Hour })
@@ -356,7 +288,7 @@ public class EntradasSaidasService
                     .ToDictionaryAsync(x => x.Bucket, x => x.Qtd);
             }
 
-            if (granularity == PesquisaGranularity.Day)
+            if (granularity == TimeSeriesGranularity.Day)
             {
                 return movimentos
                     .GroupBy(m => m.Datetime.Date)
@@ -394,16 +326,16 @@ public class EntradasSaidasService
                          .Where(m => m.De == request.Hotel));
         }
 
-        static string FormatData(DateTime bucket, PesquisaGranularity granularity)
+        static string FormatData(DateTime bucket, TimeSeriesGranularity granularity)
         {
-            return granularity == PesquisaGranularity.Month
+            return granularity == TimeSeriesGranularity.Month
                 ? bucket.ToString("MM/yyyy")
                 : bucket.ToString("dd/MM");
         }
 
-        static string FormatHora(DateTime bucket, PesquisaGranularity granularity)
+        static string FormatHora(DateTime bucket, TimeSeriesGranularity granularity)
         {
-            return granularity == PesquisaGranularity.Hour
+            return granularity == TimeSeriesGranularity.Hour
                 ? bucket.Hour.ToString("00")
                 : string.Empty;
         }

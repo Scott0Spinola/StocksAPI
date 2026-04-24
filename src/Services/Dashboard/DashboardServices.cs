@@ -1,6 +1,7 @@
 using src.Data;
 using src.Dtos.Dashboard_Dtos;
 using Microsoft.EntityFrameworkCore;
+using src.Services.TimeSeries;
 
 namespace src.Services.Dashboard;
 
@@ -11,86 +12,10 @@ public class DashboardService
 
     private const string LavandariaPara = "Lavandaria";
 
-    private enum DescargasGranularity
-    {
-        Hour,
-        Day,
-        Month
-    }
-
-    private static IEnumerable<DateTime> GetBuckets(DateTime startInclusive, DateTime endInclusive, DescargasGranularity granularity)
-    {
-        if (granularity == DescargasGranularity.Hour)
-        {
-            var start = new DateTime(startInclusive.Year, startInclusive.Month, startInclusive.Day, 0, 0, 0);
-            for (var hour = 0; hour < 24; hour++)
-            {
-                yield return start.AddHours(hour);
-            }
-
-            yield break;
-        }
-
-        if (granularity == DescargasGranularity.Day)
-        {
-            for (var day = startInclusive.Date; day <= endInclusive.Date; day = day.AddDays(1))
-            {
-                yield return day;
-            }
-
-            yield break;
-        }
-
-        var startMonth = new DateTime(startInclusive.Year, startInclusive.Month, 1);
-        var endMonth = new DateTime(endInclusive.Year, endInclusive.Month, 1);
-        for (var month = startMonth; month <= endMonth; month = month.AddMonths(1))
-        {
-            yield return month;
-        }
-    }
-
     public DashboardService(StocksContext context, ILogger<DashboardService> logger)
     {
         _context = context;
         _logger = logger;
-    }
-
-    private static (DateTime startInclusive, DateTime endInclusive) GetWindow(EntradasSaidasIndicadorRequest request)
-    {
-        var anchorDay = request.DataFim.Date;
-
-        return request.Tab switch
-        {
-            0 => (anchorDay, anchorDay.AddDays(1).AddTicks(-1)),
-            1 => (anchorDay.AddDays(-6), anchorDay.AddDays(1).AddTicks(-1)),
-            2 => (anchorDay.AddDays(-30), anchorDay.AddDays(1).AddTicks(-1)),
-            3 => (new DateTime(anchorDay.Year, anchorDay.Month, 1).AddMonths(-11), anchorDay.AddDays(1).AddTicks(-1)),
-            4 => (request.DataInicio, request.DataFim),
-            _ => (request.DataInicio, request.DataFim)
-        };
-    }
-
-    private static (DateTime startInclusive, DateTime endInclusive, DescargasGranularity granularity) GetUltimasDescargasWindow(UltimasDescargasRequest request)
-    {
-        var anchorDay = request.DataFim.Date;
-
-        return request.Tab switch
-        {
-            0 => (anchorDay, anchorDay.AddDays(1).AddTicks(-1), DescargasGranularity.Hour),
-            1 => (anchorDay.AddDays(-6), anchorDay.AddDays(1).AddTicks(-1), DescargasGranularity.Day),
-            2 => (anchorDay.AddDays(-30), anchorDay.AddDays(1).AddTicks(-1), DescargasGranularity.Day),
-            3 => (new DateTime(anchorDay.Year, anchorDay.Month, 1).AddMonths(-11), anchorDay.AddDays(1).AddTicks(-1), DescargasGranularity.Month),
-            4 => (request.DataInicio, request.DataFim, request.DataInicio.Date == request.DataFim.Date ? DescargasGranularity.Hour : DescargasGranularity.Day),
-            _ => (request.DataInicio, request.DataFim, DescargasGranularity.Day)
-        };
-    }
-
-    private static (DateTime startInclusive, DateTime endInclusive) GetPreviousWindow(DateTime startInclusive, DateTime endInclusive)
-    {
-        var duration = endInclusive - startInclusive;
-        var previousEndInclusive = startInclusive.AddTicks(-1);
-        var previousStartInclusive = previousEndInclusive - duration;
-        return (previousStartInclusive, previousEndInclusive);
     }
 
     public async Task<EntradasSaidasIndicadorResponse> IndicadorEntradasSaidasAsync(EntradasSaidasIndicadorRequest request)
@@ -110,8 +35,8 @@ public class DashboardService
             throw new ArgumentException("'hotel' is required.");
         }
 
-        var (startInclusive, endInclusive) = GetWindow(request);
-        var (previousStartInclusive, previousEndInclusive) = GetPreviousWindow(startInclusive, endInclusive);
+        var (startInclusive, endInclusive) = TimeSeriesTabs.GetWindow(request.DataInicio, request.DataFim, request.Tab);
+        var (previousStartInclusive, previousEndInclusive) = TimeSeriesTabs.GetPreviousWindow(startInclusive, endInclusive);
 
         var referenceDate = request.DataFim.Date;
         var cutoffDate = referenceDate.AddDays(-30);
@@ -194,8 +119,8 @@ public class DashboardService
             throw new ArgumentException("'dataInicio' must be less than or equal to 'dataFim'.");
         }
 
-        var (startInclusive, endInclusive, granularity) = GetUltimasDescargasWindow(request);
-        var buckets = GetBuckets(startInclusive, endInclusive, granularity).ToList();
+        var (startInclusive, endInclusive, granularity) = TimeSeriesTabs.GetWindowWithGranularity(request.DataInicio, request.DataFim, request.Tab);
+        var buckets = TimeSeriesTabs.GetBuckets(startInclusive, endInclusive, granularity).ToList();
 
         IQueryable<Models.Cliente_Movimento> baseQuery = _context.Cliente_Movimentos
             .AsNoTracking()
@@ -203,7 +128,7 @@ public class DashboardService
 
         Task<Dictionary<DateTime, int>> LoadAggregatesAsync(IQueryable<Models.Cliente_Movimento> movimentos)
         {
-            if (granularity == DescargasGranularity.Hour)
+            if (granularity == TimeSeriesGranularity.Hour)
             {
                 return movimentos
                     .GroupBy(m => new { m.Datetime.Year, m.Datetime.Month, m.Datetime.Day, m.Datetime.Hour })
@@ -215,7 +140,7 @@ public class DashboardService
                     .ToDictionaryAsync(x => x.Bucket, x => x.Qtd);
             }
 
-            if (granularity == DescargasGranularity.Day)
+            if (granularity == TimeSeriesGranularity.Day)
             {
                 return movimentos
                     .GroupBy(m => m.Datetime.Date)
@@ -252,16 +177,16 @@ public class DashboardService
                          .Where(m => m.De == request.Hotel));
         }
 
-        static string FormatData(DateTime bucket, DescargasGranularity granularity)
+        static string FormatData(DateTime bucket, TimeSeriesGranularity granularity)
         {
-            return granularity == DescargasGranularity.Month
+            return granularity == TimeSeriesGranularity.Month
                 ? bucket.ToString("MM/yyyy")
                 : bucket.ToString("dd/MM");
         }
 
-        static string FormatHora(DateTime bucket, DescargasGranularity granularity)
+        static string FormatHora(DateTime bucket, TimeSeriesGranularity granularity)
         {
-            return granularity == DescargasGranularity.Hour
+            return granularity == TimeSeriesGranularity.Hour
                 ? bucket.Hour.ToString("00")
                 : string.Empty;
         }
