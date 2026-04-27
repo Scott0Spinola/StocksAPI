@@ -46,6 +46,25 @@ public class DashboardService
             .Where(t => t.Unidade == request.Hotel && t.Data_Ultimo_Movimento <= cutoffDate)
             .CountAsync();
 
+        var hotelKey = request.Hotel.Trim().ToUpperInvariant();
+
+        int alerta = 0;
+        try
+        {
+            alerta = await _context.VwIntervencoesAlertasPorHotel
+                .AsNoTracking()
+                .Where(x => x.Hotel == hotelKey)
+                .Select(x => (int?)x.Alerta)
+                .FirstOrDefaultAsync() ?? 0;
+        }
+        catch (Exception ex) when (ex is Microsoft.Data.SqlClient.SqlException sqlEx && sqlEx.Number == 208)
+        {
+            // View not created in the target database yet.
+            _logger.LogWarning(
+                "Missing view dbo.vw_IntervencoesAlertasPorHotel; returning 0 alertas. Ensure the view exists in database {Database}.",
+                _context.Database.GetDbConnection().Database);
+        }
+
         IQueryable<Models.Cliente_Movimento> current = _context.Cliente_Movimentos
             .AsNoTracking()
             .Where(m => m.Datetime >= startInclusive && m.Datetime <= endInclusive);
@@ -94,7 +113,8 @@ public class DashboardService
             Saidas: new IndicadorDirecao(NumPecas: saidasCurrent, NumPecasAnterior: saidasPrevious, Peso: pesoKg),
             Entradas: new IndicadorDirecao(NumPecas: entradasCurrent, NumPecasAnterior: entradasPrevious, Peso: pesoKg),
             Diferenca: new IndicadorDirecao(NumPecas: diferencaCurrent, NumPecasAnterior: diferencaPrevious, Peso: pesoKg),
-            NumPecasSemMovimento30dias: numPecasSemMovimento30dias);
+            NumPecasSemMovimento30dias: numPecasSemMovimento30dias,
+            Alerta: alerta);
     }
 
     public async Task<List<UltimasDescargasItem>> UltimasDescargasAsync(UltimasDescargasRequest request)

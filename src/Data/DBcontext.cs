@@ -13,6 +13,8 @@ public class StocksContext(DbContextOptions<StocksContext> options) : DbContext(
 
     public DbSet<VwProximaEntrega> VwProximasEntregas => Set<VwProximaEntrega>();
 
+    public DbSet<VwIntervencoesAlertasPorHotel> VwIntervencoesAlertasPorHotel => Set<VwIntervencoesAlertasPorHotel>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -27,6 +29,13 @@ public class StocksContext(DbContextOptions<StocksContext> options) : DbContext(
         {
             entity.HasNoKey();
             entity.ToView("vw_ProximasEntregas", "dbo");
+        });
+
+        modelBuilder.Entity<VwIntervencoesAlertasPorHotel>(entity =>
+        {
+            // Backed by a view; the key is for EF tracking/testing convenience.
+            entity.HasKey(x => x.Hotel);
+            entity.ToView("vw_IntervencoesAlertasPorHotel", "dbo");
         });
     }
 }

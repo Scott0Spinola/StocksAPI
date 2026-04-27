@@ -69,5 +69,7 @@ public class DashboardEntradasSaidasIndicadorTests
         Assert.Equal(0m, result.Entradas.Peso);
         Assert.Equal(0m, result.Saidas.Peso);
         Assert.Equal(0m, result.Diferenca.Peso);
+
+        Assert.Equal(0, result.Alerta);
     }
 }
