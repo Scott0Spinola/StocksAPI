@@ -14,7 +14,8 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "10.0.5",
           "Microsoft.OpenApi": "2.4.1",
           "Serilog.AspNetCore": "10.0.0",
-          "Swashbuckle.AspNetCore": "10.1.4"
+          "Swashbuckle.AspNetCore": "10.1.4",
+          "ICSharpCode.SharpZipLib": "0.86.0.518"
         },
         "runtime": {
           "src.dll": {}
@@ -910,6 +911,14 @@
             "fileVersion": "9.0.425.16305"
           }
         }
+      },
+      "ICSharpCode.SharpZipLib/0.86.0.518": {
+        "runtime": {
+          "ICSharpCode.SharpZipLib.dll": {
+            "assemblyVersion": "0.86.0.518",
+            "fileVersion": "0.86.0.518"
+          }
+        }
       }
     }
   },
@@ -1324,6 +1333,11 @@
       "sha512": "sha512-o94k2RKuAce3GeDMlUvIXlhVa1kWpJw95E6C9LwW0KlG0nj5+SgCiIxJ2Eroqb9sLtG1mEMbFttZIBZ13EJPvQ==",
       "path": "system.security.cryptography.protecteddata/9.0.4",
       "hashPath": "system.security.cryptography.protecteddata.9.0.4.nupkg.sha512"
+    },
+    "ICSharpCode.SharpZipLib/0.86.0.518": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }
