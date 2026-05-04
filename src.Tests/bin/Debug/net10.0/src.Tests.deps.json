@@ -43,6 +43,31 @@
           }
         }
       },
+      "Expedita.Export.Excel/1.0.1": {
+        "dependencies": {
+          "Expedita.Runtime": "1.0.2",
+          "SharpZipLib.NETStandard": "1.0.7"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Expedita.Export.Excel.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        }
+      },
+      "Expedita.Runtime/1.0.2": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "10.0.5",
+          "SoapFormatter": "1.1.9",
+          "System.Configuration.ConfigurationManager": "9.0.4"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Expedita.Runtime.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        }
+      },
       "Microsoft.AspNetCore.OpenApi/10.0.3": {
         "dependencies": {
           "Microsoft.OpenApi": "2.4.1"
@@ -809,6 +834,22 @@
           }
         }
       },
+      "SharpZipLib.NETStandard/1.0.7": {
+        "runtime": {
+          "lib/netstandard1.3/ICSharpCode.SharpZipLib.dll": {
+            "assemblyVersion": "1.0.7.0",
+            "fileVersion": "1.0.7.0"
+          }
+        }
+      },
+      "SoapFormatter/1.1.9": {
+        "runtime": {
+          "lib/netstandard2.0/SoapFormatter.dll": {
+            "assemblyVersion": "1.1.0.0",
+            "fileVersion": "1.1.9.49678"
+          }
+        }
+      },
       "Swashbuckle.AspNetCore/10.1.4": {
         "dependencies": {
           "Swashbuckle.AspNetCore.Swagger": "10.1.4",
@@ -949,6 +990,8 @@
       },
       "src/1.0.0": {
         "dependencies": {
+          "Expedita.Export.Excel": "1.0.1",
+          "Expedita.Runtime": "1.0.2",
           "Microsoft.AspNetCore.OpenApi": "10.0.3",
           "Microsoft.EntityFrameworkCore": "10.0.5",
           "Microsoft.EntityFrameworkCore.SqlServer": "10.0.5",
@@ -984,6 +1027,20 @@
       "sha512": "sha512-YhNMwOTwT+I2wIcJKSdP0ADyB2aK+JaYWZxO8LSRDm5w77LFr0ykR9xmt2ZV5T1gaI7xU6iNFIh/yW1dAlpddQ==",
       "path": "azure.identity/1.14.2",
       "hashPath": "azure.identity.1.14.2.nupkg.sha512"
+    },
+    "Expedita.Export.Excel/1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9UGQlR3WARuUBLx0SqIkIVCX1HB4E5jQPtNWT3r3uwYycZlKbNus1uGYqOi/ZbqTkPffuyBiodlSHxnEB2bMUg==",
+      "path": "expedita.export.excel/1.0.1",
+      "hashPath": "expedita.export.excel.1.0.1.nupkg.sha512"
+    },
+    "Expedita.Runtime/1.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9ZZhimdFfRyUqUgiX04C0qgF3ZWe7TXjFOilKcWI6z1mEQHceHX7/U4TYHJody+1dwQ51jafxs/qwZ6mayIZaw==",
+      "path": "expedita.runtime/1.0.2",
+      "hashPath": "expedita.runtime.1.0.2.nupkg.sha512"
     },
     "Microsoft.AspNetCore.OpenApi/10.0.3": {
       "type": "package",
@@ -1292,6 +1349,20 @@
       "sha512": "sha512-fKL7mXv7qaiNBUC71ssvn/dU0k9t0o45+qm2XgKAlSt19xF+ijjxyA3R6HmCgfKEKwfcfkwWjayuQtRueZFkYw==",
       "path": "serilog.sinks.file/7.0.0",
       "hashPath": "serilog.sinks.file.7.0.0.nupkg.sha512"
+    },
+    "SharpZipLib.NETStandard/1.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mYKPizF2CY32RQB8FITYy0e30gVgItFA63SFquruaxq+votwL1T+yOfssK10v4enBcxklr8ks48hS1emw5TTXg==",
+      "path": "sharpziplib.netstandard/1.0.7",
+      "hashPath": "sharpziplib.netstandard.1.0.7.nupkg.sha512"
+    },
+    "SoapFormatter/1.1.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9okRnHpuoOKlTlxid6sddSjZ0OVGbK4EjSf3VvxOLnQfTkV3iGZzSQa2ZYYuD+apairVrPqwZ3lPvcFqR8b7Kw==",
+      "path": "soapformatter/1.1.9",
+      "hashPath": "soapformatter.1.1.9.nupkg.sha512"
     },
     "Swashbuckle.AspNetCore/10.1.4": {
       "type": "package",

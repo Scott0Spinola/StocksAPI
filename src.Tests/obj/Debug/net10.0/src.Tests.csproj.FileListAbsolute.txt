@@ -172,3 +172,7 @@ C:\Users\spino\Desktop\StocksAPI\src.Tests\obj\Debug\net10.0\refint\src.Tests.dl
 C:\Users\spino\Desktop\StocksAPI\src.Tests\obj\Debug\net10.0\src.Tests.pdb
 C:\Users\spino\Desktop\StocksAPI\src.Tests\obj\Debug\net10.0\src.Tests.genruntimeconfig.cache
 C:\Users\spino\Desktop\StocksAPI\src.Tests\obj\Debug\net10.0\ref\src.Tests.dll
+C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\Expedita.Export.Excel.dll
+C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\Expedita.Runtime.dll
+C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\ICSharpCode.SharpZipLib.dll
+C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\SoapFormatter.dll

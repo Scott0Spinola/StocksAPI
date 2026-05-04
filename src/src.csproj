@@ -17,6 +17,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.5" />
     <PackageReference Include="Microsoft.OpenApi" Version="2.4.1" />
+    <PackageReference Include="Expedita.Export.Excel" Version="1.0.1" />
+    <PackageReference Include="Expedita.Runtime" Version="1.0.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.4" />
   </ItemGroup>

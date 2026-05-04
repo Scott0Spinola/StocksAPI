@@ -38,6 +38,40 @@
           }
         }
       },
+      "Expedita.Export.Excel/1.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Expedita.Runtime": "1.0.2",
+          "SharpZipLib.NETStandard": "1.0.7"
+        },
+        "compile": {
+          "lib/netcoreapp3.1/Expedita.Export.Excel.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Expedita.Export.Excel.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Expedita.Runtime/1.0.2": {
+        "type": "package",
+        "dependencies": {
+          "SoapFormatter": "1.1.9",
+          "System.Configuration.ConfigurationManager": "6.0.1"
+        },
+        "compile": {
+          "lib/netcoreapp3.1/Expedita.Runtime.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Expedita.Runtime.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -770,6 +804,15 @@
           }
         }
       },
+      "Microsoft.NETCore.Platforms/1.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/_._": {}
+        }
+      },
       "Microsoft.OpenApi/2.4.1": {
         "type": "package",
         "compile": {
@@ -822,6 +865,12 @@
         },
         "build": {
           "buildTransitive/Mono.TextTemplating.targets": {}
+        }
+      },
+      "NETStandard.Library/1.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0"
         }
       },
       "Newtonsoft.Json/13.0.3": {
@@ -990,6 +1039,31 @@
           "lib/net9.0/Serilog.Sinks.File.dll": {
             "related": ".xml"
           }
+        }
+      },
+      "SharpZipLib.NETStandard/1.0.7": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/ICSharpCode.SharpZipLib.dll": {
+            "related": ".deps.json;.pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard1.3/ICSharpCode.SharpZipLib.dll": {
+            "related": ".deps.json;.pdb;.xml"
+          }
+        }
+      },
+      "SoapFormatter/1.1.9": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/SoapFormatter.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SoapFormatter.dll": {}
         }
       },
       "Swashbuckle.AspNetCore/10.1.4": {
@@ -1206,7 +1280,7 @@
           "System.Security.Cryptography.ProtectedData": "9.0.4"
         },
         "compile": {
-          "lib/net9.0/_._": {
+          "lib/net9.0/System.Configuration.ConfigurationManager.dll": {
             "related": ".xml"
           }
         },
@@ -1331,6 +1405,38 @@
         "lib/net8.0/Azure.Identity.xml",
         "lib/netstandard2.0/Azure.Identity.dll",
         "lib/netstandard2.0/Azure.Identity.xml"
+      ]
+    },
+    "Expedita.Export.Excel/1.0.1": {
+      "sha512": "9UGQlR3WARuUBLx0SqIkIVCX1HB4E5jQPtNWT3r3uwYycZlKbNus1uGYqOi/ZbqTkPffuyBiodlSHxnEB2bMUg==",
+      "type": "package",
+      "path": "expedita.export.excel/1.0.1",
+      "files": [
+        ".nupkg.metadata",
+        "expedita.export.excel.1.0.1.nupkg.sha512",
+        "expedita.export.excel.nuspec",
+        "lib/net472/Expedita.Export.Excel.dll",
+        "lib/net472/Expedita.Export.Excel.xml",
+        "lib/netcoreapp3.1/Expedita.Export.Excel.dll",
+        "lib/netcoreapp3.1/Expedita.Export.Excel.xml",
+        "lib/netstandard2.1/Expedita.Export.Excel.dll",
+        "lib/netstandard2.1/Expedita.Export.Excel.xml"
+      ]
+    },
+    "Expedita.Runtime/1.0.2": {
+      "sha512": "9ZZhimdFfRyUqUgiX04C0qgF3ZWe7TXjFOilKcWI6z1mEQHceHX7/U4TYHJody+1dwQ51jafxs/qwZ6mayIZaw==",
+      "type": "package",
+      "path": "expedita.runtime/1.0.2",
+      "files": [
+        ".nupkg.metadata",
+        "expedita.runtime.1.0.2.nupkg.sha512",
+        "expedita.runtime.nuspec",
+        "lib/net472/Expedita.Runtime.dll",
+        "lib/net472/Expedita.Runtime.xml",
+        "lib/netcoreapp3.1/Expedita.Runtime.dll",
+        "lib/netcoreapp3.1/Expedita.Runtime.xml",
+        "lib/netstandard2.1/Expedita.Runtime.dll",
+        "lib/netstandard2.1/Expedita.Runtime.xml"
       ]
     },
     "Humanizer.Core/2.14.1": {
@@ -3150,6 +3256,21 @@
         "microsoft.identitymodel.tokens.nuspec"
       ]
     },
+    "Microsoft.NETCore.Platforms/1.1.0": {
+      "sha512": "kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A==",
+      "type": "package",
+      "path": "microsoft.netcore.platforms/1.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/netstandard1.0/_._",
+        "microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+        "microsoft.netcore.platforms.nuspec",
+        "runtime.json"
+      ]
+    },
     "Microsoft.OpenApi/2.4.1": {
       "sha512": "u7QhXCISMQuab3flasb1hoaiERmUqyWsW7tmQODyILoQ7mJV5IRGM+2KKZYo0QUfC13evEOcHAb6TPWgqEQtrw==",
       "type": "package",
@@ -3219,6 +3340,19 @@
         "mono.texttemplating.3.0.0.nupkg.sha512",
         "mono.texttemplating.nuspec",
         "readme.md"
+      ]
+    },
+    "NETStandard.Library/1.6.1": {
+      "sha512": "WcSp3+vP+yHNgS8EV5J7pZ9IRpeDuARBPN28by8zqff1wJQXm26PVU8L3/fYLBJVU7BtDyqNVWq2KlCVvSSR4A==",
+      "type": "package",
+      "path": "netstandard.library/1.6.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "netstandard.library.1.6.1.nupkg.sha512",
+        "netstandard.library.nuspec"
       ]
     },
     "Newtonsoft.Json/13.0.3": {
@@ -3467,6 +3601,36 @@
         "serilog-sink-nuget.png",
         "serilog.sinks.file.7.0.0.nupkg.sha512",
         "serilog.sinks.file.nuspec"
+      ]
+    },
+    "SharpZipLib.NETStandard/1.0.7": {
+      "sha512": "mYKPizF2CY32RQB8FITYy0e30gVgItFA63SFquruaxq+votwL1T+yOfssK10v4enBcxklr8ks48hS1emw5TTXg==",
+      "type": "package",
+      "path": "sharpziplib.netstandard/1.0.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/ICSharpCode.SharpZipLib.dll",
+        "lib/net45/ICSharpCode.SharpZipLib.pdb",
+        "lib/net45/ICSharpCode.SharpZipLib.xml",
+        "lib/netstandard1.3/ICSharpCode.SharpZipLib.deps.json",
+        "lib/netstandard1.3/ICSharpCode.SharpZipLib.dll",
+        "lib/netstandard1.3/ICSharpCode.SharpZipLib.pdb",
+        "lib/netstandard1.3/ICSharpCode.SharpZipLib.xml",
+        "sharpziplib.netstandard.1.0.7.nupkg.sha512",
+        "sharpziplib.netstandard.nuspec"
+      ]
+    },
+    "SoapFormatter/1.1.9": {
+      "sha512": "9okRnHpuoOKlTlxid6sddSjZ0OVGbK4EjSf3VvxOLnQfTkV3iGZzSQa2ZYYuD+apairVrPqwZ3lPvcFqR8b7Kw==",
+      "type": "package",
+      "path": "soapformatter/1.1.9",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/SoapFormatter.dll",
+        "soapformatter.1.1.9.nupkg.sha512",
+        "soapformatter.nuspec"
       ]
     },
     "Swashbuckle.AspNetCore/10.1.4": {
@@ -3902,6 +4066,8 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "Expedita.Export.Excel >= 1.0.1",
+      "Expedita.Runtime >= 1.0.2",
       "Microsoft.AspNetCore.OpenApi >= 10.0.3",
       "Microsoft.EntityFrameworkCore >= 10.0.5",
       "Microsoft.EntityFrameworkCore.Design >= 10.0.5",
@@ -3924,12 +4090,14 @@
       "outputPath": "C:\\Users\\spino\\Desktop\\StocksAPI\\src\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
+        "C:\\Users\\spino\\Desktop\\StocksAPI\\NuGet.Config",
         "C:\\Users\\spino\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
+        "C:\\Users\\spino\\Desktop\\StocksAPI\\src\\excel_nuget": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3954,6 +4122,14 @@
       "net10.0": {
         "targetAlias": "net10.0",
         "dependencies": {
+          "Expedita.Export.Excel": {
+            "target": "Package",
+            "version": "[1.0.1, )"
+          },
+          "Expedita.Runtime": {
+            "target": "Package",
+            "version": "[1.0.2, )"
+          },
           "Microsoft.AspNetCore.OpenApi": {
             "target": "Package",
             "version": "[10.0.3, )"
