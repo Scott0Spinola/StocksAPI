@@ -22,17 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ExpeditaEx.Controls.Export">
-      <HintPath>excelDll\ExpeditaEx.Controls.Export.dll</HintPath>
-      <Private>true</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>excelDll\ICSharpCode.SharpZipLib.dll</HintPath>
-      <Private>true</Private>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Auth\" />
     <Folder Include="Dtos\Cliente_Movimento_Dtos\" />
     <Folder Include="Dtos\Cliente_Tag_Dtos\" />
