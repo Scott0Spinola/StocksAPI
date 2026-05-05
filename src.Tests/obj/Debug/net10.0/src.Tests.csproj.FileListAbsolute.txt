@@ -7,7 +7,6 @@ C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\src.runtimeconfig.j
 C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\appsettings.Development.json
 C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\appsettings.json
 C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\src.staticwebassets.endpoints.json
-C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\src.exe
 C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\testhost.exe
 C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\xunit.runner.visualstudio.testadapter.dll
 C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\src.Tests.deps.json
@@ -176,3 +175,4 @@ C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\Expedita.Export.Exc
 C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\Expedita.Runtime.dll
 C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\ICSharpCode.SharpZipLib.dll
 C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\SoapFormatter.dll
+C:\Users\spino\Desktop\StocksAPI\src.Tests\bin\Debug\net10.0\src.exe

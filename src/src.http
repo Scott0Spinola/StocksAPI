@@ -59,3 +59,33 @@ Content-Type: application/json
 }
 
 ###
+
+POST {{src_HostAddress}}/api/movimentos/evolucao
+X-API-KEY: {{apiKey}}
+Content-Type: application/json
+
+{
+	"hotel": "HotelA",
+	"tab": 4,
+	"dataInicio": "2026-04-01T00:00:00",
+	"dataFim": "2026-04-30T23:59:59",
+	"tipo": 2,
+	"pagina": 1,
+	"numRegistos": 200
+}
+
+###
+
+POST {{src_HostAddress}}/api/movimentos/evolucao/excel
+X-API-KEY: {{apiKey}}
+Content-Type: application/json
+
+{
+	"hotel": "HotelA",
+	"tab": 4,
+	"dataInicio": "2026-04-01T00:00:00",
+	"dataFim": "2026-04-30T23:59:59",
+	"tipo": 2
+}
+
+###

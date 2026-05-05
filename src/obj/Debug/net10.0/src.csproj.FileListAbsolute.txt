@@ -1,7 +1,6 @@
 C:\Users\spino\Desktop\StocksAPI\src\bin\Debug\net10.0\appsettings.Development.json
 C:\Users\spino\Desktop\StocksAPI\src\bin\Debug\net10.0\appsettings.json
 C:\Users\spino\Desktop\StocksAPI\src\bin\Debug\net10.0\src.staticwebassets.endpoints.json
-C:\Users\spino\Desktop\StocksAPI\src\bin\Debug\net10.0\src.exe
 C:\Users\spino\Desktop\StocksAPI\src\bin\Debug\net10.0\src.deps.json
 C:\Users\spino\Desktop\StocksAPI\src\bin\Debug\net10.0\src.runtimeconfig.json
 C:\Users\spino\Desktop\StocksAPI\src\bin\Debug\net10.0\src.dll
@@ -175,3 +174,4 @@ C:\Users\spino\Desktop\StocksAPI\src\bin\Debug\net10.0\Expedita.Export.Excel.dll
 C:\Users\spino\Desktop\StocksAPI\src\bin\Debug\net10.0\Expedita.Runtime.dll
 C:\Users\spino\Desktop\StocksAPI\src\bin\Debug\net10.0\ICSharpCode.SharpZipLib.dll
 C:\Users\spino\Desktop\StocksAPI\src\bin\Debug\net10.0\SoapFormatter.dll
+C:\Users\spino\Desktop\StocksAPI\src\bin\Debug\net10.0\src.exe

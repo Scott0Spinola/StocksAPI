@@ -55,6 +55,23 @@ public class MovimentosController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPost("evolucao/excel")]
+    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> EvolucaoExcel([FromBody] EvolucaoExcelRequest request)
+    {
+        _logger.LogInformation(
+            "EvolucaoExcel movimentos hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo}",
+            request.Hotel,
+            request.Tab,
+            request.DataInicio,
+            request.DataFim,
+            request.Tipo);
+
+        var (content, fileName) = await _movimentosService.EvolucaoExcelAsync(request);
+        return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+    }
+
     [HttpPost("proximasentregas")]
     [ProducesResponseType(typeof(List<ProximaEntregaItem>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

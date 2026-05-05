@@ -1,8 +1,10 @@
 using System.Data;
+using System.Globalization;
 using src.Data;
 using src.Models;
 using src.Dtos.Movimentos_Dtos;
 using src.Services.TimeSeries;
+using Expedita.Export.Excel;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -227,55 +229,106 @@ public class EntradasSaidasService
     }
 
     /// <summary>
-    /// Computes an evolution series of quantities for entries/exits (or both), honoring preset tabs (day/week/month/year/custom).
+    /// Writes a single cell into an <see cref="xlsxPagina"/>.
     /// </summary>
-    /// <param name="request">Evolution criteria including date range, hotel, optional document number, direction type, and pagination.</param>
-    /// <returns>A list of <see cref="EvolucaoItem"/> ordered by date (and hour when applicable).</returns>
-    /// <exception cref="ArgumentException">Thrown when request parameters are invalid.</exception>
-    public async Task<List<EvolucaoItem>> EvolucaoAsync(EvolucaoRequest request)
+    /// <remarks>
+    /// Expedita's Excel library was originally designed with a VB-style "named indexed property".
+    /// In C#, the compiler generates explicit accessors like <c>set_Celula(row, col, cell)</c>.
+    ///
+    /// Important details (learned from reflection + a smoke XLSX):
+    /// - The accessor parameter order is <b>(row, col)</b>, not (col, row)
+    /// - Indices are treated as <b>0-based</b> by the accessor
+    ///
+    /// If you swap row/col, or use the wrong base, the library can throw "Index was out of range".
+    /// </remarks>
+    private static void SetCell(xlsxPagina page, int col0, int row0, string? value, xlsxCelula.tiposValor tipo)
     {
-        // Validate required invariants up front.
-        if (request.Tab is < 0 or > 4)
+        // Normalize nulls so we never pass null strings into the library.
+        var safeValue = value ?? string.Empty;
+
+        // The cell object stores its own coordinates, so we set both:
+        // 1) the xlsxCelula ctor coords
+        // 2) the explicit idxLinha/idxColuna fields
+        var cell = new xlsxCelula(col0, row0)
+        {
+            idxColuna = col0,
+            idxLinha = row0,
+            valor = safeValue,
+            tipoValor = tipo
+        };
+
+        // NOTE: this is row/col order.
+        page.set_Celula(row0, col0, cell);
+    }
+
+    /// <summary>
+    /// Validates the common (non-pagination) parameters for Evolução requests.
+    /// </summary>
+    /// <remarks>
+    /// We keep this separate so:
+    /// - JSON endpoint can validate pagination
+    /// - Excel endpoint can ignore pagination entirely
+    /// but both share the same domain rules (hotel, tab range, date window, tipo range).
+    /// </remarks>
+    private static void ValidateEvolucaoBase(string hotel, int tab, DateTime dataInicio, DateTime dataFim, int tipo)
+    {
+        if (tab is < 0 or > 4)
         {
             throw new ArgumentException("'tab' must be 0 (dia), 1 (semana), 2 (mes), 3 (ano), or 4 (personalizado). ");
         }
 
-        if (string.IsNullOrWhiteSpace(request.Hotel))
+        if (string.IsNullOrWhiteSpace(hotel))
         {
             throw new ArgumentException("'hotel' is required.");
         }
 
-        if (request.Tab == 4 && request.DataInicio > request.DataFim)
+        if (tab == 4 && dataInicio > dataFim)
         {
             throw new ArgumentException("'dataInicio' must be less than or equal to 'dataFim'.");
         }
 
-        if (request.Tipo is < 0 or > 2)
+        if (tipo is < 0 or > 2)
         {
             throw new ArgumentException("'tipo' must be 0 (entrada), 1 (saida), or 2 (ambos). ");
         }
+    }
 
-        if (request.Pagina < 1)
-        {
-            throw new ArgumentException("'pagina' must be >= 1.");
-        }
+    /// <summary>
+    /// Loads all data needed to build the Evolução series (time buckets + aggregates per direction).
+    /// </summary>
+    /// <remarks>
+    /// This method is the shared "core" for:
+    /// - <see cref="EvolucaoAsync"/> (JSON): applies API pagination to the final series.
+    /// - <see cref="EvolucaoExcelAsync"/> (XLSX): exports the full series without pagination.
+    ///
+    /// What it returns:
+    /// - Buckets: the timeline points (hours/days/months) to render. Buckets are pre-generated, so
+    ///   we can output zeros for periods with no movimentos.
+    /// - Granularity: Hour/Day/Month, derived from <c>tab</c> and the requested window.
+    /// - EntradasMap / SaidasMap: aggregated quantity per bucket for the selected direction(s).
+    ///
+    /// Why use maps:
+    /// We aggregate in SQL (fast), then later build the full bucketed series in memory by
+    /// looking up each bucket in a dictionary (fast and predictable ordering).
+    /// </remarks>
+    private async Task<(List<DateTime> Buckets, TimeSeriesGranularity Granularity, Dictionary<DateTime, int> EntradasMap, Dictionary<DateTime, int> SaidasMap)>
+        LoadEvolucaoDataAsync(string hotel, int tab, DateTime dataInicio, DateTime dataFim, int tipo)
+    {
+        ValidateEvolucaoBase(hotel, tab, dataInicio, dataFim, tipo);
 
-        if (request.NumRegistos < 1)
-        {
-            throw new ArgumentException("'numRegistos' must be >= 1.");
-        }
-
-        var (startInclusive, endInclusive, granularity) = TimeSeriesTabs.GetWindowWithGranularity(request.DataInicio, request.DataFim, request.Tab);
+        var (startInclusive, endInclusive, granularity) = TimeSeriesTabs.GetWindowWithGranularity(dataInicio, dataFim, tab);
         var buckets = TimeSeriesTabs.GetBuckets(startInclusive, endInclusive, granularity).ToList();
 
-        // Base query from the movements table filtered by the computed window, with an optional RID filter.
+        // Base query: only movimentos inside the computed window.
+        // We use AsNoTracking because these are read-only analytics queries.
         IQueryable<Cliente_Movimento> baseQuery = _context.Cliente_Movimentos
             .AsNoTracking()
             .Where(m => m.Datetime >= startInclusive && m.Datetime <= endInclusive);
 
-      
         Task<Dictionary<DateTime, int>> LoadAggregatesAsync(IQueryable<Cliente_Movimento> movimentos)
         {
+            // For each granularity, group by the appropriate key and sum Quantidade.
+            // We always normalize the bucket DateTime so later dictionary lookups match.
             if (granularity == TimeSeriesGranularity.Hour)
             {
                 return movimentos
@@ -300,7 +353,6 @@ public class EntradasSaidasService
                     .ToDictionaryAsync(x => x.Bucket, x => x.Qtd);
             }
 
-            // Month
             return movimentos
                 .GroupBy(m => new { m.Datetime.Year, m.Datetime.Month })
                 .Select(g => new
@@ -314,18 +366,46 @@ public class EntradasSaidasService
         Dictionary<DateTime, int> entradasMap = new();
         Dictionary<DateTime, int> saidasMap = new();
 
-        if (request.Tipo is 0 or 2)
+        // Direction rules (matches the existing JSON logic):
+        // - entradas: Para == hotel
+        // - saidas:   Para == "Lavandaria" AND De == hotel
+        if (tipo is 0 or 2)
         {
-            entradasMap = await LoadAggregatesAsync(baseQuery.Where(m => m.Para == request.Hotel));
+            entradasMap = await LoadAggregatesAsync(baseQuery.Where(m => m.Para == hotel));
         }
 
-        if (request.Tipo is 1 or 2)
+        if (tipo is 1 or 2)
         {
             saidasMap = await LoadAggregatesAsync(
                 baseQuery.Where(m => m.Para == LavandariaPara)
-                         .Where(m => m.De == request.Hotel));
+                         .Where(m => m.De == hotel));
         }
 
+        return (buckets, granularity, entradasMap, saidasMap);
+    }
+
+    /// <summary>
+    /// Builds the Evolução series as a flat list of <see cref="EvolucaoItem"/>, including zero-filled buckets.
+    /// </summary>
+    /// <remarks>
+    /// The returned list interleaves directions depending on <paramref name="tipo"/>:
+    /// - tipo=0: only entradas
+    /// - tipo=1: only saidas
+    /// - tipo=2: entradas + saidas
+    ///
+    /// Pagination is implemented using an <c>index</c> that counts output rows (not buckets), since
+    /// when tipo=2 we output two rows per time bucket.
+    /// </remarks>
+    private static List<EvolucaoItem> BuildEvolucaoResult(
+        IReadOnlyList<DateTime> buckets,
+        TimeSeriesGranularity granularity,
+        Dictionary<DateTime, int> entradasMap,
+        Dictionary<DateTime, int> saidasMap,
+        int tipo,
+        int skip,
+        int take)
+    {
+        // Formatting helpers: these match the original JSON endpoint behavior.
         static string FormatData(DateTime bucket, TimeSeriesGranularity granularity)
         {
             return granularity == TimeSeriesGranularity.Month
@@ -340,17 +420,16 @@ public class EntradasSaidasService
                 : string.Empty;
         }
 
-        // API pagination is applied after building the (zero-filled) series.
-        var skip = (request.Pagina - 1) * request.NumRegistos;
-        var result = new List<EvolucaoItem>(capacity: Math.Min(request.NumRegistos, 512));
-
+        var result = new List<EvolucaoItem>(capacity: Math.Min(Math.Max(take, 32), 32_768));
         var index = 0;
+
         foreach (var bucket in buckets)
         {
-            if (request.Tipo is 0 or 2)
+            if (tipo is 0 or 2)
             {
+                // entradas
                 var qtd = entradasMap.TryGetValue(bucket, out var value) ? value : 0;
-                if (index >= skip && result.Count < request.NumRegistos)
+                if (index >= skip && result.Count < take)
                 {
                     result.Add(new EvolucaoItem(
                         Data: FormatData(bucket, granularity),
@@ -360,16 +439,17 @@ public class EntradasSaidasService
                 }
 
                 index++;
-                if (result.Count >= request.NumRegistos)
+                if (result.Count >= take)
                 {
                     break;
                 }
             }
 
-            if (request.Tipo is 1 or 2)
+            if (tipo is 1 or 2)
             {
+                // saidas
                 var qtd = saidasMap.TryGetValue(bucket, out var value) ? value : 0;
-                if (index >= skip && result.Count < request.NumRegistos)
+                if (index >= skip && result.Count < take)
                 {
                     result.Add(new EvolucaoItem(
                         Data: FormatData(bucket, granularity),
@@ -379,13 +459,148 @@ public class EntradasSaidasService
                 }
 
                 index++;
-                if (result.Count >= request.NumRegistos)
+                if (result.Count >= take)
                 {
                     break;
                 }
             }
         }
+
         return result;
+    }
+
+    /// <summary>
+    /// Computes an evolution series of quantities for entries/exits (or both), honoring preset tabs (day/week/month/year/custom).
+    /// </summary>
+    /// <param name="request">Evolution criteria including date range, hotel, optional document number, direction type, and pagination.</param>
+    /// <returns>A list of <see cref="EvolucaoItem"/> ordered by date (and hour when applicable).</returns>
+    /// <exception cref="ArgumentException">Thrown when request parameters are invalid.</exception>
+    public async Task<List<EvolucaoItem>> EvolucaoAsync(EvolucaoRequest request)
+    {
+        // JSON endpoint requires explicit pagination.
+        if (request.Pagina < 1)
+        {
+            throw new ArgumentException("'pagina' must be >= 1.");
+        }
+
+        if (request.NumRegistos < 1)
+        {
+            throw new ArgumentException("'numRegistos' must be >= 1.");
+        }
+
+        var (buckets, granularity, entradasMap, saidasMap) = await LoadEvolucaoDataAsync(
+            request.Hotel,
+            request.Tab,
+            request.DataInicio,
+            request.DataFim,
+            request.Tipo);
+
+        var skip = (request.Pagina - 1) * request.NumRegistos;
+
+        return BuildEvolucaoResult(
+            buckets,
+            granularity,
+            entradasMap,
+            saidasMap,
+            request.Tipo,
+            skip,
+            request.NumRegistos);
+    }
+
+    /// <summary>
+    /// Generates an Excel (.xlsx) export for the Evolução series.
+    /// </summary>
+    /// <remarks>
+    /// Key behavior differences vs <see cref="EvolucaoAsync"/>:
+    /// - This export returns the <b>full</b> series for the requested window (no pagination).
+    /// - The Excel library writes to a file on disk; we then read the bytes and return them.
+    /// - We allocate an extra spare row/column to be resilient against edge-index behavior.
+    ///
+    /// The endpoint returns the bytes directly (download), but we still use a temporary file because
+    /// the library's export API is "export to folder" oriented.
+    /// </remarks>
+    public async Task<(byte[] Content, string FileName)> EvolucaoExcelAsync(EvolucaoExcelRequest request)
+    {
+        var (buckets, granularity, entradasMap, saidasMap) = await LoadEvolucaoDataAsync(
+            request.Hotel,
+            request.Tab,
+            request.DataInicio,
+            request.DataFim,
+            request.Tipo);
+
+        // Export the full series (no pagination).
+        var items = BuildEvolucaoResult(
+            buckets,
+            granularity,
+            entradasMap,
+            saidasMap,
+            request.Tipo,
+            skip: 0,
+            take: int.MaxValue);
+
+        // Allocate one spare row/column to avoid any edge-indexing behavior in the library.
+        var numRows = Math.Max(2, items.Count + 2); // header + data + spare
+        const int numCols = 5; // 4 data columns + spare
+
+        var workDir = Path.Combine(Path.GetTempPath(), "StocksAPI", "exports");
+        Directory.CreateDirectory(workDir);
+
+        var fileName = $"{DateTime.UtcNow:yyyyMMdd_HHmmss}_evolucao.xlsx";
+        var fullPath = Path.Combine(workDir, fileName);
+
+        if (File.Exists(fullPath))
+        {
+            File.Delete(fullPath);
+        }
+
+        Stream? fileStream = null;
+
+        try
+        {
+            // The library expects a "temporary path" and then an output folder.
+            // We reuse the same folder for both.
+            var doc = new xlsxDocumento(workDir);
+            var page = doc.AdicionarPagina("Evolucao", numRows, numCols);
+
+            // Header row
+            SetCell(page, col0: 0, row0: 0, "Data", xlsxCelula.tiposValor.TextoHeader);
+            SetCell(page, col0: 1, row0: 0, "Hora", xlsxCelula.tiposValor.TextoHeader);
+            SetCell(page, col0: 2, row0: 0, "Direcao", xlsxCelula.tiposValor.TextoHeader);
+            SetCell(page, col0: 3, row0: 0, "Qtd", xlsxCelula.tiposValor.TextoHeader);
+
+            // Data rows
+            for (var i = 0; i < items.Count; i++)
+            {
+                var row0 = i + 1;
+                var item = items[i];
+
+                SetCell(page, col0: 0, row0, item.Data, xlsxCelula.tiposValor.Texto);
+                SetCell(page, col0: 1, row0, item.Hora ?? string.Empty, xlsxCelula.tiposValor.Texto);
+                SetCell(page, col0: 2, row0, item.Direcao.ToString(CultureInfo.InvariantCulture), xlsxCelula.tiposValor.Inteiro);
+                SetCell(page, col0: 3, row0, item.Qtd.ToString(CultureInfo.InvariantCulture), xlsxCelula.tiposValor.Inteiro);
+            }
+
+            doc.Exportar(fileName, xlsxDocumento.tipoExportacao.documentoXls, workDir, ref fileStream);
+            fileStream?.Flush();
+        }
+        finally
+        {
+            fileStream?.Dispose();
+        }
+
+        // Read back the generated file and return it to the controller.
+        var content = await File.ReadAllBytesAsync(fullPath);
+
+        try
+        {
+            File.Delete(fullPath);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to delete temporary Excel export file: {Path}", fullPath);
+        }
+
+        return (content, fileName);
     }
 
     /// <summary>
