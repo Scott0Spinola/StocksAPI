@@ -4,18 +4,18 @@ using System.ComponentModel.DataAnnotations;
 namespace src.Dtos.Movimentos_Dtos;
 
 /// <summary>
-/// Request payload for exporting the Evolução series to Excel.
+/// Request payload for exporting the Pesquisa series to Excel.
 /// </summary>
 /// <remarks>
 /// This intentionally omits pagination fields (<c>pagina</c>/<c>numRegistos</c>).
 ///
 /// Reason:
 /// - The JSON endpoint is optimized for UI paging.
-/// - An Excel export is typically expected to contain the full time series for the requested window.
+/// - An Excel export is typically expected to contain the full series for the requested window.
 ///
-/// The service method <c>EvolucaoExcelAsync</c> always exports the full series.
+/// The service method <c>PesquisaExcelAsync</c> always exports the full series.
 /// </remarks>
-public record EvolucaoExcelRequest
+public record PesquisaExcelRequest
 (
     [Required]
     [MaxLength(80)]

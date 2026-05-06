@@ -158,32 +158,32 @@
         <member name="M:src.Data.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
-        <member name="T:src.Dtos.Movimentos_Dtos.EvolucaoExcelRequest">
+        <member name="T:src.Dtos.Movimentos_Dtos.PesquisaExcelRequest">
              <summary>
-             Request payload for exporting the Evolução series to Excel.
+             Request payload for exporting the Pesquisa series to Excel.
              </summary>
              <remarks>
              This intentionally omits pagination fields (<c>pagina</c>/<c>numRegistos</c>).
             
              Reason:
              - The JSON endpoint is optimized for UI paging.
-             - An Excel export is typically expected to contain the full time series for the requested window.
+             - An Excel export is typically expected to contain the full series for the requested window.
             
-             The service method <c>EvolucaoExcelAsync</c> always exports the full series.
+             The service method <c>PesquisaExcelAsync</c> always exports the full series.
              </remarks>
         </member>
-        <member name="M:src.Dtos.Movimentos_Dtos.EvolucaoExcelRequest.#ctor(System.String,System.Int32,System.DateTime,System.DateTime,System.Int32)">
+        <member name="M:src.Dtos.Movimentos_Dtos.PesquisaExcelRequest.#ctor(System.String,System.Int32,System.DateTime,System.DateTime,System.Int32)">
              <summary>
-             Request payload for exporting the Evolução series to Excel.
+             Request payload for exporting the Pesquisa series to Excel.
              </summary>
              <remarks>
              This intentionally omits pagination fields (<c>pagina</c>/<c>numRegistos</c>).
             
              Reason:
              - The JSON endpoint is optimized for UI paging.
-             - An Excel export is typically expected to contain the full time series for the requested window.
+             - An Excel export is typically expected to contain the full series for the requested window.
             
-             The service method <c>EvolucaoExcelAsync</c> always exports the full series.
+             The service method <c>PesquisaExcelAsync</c> always exports the full series.
              </remarks>
         </member>
         <member name="T:src.Services.Cliente_Movimento_Services">
@@ -425,6 +425,14 @@
             <returns>A list of <see cref="T:src.Dtos.Movimentos_Dtos.PesquisaItem"/> ordered by movement date.</returns>
             <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
         </member>
+        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.PesquisaExcelAsync(src.Dtos.Movimentos_Dtos.PesquisaExcelRequest)">
+            <summary>
+            Generates an Excel (.xlsx) export for the Pesquisa series.
+            </summary>
+            <remarks>
+            This export returns the <b>full</b> series for the requested window (no pagination).
+            </remarks>
+        </member>
         <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.SetCell(Expedita.Export.Excel.xlsxPagina,System.Int32,System.Int32,System.String,Expedita.Export.Excel.xlsxCelula.tiposValor)">
              <summary>
              Writes a single cell into an <see cref="T:Expedita.Export.Excel.xlsxPagina"/>.
@@ -457,7 +465,6 @@
              <remarks>
              This method is the shared "core" for:
              - <see cref="M:src.Services.EntradasSaidasService.EntradasSaidasService.EvolucaoAsync(src.Dtos.Movimentos_Dtos.EvolucaoRequest)"/> (JSON): applies API pagination to the final series.
-             - <see cref="M:src.Services.EntradasSaidasService.EntradasSaidasService.EvolucaoExcelAsync(src.Dtos.Movimentos_Dtos.EvolucaoExcelRequest)"/> (XLSX): exports the full series without pagination.
             
              What it returns:
              - Buckets: the timeline points (hours/days/months) to render. Buckets are pre-generated, so
@@ -491,20 +498,6 @@
             <param name="request">Evolution criteria including date range, hotel, optional document number, direction type, and pagination.</param>
             <returns>A list of <see cref="T:src.Dtos.Movimentos_Dtos.EvolucaoItem"/> ordered by date (and hour when applicable).</returns>
             <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
-        </member>
-        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.EvolucaoExcelAsync(src.Dtos.Movimentos_Dtos.EvolucaoExcelRequest)">
-             <summary>
-             Generates an Excel (.xlsx) export for the Evolução series.
-             </summary>
-             <remarks>
-             Key behavior differences vs <see cref="M:src.Services.EntradasSaidasService.EntradasSaidasService.EvolucaoAsync(src.Dtos.Movimentos_Dtos.EvolucaoRequest)"/>:
-             - This export returns the <b>full</b> series for the requested window (no pagination).
-             - The Excel library writes to a file on disk; we then read the bytes and return them.
-             - We allocate an extra spare row/column to be resilient against edge-index behavior.
-            
-             The endpoint returns the bytes directly (download), but we still use a temporary file because
-             the library's export API is "export to folder" oriented.
-             </remarks>
         </member>
         <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.ProximasEntregasAsync(src.Dtos.Movimentos_Dtos.ProximasEntregasRequest)">
             <summary>

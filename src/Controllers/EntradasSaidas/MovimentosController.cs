@@ -36,6 +36,23 @@ public class MovimentosController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPost("pesquisa/excel")]
+    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> PesquisaExcel([FromBody] PesquisaExcelRequest request)
+    {
+        _logger.LogInformation(
+            "PesquisaExcel movimentos hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo}",
+            request.Hotel,
+            request.Tab,
+            request.DataInicio,
+            request.DataFim,
+            request.Tipo);
+
+        var (content, fileName) = await _movimentosService.PesquisaExcelAsync(request);
+        return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+    }
+
     [HttpPost("evolucao")]
     [ProducesResponseType(typeof(List<EvolucaoItem>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -53,23 +70,6 @@ public class MovimentosController : ControllerBase
 
         var result = await _movimentosService.EvolucaoAsync(request);
         return Ok(result);
-    }
-
-    [HttpPost("evolucao/excel")]
-    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> EvolucaoExcel([FromBody] EvolucaoExcelRequest request)
-    {
-        _logger.LogInformation(
-            "EvolucaoExcel movimentos hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo}",
-            request.Hotel,
-            request.Tab,
-            request.DataInicio,
-            request.DataFim,
-            request.Tipo);
-
-        var (content, fileName) = await _movimentosService.EvolucaoExcelAsync(request);
-        return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
 
     [HttpPost("proximasentregas")]
