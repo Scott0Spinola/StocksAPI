@@ -158,6 +158,34 @@
         <member name="M:src.Data.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:src.Dtos.Movimentos_Dtos.EvolucaoExcelRequest">
+             <summary>
+             Request payload for exporting the Evolução series to Excel.
+             </summary>
+             <remarks>
+             This intentionally omits pagination fields (<c>pagina</c>/<c>numRegistos</c>).
+            
+             Reason:
+             - The JSON endpoint is optimized for UI paging.
+             - An Excel export is typically expected to contain the full time series for the requested window.
+            
+             The service method <c>EvolucaoExcelAsync</c> always exports the full series.
+             </remarks>
+        </member>
+        <member name="M:src.Dtos.Movimentos_Dtos.EvolucaoExcelRequest.#ctor(System.String,System.Int32,System.DateTime,System.DateTime,System.Int32)">
+             <summary>
+             Request payload for exporting the Evolução series to Excel.
+             </summary>
+             <remarks>
+             This intentionally omits pagination fields (<c>pagina</c>/<c>numRegistos</c>).
+            
+             Reason:
+             - The JSON endpoint is optimized for UI paging.
+             - An Excel export is typically expected to contain the full time series for the requested window.
+            
+             The service method <c>EvolucaoExcelAsync</c> always exports the full series.
+             </remarks>
+        </member>
         <member name="T:src.Services.Cliente_Movimento_Services">
             <summary>
             Application service for querying and managing <see cref="T:src.Models.Cliente_Movimento"/> records.
@@ -397,6 +425,65 @@
             <returns>A list of <see cref="T:src.Dtos.Movimentos_Dtos.PesquisaItem"/> ordered by movement date.</returns>
             <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
         </member>
+        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.SetCell(Expedita.Export.Excel.xlsxPagina,System.Int32,System.Int32,System.String,Expedita.Export.Excel.xlsxCelula.tiposValor)">
+             <summary>
+             Writes a single cell into an <see cref="T:Expedita.Export.Excel.xlsxPagina"/>.
+             </summary>
+             <remarks>
+             In C#, the compiler generates explicit accessors like <c>set_Celula(row, col, cell)</c>.
+            
+             Important details:
+             - The accessor parameter order is <b>(row, col)</b>, not (col, row)
+             - Indices are treated as <b>0-based</b> by the accessor
+            
+             If you swap row/col, or use the wrong base, the library can throw "Index was out of range".
+             </remarks>
+        </member>
+        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.ValidateEvolucaoBase(System.String,System.Int32,System.DateTime,System.DateTime,System.Int32)">
+            <summary>
+            Validates the common (non-pagination) parameters for Evolução requests.
+            </summary>
+            <remarks>
+            keep this separate so:
+            - JSON endpoint can validate pagination
+            - Excel endpoint can ignore pagination entirely
+            but both share the same domain rules (hotel, tab range, date window, tipo range).
+            </remarks>
+        </member>
+        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.LoadEvolucaoDataAsync(System.String,System.Int32,System.DateTime,System.DateTime,System.Int32)">
+             <summary>
+             Loads all data needed to build the Evolução series (time buckets + aggregates per direction).
+             </summary>
+             <remarks>
+             This method is the shared "core" for:
+             - <see cref="M:src.Services.EntradasSaidasService.EntradasSaidasService.EvolucaoAsync(src.Dtos.Movimentos_Dtos.EvolucaoRequest)"/> (JSON): applies API pagination to the final series.
+             - <see cref="M:src.Services.EntradasSaidasService.EntradasSaidasService.EvolucaoExcelAsync(src.Dtos.Movimentos_Dtos.EvolucaoExcelRequest)"/> (XLSX): exports the full series without pagination.
+            
+             What it returns:
+             - Buckets: the timeline points (hours/days/months) to render. Buckets are pre-generated, so
+               we can output zeros for periods with no movimentos.
+             - Granularity: Hour/Day/Month, derived from <c>tab</c> and the requested window.
+             - EntradasMap / SaidasMap: aggregated quantity per bucket for the selected direction(s).
+            
+             Why use maps:
+             We aggregate in SQL (fast), then later build the full bucketed series in memory by
+             looking up each bucket in a dictionary (fast and predictable ordering).
+             </remarks>
+        </member>
+        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.BuildEvolucaoResult(System.Collections.Generic.IReadOnlyList{System.DateTime},src.Services.TimeSeries.TimeSeriesGranularity,System.Collections.Generic.Dictionary{System.DateTime,System.Int32},System.Collections.Generic.Dictionary{System.DateTime,System.Int32},System.Int32,System.Int32,System.Int32)">
+             <summary>
+             Builds the Evolução series as a flat list of <see cref="T:src.Dtos.Movimentos_Dtos.EvolucaoItem"/>, including zero-filled buckets.
+             </summary>
+             <remarks>
+             The returned list interleaves directions depending on <paramref name="tipo"/>:
+             - tipo=0: only entradas
+             - tipo=1: only saidas
+             - tipo=2: entradas + saidas
+            
+             Pagination is implemented using an <c>index</c> that counts output rows (not buckets), since
+             when tipo=2 we output two rows per time bucket.
+             </remarks>
+        </member>
         <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.EvolucaoAsync(src.Dtos.Movimentos_Dtos.EvolucaoRequest)">
             <summary>
             Computes an evolution series of quantities for entries/exits (or both), honoring preset tabs (day/week/month/year/custom).
@@ -404,6 +491,20 @@
             <param name="request">Evolution criteria including date range, hotel, optional document number, direction type, and pagination.</param>
             <returns>A list of <see cref="T:src.Dtos.Movimentos_Dtos.EvolucaoItem"/> ordered by date (and hour when applicable).</returns>
             <exception cref="T:System.ArgumentException">Thrown when request parameters are invalid.</exception>
+        </member>
+        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.EvolucaoExcelAsync(src.Dtos.Movimentos_Dtos.EvolucaoExcelRequest)">
+             <summary>
+             Generates an Excel (.xlsx) export for the Evolução series.
+             </summary>
+             <remarks>
+             Key behavior differences vs <see cref="M:src.Services.EntradasSaidasService.EntradasSaidasService.EvolucaoAsync(src.Dtos.Movimentos_Dtos.EvolucaoRequest)"/>:
+             - This export returns the <b>full</b> series for the requested window (no pagination).
+             - The Excel library writes to a file on disk; we then read the bytes and return them.
+             - We allocate an extra spare row/column to be resilient against edge-index behavior.
+            
+             The endpoint returns the bytes directly (download), but we still use a temporary file because
+             the library's export API is "export to folder" oriented.
+             </remarks>
         </member>
         <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.ProximasEntregasAsync(src.Dtos.Movimentos_Dtos.ProximasEntregasRequest)">
             <summary>

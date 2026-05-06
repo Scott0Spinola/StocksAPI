@@ -1,8 +1,8 @@
 services:
   src:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: src/Dockerfile
     image: src:dev
     ports:
       - "5275:5275"

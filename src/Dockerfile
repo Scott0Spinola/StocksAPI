@@ -19,7 +19,16 @@ RUN set -eux; \
 	if [ -f "./src/src.csproj" ]; then PROJECT_PATH="./src/src.csproj"; \
 	elif [ -f "./src.csproj" ]; then PROJECT_PATH="./src.csproj"; \
 	else echo "ERROR: Could not find src.csproj (expected ./src/src.csproj or ./src.csproj)"; exit 1; fi; \
-	dotnet restore "$PROJECT_PATH"; \
+	if [ -d "./src/excel_nuget" ]; then LOCAL_FEED="./src/excel_nuget"; \
+	elif [ -d "./excel_nuget" ]; then LOCAL_FEED="./excel_nuget"; \
+	else LOCAL_FEED=""; fi; \
+	if [ -f "./NuGet.config" ]; then \
+		dotnet restore "$PROJECT_PATH" --configfile ./NuGet.config; \
+	elif [ -n "$LOCAL_FEED" ]; then \
+		dotnet restore "$PROJECT_PATH" --source "$LOCAL_FEED" --source "https://api.nuget.org/v3/index.json"; \
+	else \
+		dotnet restore "$PROJECT_PATH"; \
+	fi; \
 	dotnet publish "$PROJECT_PATH" -c $configuration -o /app/publish /p:UseAppHost=false
 
 FROM base AS final

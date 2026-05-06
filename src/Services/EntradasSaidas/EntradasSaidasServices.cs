@@ -232,10 +232,9 @@ public class EntradasSaidasService
     /// Writes a single cell into an <see cref="xlsxPagina"/>.
     /// </summary>
     /// <remarks>
-    /// Expedita's Excel library was originally designed with a VB-style "named indexed property".
     /// In C#, the compiler generates explicit accessors like <c>set_Celula(row, col, cell)</c>.
     ///
-    /// Important details (learned from reflection + a smoke XLSX):
+    /// Important details:
     /// - The accessor parameter order is <b>(row, col)</b>, not (col, row)
     /// - Indices are treated as <b>0-based</b> by the accessor
     ///
@@ -265,7 +264,7 @@ public class EntradasSaidasService
     /// Validates the common (non-pagination) parameters for Evolução requests.
     /// </summary>
     /// <remarks>
-    /// We keep this separate so:
+    /// keep this separate so:
     /// - JSON endpoint can validate pagination
     /// - Excel endpoint can ignore pagination entirely
     /// but both share the same domain rules (hotel, tab range, date window, tipo range).
@@ -320,7 +319,7 @@ public class EntradasSaidasService
         var buckets = TimeSeriesTabs.GetBuckets(startInclusive, endInclusive, granularity).ToList();
 
         // Base query: only movimentos inside the computed window.
-        // We use AsNoTracking because these are read-only analytics queries.
+        //  use AsNoTracking because these are read-only analytics queries.
         IQueryable<Cliente_Movimento> baseQuery = _context.Cliente_Movimentos
             .AsNoTracking()
             .Where(m => m.Datetime >= startInclusive && m.Datetime <= endInclusive);
@@ -328,7 +327,7 @@ public class EntradasSaidasService
         Task<Dictionary<DateTime, int>> LoadAggregatesAsync(IQueryable<Cliente_Movimento> movimentos)
         {
             // For each granularity, group by the appropriate key and sum Quantidade.
-            // We always normalize the bucket DateTime so later dictionary lookups match.
+            // always normalize the bucket DateTime so later dictionary lookups match.
             if (granularity == TimeSeriesGranularity.Hour)
             {
                 return movimentos
@@ -558,7 +557,7 @@ public class EntradasSaidasService
         try
         {
             // The library expects a "temporary path" and then an output folder.
-            // We reuse the same folder for both.
+            // reuse the same folder for both.
             var doc = new xlsxDocumento(workDir);
             var page = doc.AdicionarPagina("Evolucao", numRows, numCols);
 
