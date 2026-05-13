@@ -9,6 +9,10 @@ public class StocksContext(DbContextOptions<StocksContext> options) : DbContext(
 
     public DbSet<Cliente_Tag> Cliente_Tags => Set<Cliente_Tag>();
 
+    public DbSet<Cliente> Clientes => Set<Cliente>();
+
+    public DbSet<Entidade> Entidades => Set<Entidade>();
+
     public DbSet<VwClienteMovimento> VwClienteMovimentos => Set<VwClienteMovimento>();
 
     public DbSet<VwProximaEntrega> VwProximasEntregas => Set<VwProximaEntrega>();
@@ -18,6 +22,14 @@ public class StocksContext(DbContextOptions<StocksContext> options) : DbContext(
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Cliente>(entity =>
+        {
+            entity.HasOne(x => x.Entidade)
+                .WithMany(x => x.Clientes)
+                .HasForeignKey(x => x.IdEntidade)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
 
         modelBuilder.Entity<VwClienteMovimento>(entity =>
         {
