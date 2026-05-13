@@ -2,6 +2,7 @@ using src.Data;
 using src.Services;
 using src.Services.Dashboard;
 using src.Services.EntradasSaidasService;
+using src.Services.StocksServices;
 using src.Auth;
 
 using Microsoft.AspNetCore.Authorization;
@@ -42,6 +43,7 @@ builder.Services.AddScoped<Cliente_Movimento_Services>();
 builder.Services.AddScoped<Cliente_Tag_Services>();
 builder.Services.AddScoped<EntradasSaidasService>();
 builder.Services.AddScoped<DashboardService>();
+builder.Services.AddScoped<StocksServices>();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ErrorHandling>();
 
