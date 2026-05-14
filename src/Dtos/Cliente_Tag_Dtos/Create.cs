@@ -20,7 +20,7 @@ public record  CreateTag(
     string EPC,
 
     [Required]
-    [MaxLength (5)]
+    [MaxLength (20)]
     string Estado,
 
     [MaxLength (50)]
