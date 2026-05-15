@@ -4,6 +4,88 @@
         <name>src</name>
     </assembly>
     <members>
+        <member name="M:src.Controllers.ClienteController.GetAll(PageParameters)">
+            <summary>
+            Gets a paginated list of clientes.
+            </summary>
+            <param name="pageParameters">Pagination parameters (page number and page size).</param>
+            <remarks>
+            Returns a paged result containing the requested page of clientes.
+            </remarks>
+            <response code="200">Clientes returned successfully.</response>
+            <response code="400">The query parameters are invalid.</response>
+        </member>
+        <member name="M:src.Controllers.ClienteController.GetById(System.Int32)">
+            <summary>
+            Gets a cliente by identifier.
+            </summary>
+            <param name="id">The cliente identifier.</param>
+            <remarks>
+            Returns the cliente resource if found.
+            </remarks>
+            <response code="200">Cliente returned successfully.</response>
+            <response code="404">Cliente not found.</response>
+        </member>
+        <member name="M:src.Controllers.ClienteController.GetByReferencia(System.String)">
+            <summary>
+            Gets a cliente by its reference value.
+            </summary>
+            <param name="referencia">The reference value to search for.</param>
+            <remarks>
+            Returns the cliente resource that matches the provided <paramref name="referencia"/>.
+            </remarks>
+            <response code="200">Cliente returned successfully.</response>
+            <response code="400">The query parameter is missing or invalid.</response>
+            <response code="404">Cliente not found.</response>
+        </member>
+        <member name="M:src.Controllers.ClienteController.GetByIdEntidade(System.Int32,PageParameters)">
+            <summary>
+            Gets clientes for a given entidade identifier (paged).
+            </summary>
+            <param name="idEntidade">The entidade identifier to filter clientes by.</param>
+            <param name="pageParameters">Pagination parameters (page number and page size).</param>
+            <remarks>
+            Returns a paged result containing clientes associated with the provided <paramref name="idEntidade"/>.
+            </remarks>
+            <response code="200">Clientes returned successfully.</response>
+            <response code="400">The query parameters are invalid.</response>
+            <response code="404">No clientes were found for the provided entidade identifier.</response>
+        </member>
+        <member name="M:src.Controllers.ClienteController.Create(IntervencoesAPI.Dtos.CreateCliente)">
+            <summary>
+            Creates a new cliente.
+            </summary>
+            <param name="dto">The data used to create a new cliente.</param>
+            <remarks>
+            Creates a new cliente and returns the created resource with its generated identifier.
+            </remarks>
+            <response code="201">Cliente created successfully.</response>
+            <response code="400">The request data is invalid.</response>
+        </member>
+        <member name="M:src.Controllers.ClienteController.Update(System.Int32,IntervencoesAPI.Dtos.UpdateCliente)">
+            <summary>
+            Updates an existing cliente.
+            </summary>
+            <param name="id">The cliente identifier.</param>
+            <param name="updatecliente">The data used to update the cliente.</param>
+            <remarks>
+            Updates the cliente identified by <paramref name="id"/> and returns the updated resource.
+            </remarks>
+            <response code="200">Cliente updated successfully.</response>
+            <response code="400">The request data is invalid.</response>
+            <response code="404">Cliente not found.</response>
+        </member>
+        <member name="M:src.Controllers.ClienteController.Delete(System.Int32)">
+            <summary>
+            Deletes an existing cliente.
+            </summary>
+            <param name="id">The cliente identifier.</param>
+            <remarks>
+            Deletes the cliente identified by <paramref name="id"/>.
+            </remarks>
+            <response code="204">Cliente deleted successfully.</response>
+            <response code="404">Cliente not found.</response>
+        </member>
         <member name="M:src.Controllers.Cliente_movimento_Controller.GetAll(PageParameters)">
             <summary>
             Gets a paged list of all movimentos.
@@ -146,6 +228,100 @@
             <response code="404">Tag not found.</response>
             <response code="400">Invalid request.</response>
         </member>
+        <member name="T:src.Controllers.EntidadeController">
+            <summary>
+            Provides endpoints to manage entidades.
+            </summary>
+        </member>
+        <member name="M:src.Controllers.EntidadeController.GetAll(PageParameters)">
+            <summary>
+            Gets a paginated list of entidades.
+            </summary>
+            <param name="pageParameters">Pagination parameters (page number and page size).</param>
+            <remarks>
+            Returns a paged result containing the requested page of entidades.
+            </remarks>
+            <response code="200">Entidades returned successfully.</response>
+            <response code="400">The query parameters are invalid.</response>
+        </member>
+        <member name="M:src.Controllers.EntidadeController.GetById(System.Int32)">
+            <summary>
+            Gets an entidade by identifier.
+            </summary>
+            <param name="id">The entidade identifier.</param>
+            <remarks>
+            Returns the entidade resource if found.
+            </remarks>
+            <response code="200">Entidade returned successfully.</response>
+            <response code="404">Entidade not found.</response>
+        </member>
+        <member name="M:src.Controllers.EntidadeController.GetNomeSocial(System.String)">
+            <summary>
+            Gets an entidade by nome social.
+            </summary>
+            <param name="name">The nome social to search for.</param>
+            <response code="200">Entidade returned successfully.</response>
+            <response code="400">The name query parameter is missing/invalid.</response>
+            <response code="404">Entidade not found.</response>
+        </member>
+        <member name="M:src.Controllers.EntidadeController.GetByReferencia(System.String)">
+            <summary>
+            Gets an entidade by referencia.
+            </summary>
+            <param name="referencia">The referencia value to search for.</param>
+            <remarks>
+            The value is matched against the <c>Referencia</c> field.
+            </remarks>
+            <response code="200">Entidade returned successfully.</response>
+            <response code="400">The referencia query parameter is missing/invalid.</response>
+            <response code="404">Entidade not found.</response>
+        </member>
+        <member name="M:src.Controllers.EntidadeController.Create(IntervencoesAPI.Dtos.CreateEntidade)">
+            <summary>
+            Creates a new entidade.
+            </summary>
+            <param name="dto">The data used to create a new entidade.</param>
+            <remarks>
+            Creates a new entidade and returns the created resource with its generated identifier.
+            </remarks>
+            <response code="201">Entidade created successfully.</response>
+            <response code="400">The request data is invalid.</response>
+        </member>
+        <member name="M:src.Controllers.EntidadeController.Update(System.Int32,IntervencoesAPI.Dtos.EntidadeDtos.UpdateEntidade)">
+            <summary>
+            Updates an existing entidade.
+            </summary>
+            <param name="id">The entidade identifier.</param>
+            <param name="updateEntidade">The data used to update the entidade.</param>
+            <remarks>
+            Updates the entidade identified by <paramref name="id"/> and returns the updated resource.
+            </remarks>
+            <response code="200">Entidade updated successfully.</response>
+            <response code="400">The request data is invalid.</response>
+            <response code="404">Entidade not found.</response>
+        </member>
+        <member name="M:src.Controllers.EntidadeController.Delete(System.Int32)">
+            <summary>
+            Deletes an existing entidade.
+            </summary>
+            <param name="id">The entidade identifier.</param>
+            <remarks>
+            Deletes the entidade identified by <paramref name="id"/>.
+            </remarks>
+            <response code="204">Entidade deleted successfully.</response>
+            <response code="404">Entidade not found.</response>
+        </member>
+        <member name="M:src.Controllers.EntidadeController.GetDetails(System.Int32)">
+            <summary>
+            Gets an entidade with related data (details view).
+            </summary>
+            <param name="id">The entidade identifier.</param>
+            <remarks>
+            Returns an aggregated DTO that includes the entidade and its related clientes, processos, and intervenções.
+            </remarks>
+            <response code="200">Entidade details returned successfully.</response>
+            <response code="404">Entidade not found.</response>
+        </member>
         <member name="T:src.Data.Migrations.InitialCreate">
             <inheritdoc />
         </member>
@@ -197,6 +373,97 @@
             
              The service method <c>PesquisaExcelAsync</c> always exports the full series.
              </remarks>
+        </member>
+        <member name="M:src.Services.ClienteService.#ctor(src.Data.StocksContext,Microsoft.Extensions.Logging.ILogger{src.Services.ClienteService})">
+            <summary>
+            Initializes a new instance of <see cref="T:src.Services.ClienteService"/>.
+            </summary>
+            <param name="context">EF Core database context used to access <see cref="T:src.Models.Cliente"/> entities.</param>
+            <param name="logger">Logger used to record failures and operational errors.</param>
+        </member>
+        <member name="M:src.Services.ClienteService.GetAll">
+            <summary>
+            Gets all <see cref="T:src.Models.Cliente"/> records ordered by identifier.
+            </summary>
+            <remarks>
+            This query is tracked by EF Core (no <c>AsNoTracking</c>). Use paged or no-tracking variants
+            where appropriate.
+            </remarks>
+            <returns>All clientes ordered by <see cref="P:src.Models.Cliente.Id"/>.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.ClienteService.GetAllPagedAsync(PageParameters)">
+            <summary>
+            Gets a paginated list of clientes.
+            </summary>
+            <param name="pageParameters">Pagination parameters (page number and page size).</param>
+            <returns>A paged list containing the requested page of clientes as DTOs.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.ClienteService.GetByIdCliente(System.Int32)">
+            <summary>
+            Gets a single <see cref="T:src.Models.Cliente"/> by its identifier.
+            </summary>
+            <param name="id">The cliente identifier.</param>
+            <returns>The matching cliente, or <see langword="null"/> if not found.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.ClienteService.GetByReferencia(System.String)">
+            <summary>
+            Gets a single <see cref="T:src.Models.Cliente"/> by its <see cref="P:src.Models.Cliente.Referencia"/>.
+            </summary>
+            <param name="referencia">The reference value to look up.</param>
+            <returns>The matching cliente, or <see langword="null"/> if not found.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.ClienteService.GetByIdEntidade(System.Int32)">
+            <summary>
+            Gets the first cliente that matches the given entidade identifier.
+            </summary>
+            <param name="idEntidade">The entidade identifier.</param>
+            <returns>The first matching cliente, or <see langword="null"/> if none exists.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.ClienteService.GetByIdEntidadePagedAsync(System.Int32,PageParameters)">
+            <summary>
+            Gets clientes that match the given entidade identifier, returned as a paged result.
+            </summary>
+            <param name="idEntidade">The entidade identifier to filter clientes by.</param>
+            <param name="pageParameters">Pagination parameters (page number and page size).</param>
+            <returns>A paged list containing clientes associated with the provided entidade identifier.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.ClienteService.CreateAsync(IntervencoesAPI.Dtos.CreateCliente)">
+            <summary>
+            Creates a new <see cref="T:src.Models.Cliente"/> from the provided DTO.
+            </summary>
+            <remarks>
+            Sets <see cref="P:src.Models.Cliente.DataDeInicio"/> and <see cref="P:src.Models.Cliente.DataActualizacao"/> to
+            <see cref="P:System.DateTime.UtcNow"/>.
+            </remarks>
+            <param name="dto">The values to use for creation.</param>
+            <returns>The created cliente after it has been persisted.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.ClienteService.UpdateAsync(System.Int32,IntervencoesAPI.Dtos.UpdateCliente)">
+            <summary>
+            Updates an existing <see cref="T:src.Models.Cliente"/> identified by <paramref name="id"/>.
+            </summary>
+            <remarks>
+            Updates <see cref="P:src.Models.Cliente.DataActualizacao"/> to <see cref="P:System.DateTime.UtcNow"/>.
+            </remarks>
+            <param name="id">The cliente identifier.</param>
+            <param name="dto">The values to apply to the existing cliente.</param>
+            <returns>The updated cliente, or <see langword="null"/> if no cliente exists with the given identifier.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.ClienteService.Delete(System.Int32)">
+            <summary>
+            Deletes a <see cref="T:src.Models.Cliente"/> identified by <paramref name="id"/>.
+            </summary>
+            <param name="id">The cliente identifier.</param>
+            <returns><see langword="true"/> if the cliente existed and was deleted; otherwise <see langword="false"/>.</returns>
+            <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
         </member>
         <member name="T:src.Services.Cliente_Movimento_Services">
             <summary>
@@ -421,6 +688,77 @@
             <param name="id">The unique identifier of the tag to delete.</param>
             <returns>True if the tag was deleted; otherwise, false.</returns>
             <exception cref="T:System.Exception">Rethrows any exception encountered during deletion.</exception>
+        </member>
+        <member name="T:src.Services.EntidadeService">
+            <summary>
+            Provides data access and business operations for <see cref="T:src.Models.Entidade"/>.
+            </summary>
+        </member>
+        <member name="M:src.Services.EntidadeService.GetAll">
+            <summary>
+            Gets all entidades ordered by identifier.
+            </summary>
+            <returns>A list of entidades.</returns>
+        </member>
+        <member name="M:src.Services.EntidadeService.GetAllPagedAsync(PageParameters)">
+            <summary>
+            Gets a paginated list of entidades.
+            </summary>
+            <param name="pageParameters">Pagination parameters (page number and page size).</param>
+            <returns>A paged list containing the requested page of entidades.</returns>
+        </member>
+        <member name="M:src.Services.EntidadeService.GetByNomeSocial(System.String)">
+            <summary>
+            Gets an entidade by nome social.
+            </summary>
+            <param name="name">The nome social to search for.</param>
+            <returns>The entidade if found; otherwise <see langword="null"/>.</returns>
+        </member>
+        <member name="M:src.Services.EntidadeService.GetByReferencia(System.String)">
+            <summary>
+            Gets an entidade by referencia.
+            </summary>
+            <param name="referncia">The referencia to search for.</param>
+            <returns>The entidade if found; otherwise <see langword="null"/>.</returns>
+        </member>
+        <member name="M:src.Services.EntidadeService.GetByIdEntidade(System.Int32)">
+            <summary>
+            Gets an entidade by identifier.
+            </summary>
+            <param name="id">The entidade identifier.</param>
+            <returns>The entidade if found; otherwise <see langword="null"/>.</returns>
+        </member>
+        <member name="M:src.Services.EntidadeService.CreateAsync(IntervencoesAPI.Dtos.CreateEntidade)">
+            <summary>
+            Creates a new entidade.
+            </summary>
+            <param name="dto">The data used to create the entidade.</param>
+            <returns>The created entidade with its generated identifier.</returns>
+        </member>
+        <member name="M:src.Services.EntidadeService.UpdateAsync(System.Int32,IntervencoesAPI.Dtos.EntidadeDtos.UpdateEntidade)">
+            <summary>
+            Updates an existing entidade.
+            </summary>
+            <param name="id">The entidade identifier.</param>
+            <param name="dto">The data used to update the entidade.</param>
+            <returns>The updated entidade if found; otherwise <see langword="null"/>.</returns>
+        </member>
+        <member name="M:src.Services.EntidadeService.Delete(System.Int32)">
+            <summary>
+            Deletes an entidade.
+            </summary>
+            <param name="id">The entidade identifier.</param>
+            <returns><see langword="true"/> if deleted; <see langword="false"/> if not found.</returns>
+        </member>
+        <member name="M:src.Services.EntidadeService.GetDetailsAsync(System.Int32)">
+            <summary>
+            Gets an aggregated details DTO for an entidade.
+            </summary>
+            <param name="entidadeId">The entidade identifier.</param>
+            <remarks>
+            Loads related data (clientes, processos, and intervenções) and maps it into <see cref="T:IntervencoesAPI.Dtos.EntidadeDtos.EntidadeDetailsDto"/>.
+            </remarks>
+            <returns>The details DTO if found; otherwise <see langword="null"/>.</returns>
         </member>
         <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.#ctor(src.Data.StocksContext,Microsoft.Extensions.Logging.ILogger{src.Services.EntradasSaidasService.EntradasSaidasService})">
             <summary>

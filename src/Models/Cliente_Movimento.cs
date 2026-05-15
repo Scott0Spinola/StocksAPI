@@ -18,4 +18,6 @@ public class Cliente_Movimento
     public string? DataFormatada {get; set;}
 
     public int Quantidade {get; set;}
+
+    public Cliente? Nome { get; set; }
 }

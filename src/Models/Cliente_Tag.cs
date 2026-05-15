@@ -20,4 +20,6 @@ public class Cliente_Tag
     public string? Ultima_Localizacao {get; set;}
 
     public string? Ultima_Unidade {get; set;}
+
+    public Cliente? Nome { get; set; }
 }

@@ -41,6 +41,8 @@ builder.Services.AddDbContext<StocksContext>(options =>
 
 builder.Services.AddScoped<Cliente_Movimento_Services>();
 builder.Services.AddScoped<Cliente_Tag_Services>();
+builder.Services.AddScoped<ClienteService>();
+builder.Services.AddScoped<EntidadeService>();
 builder.Services.AddScoped<EntradasSaidasService>();
 builder.Services.AddScoped<DashboardService>();
 builder.Services.AddScoped<StocksServices>();
@@ -75,7 +77,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         options.IncludeXmlComments(xmlPath);
     }
-      options.AddSecurityDefinition(ApiKeyAuthenticationHandler.SchemeName, new OpenApiSecurityScheme
+    options.AddSecurityDefinition(ApiKeyAuthenticationHandler.SchemeName, new OpenApiSecurityScheme
     {
         Description = $"API Key via header {ApiKeyAuthenticationHandler.HeaderName}",
         Type = SecuritySchemeType.ApiKey,
@@ -99,6 +101,18 @@ builder.Services.AddSwaggerGen(options =>
 
 
 var app = builder.Build();
+
+app.UseCors(policy => policy
+
+              .WithOrigins((builder.Configuration.GetValue("CORS-origin", "*") ?? "*").Replace(" ", "").Split(","))
+
+              .AllowAnyMethod()
+
+              .AllowAnyHeader()
+
+              .WithExposedHeaders("X-LANGUAGE")
+          );
+
 
 Log.Information(
     "Starting {Application} in {Environment}; logs at {LogDirectory}",
