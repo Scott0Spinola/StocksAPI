@@ -346,6 +346,18 @@
         <member name="M:src.Data.Migrations.AddClienteEntidade.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:src.Data.Migrations.AddClienteNomeForeignKeys">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.AddClienteNomeForeignKeys.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.AddClienteNomeForeignKeys.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.AddClienteNomeForeignKeys.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
         <member name="T:src.Dtos.Movimentos_Dtos.PesquisaExcelRequest">
              <summary>
              Request payload for exporting the Pesquisa series to Excel.

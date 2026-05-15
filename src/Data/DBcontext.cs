@@ -25,9 +25,38 @@ public class StocksContext(DbContextOptions<StocksContext> options) : DbContext(
 
         modelBuilder.Entity<Cliente>(entity =>
         {
+            // Relationships to Cliente_Tag and Cliente_Movimento are based on the business key `Nome`.
+            // SQL Server requires the referenced column to be a key (PK/AK) and have a bounded length.
+            entity.Property(x => x.Nome).HasMaxLength(255);
+            entity.HasAlternateKey(x => x.Nome);
+
             entity.HasOne(x => x.Entidade)
                 .WithMany(x => x.Clientes)
                 .HasForeignKey(x => x.IdEntidade)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Cliente_Tag>(entity =>
+        {
+            entity.Property(x => x.Unidade).HasMaxLength(255);
+
+            // FK: Cliente_Tags.Unidade -> Clientes.Nome
+            entity.HasOne(x => x.Nome)
+                .WithMany()
+                .HasForeignKey(x => x.Unidade)
+                .HasPrincipalKey(x => x.Nome)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Cliente_Movimento>(entity =>
+        {
+            entity.Property(x => x.Cliente).HasMaxLength(255);
+
+            // FK: Cliente_Movimentos.Cliente -> Clientes.Nome
+            entity.HasOne(x => x.Nome)
+                .WithMany()
+                .HasForeignKey(x => x.Cliente)
+                .HasPrincipalKey(x => x.Nome)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 

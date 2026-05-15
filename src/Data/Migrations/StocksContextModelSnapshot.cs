@@ -62,7 +62,8 @@ namespace src.Data.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Observacoes")
                         .IsRequired()
@@ -88,7 +89,8 @@ namespace src.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Cliente")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("DataFormatada")
                         .HasColumnType("nvarchar(max)");
@@ -112,6 +114,8 @@ namespace src.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Cliente");
 
                     b.ToTable("Cliente_Movimentos");
                 });
@@ -146,9 +150,12 @@ namespace src.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Unidade")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Unidade");
 
                     b.ToTable("Cliente_Tags");
                 });
@@ -271,6 +278,28 @@ namespace src.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Entidade");
+                });
+
+            modelBuilder.Entity("src.Models.Cliente_Movimento", b =>
+                {
+                    b.HasOne("src.Models.Cliente", "Nome")
+                        .WithMany()
+                        .HasForeignKey("Cliente")
+                        .HasPrincipalKey("Nome")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Nome");
+                });
+
+            modelBuilder.Entity("src.Models.Cliente_Tag", b =>
+                {
+                    b.HasOne("src.Models.Cliente", "Nome")
+                        .WithMany()
+                        .HasForeignKey("Unidade")
+                        .HasPrincipalKey("Nome")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Nome");
                 });
 
             modelBuilder.Entity("src.Models.Entidade", b =>
