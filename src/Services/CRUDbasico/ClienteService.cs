@@ -71,12 +71,12 @@ public class ClienteService
                 .Select(c => c.Nome)
                 .ToListAsync();
 
-            var unidadesRows = await _context.VwClienteMovimentos
+            var unidadesRows = await _context.Cliente_Movimentos
                 .AsNoTracking()
                 .Where(m => m.Cliente != null && m.Cliente != "")
                 .Select(m => new { Cliente = m.Cliente!, Unidade = m.De })
                 .Union(
-                    _context.VwClienteMovimentos
+                    _context.Cliente_Movimentos
                         .AsNoTracking()
                         .Where(m => m.Cliente != null && m.Cliente != "")
                         .Select(m => new { Cliente = m.Cliente!, Unidade = m.Para }))
