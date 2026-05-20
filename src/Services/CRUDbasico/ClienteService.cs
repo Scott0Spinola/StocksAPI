@@ -53,6 +53,7 @@ public class ClienteService
         }
     }
 
+
     /// <summary>
     /// Gets a paginated list of clientes.
     /// </summary>
