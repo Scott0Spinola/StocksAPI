@@ -23,6 +23,23 @@ public class ClienteController : ControllerBase
     }
 
     /// <summary>
+    /// Gets all clientes with the list of unidades associated to each cliente.
+    /// </summary>
+    /// <remarks>
+    /// The response contains one entry per cliente with a distinct list of unidades.
+    /// </remarks>
+    /// <response code="200">Clientes with unidades returned successfully.</response>
+    [HttpGet("ComUnidades")]
+    [ProducesResponseType(typeof(List<GetClienteUnidades>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<GetClienteUnidades>>> GetAllWithUnidades()
+    {
+        _logger.LogInformation("CRUD {CrudOperation} {Resource}", "Read", "ClienteComUnidades");
+
+        var result = await _clienteService.GetAllWithUnidadesAsync();
+        return Ok(result);
+    }
+
+    /// <summary>
     /// Gets a paginated list of clientes.
     /// </summary>
     /// <param name="pageParameters">Pagination parameters (page number and page size).</param>

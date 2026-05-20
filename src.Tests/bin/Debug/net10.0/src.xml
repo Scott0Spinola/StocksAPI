@@ -4,6 +4,15 @@
         <name>src</name>
     </assembly>
     <members>
+        <member name="M:src.Controllers.ClienteController.GetAllWithUnidades">
+            <summary>
+            Gets all clientes with the list of unidades associated to each cliente.
+            </summary>
+            <remarks>
+            The response contains one entry per cliente with a distinct list of unidades.
+            </remarks>
+            <response code="200">Clientes with unidades returned successfully.</response>
+        </member>
         <member name="M:src.Controllers.ClienteController.GetAll(PageParameters)">
             <summary>
             Gets a paginated list of clientes.
@@ -403,6 +412,15 @@
             </remarks>
             <returns>All clientes ordered by <see cref="P:src.Models.Cliente.Id"/>.</returns>
             <exception cref="T:System.Exception">Rethrows any exception after logging.</exception>
+        </member>
+        <member name="M:src.Services.ClienteService.GetAllWithUnidadesAsync">
+            <summary>
+            Gets all clientes with the distinct set of unidades associated to each cliente.
+            </summary>
+            <remarks>
+            Unidades are derived from <c>vw_ClienteMovimentos</c> by taking the distinct union of
+            <c>De</c> and <c>Para</c> for each <c>Cliente</c>.
+            </remarks>
         </member>
         <member name="M:src.Services.ClienteService.GetAllPagedAsync(PageParameters)">
             <summary>

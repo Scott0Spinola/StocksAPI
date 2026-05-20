@@ -55,6 +55,69 @@ public class ClienteService
 
 
     /// <summary>
+    /// Gets all clientes with the distinct set of unidades associated to each cliente.
+    /// </summary>
+    /// <remarks>
+    /// Unidades are derived from <c>vw_ClienteMovimentos</c> by taking the distinct union of
+    /// <c>De</c> and <c>Para</c> for each <c>Cliente</c>.
+    /// </remarks>
+    public async Task<List<GetClienteUnidades>> GetAllWithUnidadesAsync()
+    {
+        try
+        {
+            var clientes = await _context.Clientes
+                .AsNoTracking()
+                .OrderBy(c => c.Nome)
+                .Select(c => c.Nome)
+                .ToListAsync();
+
+            var unidadesRows = await _context.VwClienteMovimentos
+                .AsNoTracking()
+                .Where(m => m.Cliente != null && m.Cliente != "")
+                .Select(m => new { Cliente = m.Cliente!, Unidade = m.De })
+                .Union(
+                    _context.VwClienteMovimentos
+                        .AsNoTracking()
+                        .Where(m => m.Cliente != null && m.Cliente != "")
+                        .Select(m => new { Cliente = m.Cliente!, Unidade = m.Para }))
+                .Where(x => x.Unidade != null && x.Unidade != "")
+                .Distinct()
+                .ToListAsync();
+
+            var unidadesByCliente = unidadesRows
+                .GroupBy(x => x.Cliente)
+                .ToDictionary(
+                    g => g.Key,
+                    g => (IReadOnlyList<string>)g
+                        .Select(x => x.Unidade!)
+                        .Distinct()
+                        .OrderBy(u => u)
+                        .ToList());
+
+            var result = new List<GetClienteUnidades>(clientes.Count);
+            foreach (var nomeCliente in clientes)
+            {
+                if (!unidadesByCliente.TryGetValue(nomeCliente, out var unidades))
+                {
+                    unidades = Array.Empty<string>();
+                }
+
+                result.Add(new GetClienteUnidades(
+                    Cliente: nomeCliente,
+                    Unidades: unidades));
+            }
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in {Method}", nameof(GetAllWithUnidadesAsync));
+            throw;
+        }
+    }
+
+
+    /// <summary>
     /// Gets a paginated list of clientes.
     /// </summary>
     /// <param name="pageParameters">Pagination parameters (page number and page size).</param>
