@@ -1,4 +1,4 @@
-# StocksAPI (src)
+# StocksAPI
 
 ASP.NET Core Web API for managing `Cliente_Tag` and `Cliente_Movimento` records, backed by Entity Framework Core (SQL Server) and protected by an API-key header.
 
@@ -14,6 +14,33 @@ ASP.NET Core Web API for managing `Cliente_Tag` and `Cliente_Movimento` records,
 
 - `src/` — Web API project
 - `src.Tests/` — Test project
+
+## Quick start
+
+Prerequisites:
+
+- .NET SDK that supports `net10.0`
+- SQL Server (or SQL Express) reachable from your machine
+
+From the repo root:
+
+```powershell
+dotnet restore .\src.slnx
+dotnet build .\src.slnx
+
+# run (Development profile uses HTTPS + Swagger)
+dotnet run --project .\src\src.csproj
+```
+
+Local URLs (Development profile):
+
+- HTTP: `http://localhost:5275`
+- HTTPS: `https://localhost:7092`
+
+Swagger UI (Development only):
+
+- `https://localhost:7092/swagger`
+- `http://localhost:5275/swagger`
 
 ## Configuration
 
@@ -33,6 +60,13 @@ Optional migration auto-apply:
   - When `true`, the API runs `db.Database.Migrate()` on startup.
   - Default in Development is `false` to avoid accidentally creating/updating tables against an existing database.
 
+Example (PowerShell) overriding the connection string and enabling migrations:
+
+```powershell
+$env:ConnectionStrings__DefaultConnection = "Server=localhost\\SQLEXPRESS;Database=StocksApi;Trusted_Connection=True;TrustServerCertificate=True;Encrypt=True"
+$env:Database__ApplyMigrations = "true"
+```
+
 ### Authentication (API Key)
 
 All controller routes require authentication.
@@ -48,32 +82,19 @@ $headers = @{ "X-API-KEY" = "YOUR_KEY" }
 Invoke-RestMethod "https://localhost:7092/api/Cliente_Tag_?pageNumber=1&pageSize=20" -Headers $headers
 ```
 
-## Running locally
-
-Prerequisites:
-
-- .NET SDK that supports `net10.0`
-- SQL Server (or SQL Express) accessible from your machine
-
-From the repo root:
+Example (PowerShell) setting the API key via environment variable:
 
 ```powershell
-cd .\src
-
-dotnet restore
-
-dotnet run
+$env:Authentication__ApiKey = "YOUR_KEY"
 ```
 
-Local URLs (Development profile):
+## Running locally (VS Code tasks)
 
-- HTTP: `http://localhost:5275`
-- HTTPS: `https://localhost:7092`
+This repo includes tasks for common workflows:
 
-Swagger UI (Development only):
-
-- `https://localhost:7092/swagger`
-- `http://localhost:5275/swagger`
+- `build`: `dotnet build src.slnx`
+- `watch`: `dotnet watch run --project src.slnx`
+- `publish`: `dotnet publish src.slnx`
 
 ## Running with Docker Compose
 
@@ -85,11 +106,25 @@ cd .\src
 docker compose up --build
 ```
 
-By default it maps container port `8080` to host `8080`:
+By default it maps container port `5275` to host `5275`:
 
-- `http://localhost:8080`
+- `http://localhost:5275`
+- Swagger (Development): `http://localhost:5275/swagger`
 
 Note: the compose file only runs the API container. You still need a reachable SQL Server instance (and a correct `DefaultConnection` via config/environment).
+
+## Running with Docker (single container)
+
+If you have a prebuilt image, you can run it while supplying configuration via environment variables.
+
+Example:
+
+```powershell
+docker run --rm -p 5275:5275 `
+  -e Authentication__ApiKey="YOUR_KEY" `
+  -e ConnectionStrings__DefaultConnection="<YOUR_SQLSERVER_CONNECTION_STRING>" `
+  kbairesearch/development:movimentoapi.3.0
+```
 
 ## API endpoints
 
@@ -133,5 +168,3 @@ Base: `/api/Cliente_movimento_`
 ```powershell
 dotnet test .\src.Tests\src.Tests.csproj
 ```
-## Docker
-docker run -p 5275:5275  kbairesearch/development:movimentoapi.3.0 

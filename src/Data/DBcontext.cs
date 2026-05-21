@@ -11,6 +11,14 @@ public class StocksContext(DbContextOptions<StocksContext> options) : DbContext(
 
     public DbSet<Cliente> Clientes => Set<Cliente>();
 
+    public DbSet<Cliente_Faturas> Cliente_Faturas => Set<Cliente_Faturas>();
+
+    public DbSet<Cliente_DetalheFaturas> Cliente_DetalheFaturas => Set<Cliente_DetalheFaturas>();
+
+    public DbSet<Cliente_Guias> Cliente_Guias => Set<Cliente_Guias>();
+
+    public DbSet<Cliente_DetalheGuias> Cliente_DetalheGuias => Set<Cliente_DetalheGuias>();
+
     public DbSet<Entidade> Entidades => Set<Entidade>();
 
     public DbSet<VwClienteMovimento> VwClienteMovimentos => Set<VwClienteMovimento>();
@@ -22,6 +30,74 @@ public class StocksContext(DbContextOptions<StocksContext> options) : DbContext(
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Cliente_Faturas>(entity =>
+        {
+            entity.Property(x => x.Id)
+                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+            entity.Property(x => x.NumeroDoc)
+                .HasMaxLength(255);
+            entity.HasAlternateKey(x => x.NumeroDoc);
+        });
+
+        modelBuilder.Entity<Cliente_DetalheFaturas>(entity =>
+        {
+            entity.Property(x => x.Id)
+                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+            entity.HasIndex(x => x.DocId);
+
+            entity.HasOne<Cliente_Faturas>()
+                .WithMany()
+                .HasForeignKey(x => x.DocId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.Property(x => x.NumeroDoc)
+                .HasMaxLength(255);
+
+            entity.HasOne<Cliente_Faturas>()
+                .WithMany()
+                .HasForeignKey(x => x.NumeroDoc)
+                .HasPrincipalKey(x => x.NumeroDoc)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Cliente_Guias>(entity =>
+        {
+            entity.Property(x => x.Id)
+                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+            entity.Property(x => x.NumeroGuia)
+                .HasMaxLength(255);
+            entity.HasAlternateKey(x => x.NumeroGuia);
+        });
+
+        modelBuilder.Entity<Cliente_DetalheGuias>(entity =>
+        {
+            entity.Property(x => x.Id)
+                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+            entity.HasIndex(x => x.DocId);
+
+            entity.HasOne<Cliente_Guias>()
+                .WithMany()
+                .HasForeignKey(x => x.DocId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.Property(x => x.NumeroGuia)
+                .HasMaxLength(255);
+
+            entity.HasOne<Cliente_Guias>()
+                .WithMany()
+                .HasForeignKey(x => x.NumeroGuia)
+                .HasPrincipalKey(x => x.NumeroGuia)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
 
         modelBuilder.Entity<Cliente>(entity =>
         {

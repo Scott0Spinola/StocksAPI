@@ -367,6 +367,54 @@
         <member name="M:src.Data.Migrations.AddClienteNomeForeignKeys.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:src.Data.Migrations.AddClienteFaturasGuiasTables">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.AddClienteFaturasGuiasTables.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.AddClienteFaturasGuiasTables.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.AddClienteFaturasGuiasTables.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:src.Data.Migrations.ChangeClienteDocTablesIdToGuid">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.ChangeClienteDocTablesIdToGuid.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.ChangeClienteDocTablesIdToGuid.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.ChangeClienteDocTablesIdToGuid.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:src.Data.Migrations.AddClienteDocsNumeroKeysAndFks">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.AddClienteDocsNumeroKeysAndFks.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.AddClienteDocsNumeroKeysAndFks.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.AddClienteDocsNumeroKeysAndFks.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:src.Data.Migrations.AddDocIdToClienteDetalhes">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.AddDocIdToClienteDetalhes.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.AddDocIdToClienteDetalhes.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:src.Data.Migrations.AddDocIdToClienteDetalhes.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
         <member name="T:src.Dtos.Movimentos_Dtos.PesquisaExcelRequest">
              <summary>
              Request payload for exporting the Pesquisa series to Excel.

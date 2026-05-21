@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using src.Data;
 
@@ -11,9 +12,11 @@ using src.Data;
 namespace src.Data.Migrations
 {
     [DbContext(typeof(StocksContext))]
-    partial class StocksContextModelSnapshot : ModelSnapshot
+    [Migration("20260521114445_AddClienteDocsNumeroKeysAndFks")]
+    partial class AddClienteDocsNumeroKeysAndFks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,9 +96,6 @@ namespace src.Data.Migrations
                     b.Property<string>("Codigo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("DocId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<decimal>("Iva")
                         .HasColumnType("decimal(18,2)");
 
@@ -118,8 +118,6 @@ namespace src.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DocId");
-
                     b.HasIndex("NumeroDoc");
 
                     b.ToTable("Cliente_DetalheFaturas");
@@ -131,9 +129,6 @@ namespace src.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<Guid>("DocId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("NumeroGuia")
                         .IsRequired()
@@ -147,8 +142,6 @@ namespace src.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DocId");
 
                     b.HasIndex("NumeroGuia");
 
@@ -420,12 +413,6 @@ namespace src.Data.Migrations
                 {
                     b.HasOne("src.Models.Cliente_Faturas", null)
                         .WithMany()
-                        .HasForeignKey("DocId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("src.Models.Cliente_Faturas", null)
-                        .WithMany()
                         .HasForeignKey("NumeroDoc")
                         .HasPrincipalKey("NumeroDoc")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -434,12 +421,6 @@ namespace src.Data.Migrations
 
             modelBuilder.Entity("src.Models.Cliente_DetalheGuias", b =>
                 {
-                    b.HasOne("src.Models.Cliente_Guias", null)
-                        .WithMany()
-                        .HasForeignKey("DocId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("src.Models.Cliente_Guias", null)
                         .WithMany()
                         .HasForeignKey("NumeroGuia")

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using src.Data;
 
@@ -11,9 +12,11 @@ using src.Data;
 namespace src.Data.Migrations
 {
     [DbContext(typeof(StocksContext))]
-    partial class StocksContextModelSnapshot : ModelSnapshot
+    [Migration("20260521111947_ChangeClienteDocTablesIdToGuid")]
+    partial class ChangeClienteDocTablesIdToGuid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,16 +96,11 @@ namespace src.Data.Migrations
                     b.Property<string>("Codigo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("DocId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<decimal>("Iva")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("NumeroDoc")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Produto")
                         .HasColumnType("nvarchar(max)");
@@ -118,10 +116,6 @@ namespace src.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DocId");
-
-                    b.HasIndex("NumeroDoc");
-
                     b.ToTable("Cliente_DetalheFaturas");
                 });
 
@@ -132,13 +126,8 @@ namespace src.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    b.Property<Guid>("DocId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("NumeroGuia")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumeroPecas")
                         .HasColumnType("int");
@@ -147,10 +136,6 @@ namespace src.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DocId");
-
-                    b.HasIndex("NumeroGuia");
 
                     b.ToTable("Cliente_DetalheGuias");
                 });
@@ -172,9 +157,7 @@ namespace src.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NumeroDoc")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UrlDocument")
                         .HasColumnType("nvarchar(max)");
@@ -201,9 +184,7 @@ namespace src.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NumeroGuia")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TotalPecas")
                         .HasColumnType("int");
@@ -414,38 +395,6 @@ namespace src.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Entidade");
-                });
-
-            modelBuilder.Entity("src.Models.Cliente_DetalheFaturas", b =>
-                {
-                    b.HasOne("src.Models.Cliente_Faturas", null)
-                        .WithMany()
-                        .HasForeignKey("DocId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("src.Models.Cliente_Faturas", null)
-                        .WithMany()
-                        .HasForeignKey("NumeroDoc")
-                        .HasPrincipalKey("NumeroDoc")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("src.Models.Cliente_DetalheGuias", b =>
-                {
-                    b.HasOne("src.Models.Cliente_Guias", null)
-                        .WithMany()
-                        .HasForeignKey("DocId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("src.Models.Cliente_Guias", null)
-                        .WithMany()
-                        .HasForeignKey("NumeroGuia")
-                        .HasPrincipalKey("NumeroGuia")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("src.Models.Cliente_Movimento", b =>

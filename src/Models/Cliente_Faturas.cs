@@ -2,9 +2,11 @@ namespace src.Models;
 
 public class Cliente_Faturas
 {
+    public Guid Id { get; set; }
+
     public string? Cliente {get; set;}
 
-    public string? NumeroDoc {get; set;}
+    public string NumeroDoc { get; set; } = null!;
 
     public DateTime Data {get; set;}
 
