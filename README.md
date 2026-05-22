@@ -88,6 +88,78 @@ Example (PowerShell) setting the API key via environment variable:
 $env:Authentication__ApiKey = "YOUR_KEY"
 ```
 
+## Testing Documentos via Swagger (Faturas/Guias)
+
+The `Documentos` endpoints are search/listing endpoints:
+
+- `POST /documentos/faturas/pesquisa` (monthly invoices)
+- `POST /documentos/guias/pesquisa` (daily delivery notes)
+
+There are currently no API endpoints to create `Cliente_Faturas` / `Cliente_Guias` records, so for local testing you must insert sample rows directly into SQL Server.
+
+### Swagger steps
+
+1) Run the API in Development (Swagger is Development-only)
+
+2) Open Swagger:
+
+- `https://localhost:7092/swagger`
+- `http://localhost:5275/swagger`
+
+3) Click **Authorize** and set the API key
+
+- Header name: `X-API-KEY`
+- Value: your configured key (`Authentication:ApiKey` or env var `Authentication__ApiKey`)
+
+### Database schema (migrations)
+
+Development disables auto-migrations by default (`Database:ApplyMigrations=false`). If this is a fresh database, enable it for one run:
+
+```powershell
+$env:Database__ApplyMigrations = "true"
+dotnet run --project .\src\src.csproj
+```
+
+### Seed sample data (SQL)
+
+Run these inserts in the same database configured by `ConnectionStrings:DefaultConnection`.
+
+Default date behavior when you omit `dataInicio` and `dataFim`:
+
+- `faturas/pesquisa`: defaults to the current month
+- `guias/pesquisa`: defaults to today
+
+```sql
+-- Use your configured database name
+USE STOCKSAPI;
+
+-- Guias (use today's date to match the default "today" filter)
+INSERT INTO Cliente_Guias (Cliente, NumeroGuia, Data, TotalPecas, UrlDocumento)
+VALUES
+('HotelA', 'G-2026-0522-001', '2026-05-22T10:30:00', 25, NULL),
+('HotelA', 'G-2026-0522-002', '2026-05-22T15:45:00', 40, NULL);
+
+-- Faturas (use current-month dates to match the default "current month" filter)
+INSERT INTO Cliente_Faturas (Cliente, NumeroDoc, Data, Valor, Estado, UrlDocument)
+VALUES
+('HotelA', 'F-2026-05-001', '2026-05-05T09:00:00', 123.45, 'Emitida', NULL),
+('HotelA', 'F-2026-05-002', '2026-05-19T14:00:00', 987.65, 'Paga', NULL);
+```
+
+### Example request bodies
+
+`POST /documentos/faturas/pesquisa`:
+
+```json
+{ "hotel": "HotelA" }
+```
+
+`POST /documentos/guias/pesquisa`:
+
+```json
+{ "hotel": "HotelA" }
+```
+
 ## Running locally (VS Code tasks)
 
 This repo includes tasks for common workflows:
@@ -128,7 +200,7 @@ docker run --rm -p 5275:5275 `
 
 ## API endpoints
 
-Base path is `api/[controller]`. With the current controller class names, the routes are:
+Most endpoints use base path `api/[controller]`. `DocumentosController` uses `/documentos`.
 
 ### Tags (`Cliente_Tag_Controller`)
 
@@ -157,6 +229,13 @@ Base: `/api/Cliente_movimento_`
 - `POST /api/Cliente_movimento_`
 - `PUT /api/Cliente_movimento_/{id:int}`
 - `DELETE /api/Cliente_movimento_/{id:int}`
+
+### Documentos (`DocumentosController`)
+
+Base: `/documentos`
+
+- `POST /documentos/faturas/pesquisa`
+- `POST /documentos/guias/pesquisa`
 
 ## Logging & errors
 
