@@ -1,6 +1,7 @@
 using src.Data;
 using Microsoft.EntityFrameworkCore;
 using src.Dtos.Documentos_Dtos;
+using System.Globalization;
 
 namespace src.Services.Documentos;
 
@@ -84,7 +85,7 @@ public class DocumentosService
                 .Take(filtro.NumRegistos)
                 .Select(x => new DocumentoFaturaDTO(
                     NumDocumento: x.NumeroDoc,
-                    MesAno: x.Data.ToString("MM/yyyy"),
+                    MesAno: x.Data.ToString("MM/yyyy", CultureInfo.InvariantCulture),
                     Valor: x.Valor,
                     Estado: x.Estado,
                     IdDoc: x.Id,
@@ -179,7 +180,7 @@ public class DocumentosService
                 .Take(filtro.NumRegistos)
                 .Select(x => new DocumentoGuiaDTO(
                     NumDocumento: x.NumeroGuia,
-                    Data: x.Data.ToString("dd/MM/yyyy"),
+                    Data: x.Data.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
                     TotalPecas: x.TotalPecas,
                     IdDoc: x.Id,
                     Pagina: filtro.Pagina,

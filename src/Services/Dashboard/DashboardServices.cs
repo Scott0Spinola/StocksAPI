@@ -2,6 +2,7 @@ using src.Data;
 using src.Dtos.Dashboard_Dtos;
 using Microsoft.EntityFrameworkCore;
 using src.Services.TimeSeries;
+using System.Globalization;
 
 namespace src.Services.Dashboard;
 
@@ -200,8 +201,8 @@ public class DashboardService
         static string FormatData(DateTime bucket, TimeSeriesGranularity granularity)
         {
             return granularity == TimeSeriesGranularity.Month
-                ? bucket.ToString("MM/yyyy")
-                : bucket.ToString("dd/MM");
+                ? bucket.ToString("MM/yyyy", CultureInfo.InvariantCulture)
+                : bucket.ToString("dd/MM", CultureInfo.InvariantCulture);
         }
 
         static string FormatHora(DateTime bucket, TimeSeriesGranularity granularity)

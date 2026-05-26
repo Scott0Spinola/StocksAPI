@@ -4,6 +4,7 @@ using src.Services.Dashboard;
 using src.Services.EntradasSaidasService;
 using src.Services.StocksServices;
 using src.Services.Documentos;
+using src.Services.Faturacao;
 using src.Auth;
 
 using Microsoft.AspNetCore.Authorization;
@@ -48,6 +49,7 @@ builder.Services.AddScoped<EntradasSaidasService>();
 builder.Services.AddScoped<DashboardService>();
 builder.Services.AddScoped<StocksServices>();
 builder.Services.AddScoped<DocumentosService>();
+builder.Services.AddScoped<FaturacaoService>();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ErrorHandling>();
 

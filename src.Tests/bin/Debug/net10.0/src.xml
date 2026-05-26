@@ -331,6 +331,22 @@
             <response code="200">Entidade details returned successfully.</response>
             <response code="404">Entidade not found.</response>
         </member>
+        <member name="T:src.Controllers.Faturacao.FaturacaoController">
+            <summary>
+            Endpoints for faturação indicators.
+            </summary>
+        </member>
+        <member name="M:src.Controllers.Faturacao.FaturacaoController.Indicadores(src.Dtos.Faturacao_Dtos.FiltroFaturacao)">
+            <summary>
+            Calculates faturação indicators for a given period (inclusive), including IVA and credit notes,
+            and compares the total against the previous period.
+            </summary>
+            <remarks>
+            Previous period window is computed as the immediately preceding window with the same duration.
+            </remarks>
+            <param name="request">Filter containing hotel and date window.</param>
+            <returns>Computed faturação indicators.</returns>
+        </member>
         <member name="T:src.Data.Migrations.InitialCreate">
             <inheritdoc />
         </member>
@@ -961,6 +977,41 @@
             </summary>
             <param name="exception">The exception to map.</param>
             <returns>A tuple containing the HTTP status code and title.</returns>
+        </member>
+        <member name="T:src.Services.Faturacao.FaturacaoService">
+            <summary>
+            Business logic for faturação indicators.
+            </summary>
+            <remarks>
+            This service computes totals from <c>Cliente_DetalheFaturas</c> joined to <c>Cliente_Faturas</c>:
+            - <see cref="P:src.Dtos.Faturacao_Dtos.IndicadoresFaturacaoDTO.TotalFaturacado"/>: gross invoiced amount (includes IVA), net of credit notes.
+            - <see cref="P:src.Dtos.Faturacao_Dtos.IndicadoresFaturacaoDTO.TotalIVA"/>: IVA amount, net of credit notes.
+            - <see cref="P:src.Dtos.Faturacao_Dtos.IndicadoresFaturacaoDTO.TotalNotasCredito"/>: gross credit-note amount (includes IVA), always returned as a positive number.
+            - <see cref="P:src.Dtos.Faturacao_Dtos.IndicadoresFaturacaoDTO.PercDiferencialAnterior"/>: percent change vs previous period window.
+            </remarks>
+        </member>
+        <member name="M:src.Services.Faturacao.FaturacaoService.IndicadoresAsync(src.Dtos.Faturacao_Dtos.FiltroFaturacao)">
+            <summary>
+            Calculates faturação indicators for the provided period (inclusive), and compares against the previous period.
+            </summary>
+            <param name="filtro">Request filter: hotel and date window.</param>
+            <returns>Computed indicators.</returns>
+        </member>
+        <member name="M:src.Services.Faturacao.FaturacaoService.LoadTotalsAsync(System.String,System.DateTime,System.DateTime)">
+             <summary>
+             Loads aggregate totals for a hotel within a date window (inclusive).
+             </summary>
+             <remarks>
+             Totals are computed from detail rows (<c>Cliente_DetalheFaturas</c>) so that:
+             - IVA is explicit (<c>Cliente_DetalheFaturas.Iva</c>)
+             - line amounts can be summed to gross (<c>Valor + Iva</c>)
+            
+             Credit-note classification is heuristic because we don't have an explicit boolean/type column:
+             a document is treated as a credit note if any of these is true:
+             - header <c>Valor</c> is negative
+             - <c>NumeroDoc</c> starts with "NC"
+             - <c>Estado</c> contains "credito"/"crédito" (case-insensitive)
+             </remarks>
         </member>
         <member name="T:PageParameters">
             <summary>

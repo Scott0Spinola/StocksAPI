@@ -242,11 +242,6 @@ public class EntradasSaidasService
             request.DataFim,
             request.Tipo);
 
-        // Pesquisa series is zero-filled for charting; API consumers typically want only real rows.
-        result = result
-            .Where(x => x.IdDoc > 0)
-            .ToList();
-
         var skip = (request.Pagina - 1) * request.NumRegistos;
 
         return result
@@ -278,8 +273,8 @@ public class EntradasSaidasService
         static string FormatData(DateTime bucket, TimeSeriesGranularity granularity)
         {
             return granularity == TimeSeriesGranularity.Month
-                ? bucket.ToString("MM/yyyy")
-                : bucket.ToString("dd/MM");
+                ? bucket.ToString("MM/yyyy", CultureInfo.InvariantCulture)
+                : bucket.ToString("dd/MM", CultureInfo.InvariantCulture);
         }
 
         static string FormatHora(DateTime bucket, TimeSeriesGranularity granularity)
@@ -536,8 +531,8 @@ public class EntradasSaidasService
         static string FormatData(DateTime bucket, TimeSeriesGranularity granularity)
         {
             return granularity == TimeSeriesGranularity.Month
-                ? bucket.ToString("MM/yyyy")
-                : bucket.ToString("dd/MM");
+                ? bucket.ToString("MM/yyyy", CultureInfo.InvariantCulture)
+                : bucket.ToString("dd/MM", CultureInfo.InvariantCulture);
         }
 
         static string FormatHora(DateTime bucket, TimeSeriesGranularity granularity)
