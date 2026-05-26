@@ -1,0 +1,21 @@
+using src.Data;
+using Microsoft.EntityFrameworkCore;
+using src.Dtos.Documentos_Dtos;
+
+namespace src.Services.Faturacao;
+
+public class FaturacaoService
+{
+    private readonly StocksContext _context;
+    private readonly ILogger<FaturacaoService> _logger;
+
+    
+
+    public FaturacaoServiceService(StocksContext context, ILogger<FaturacaoService> logger)
+    {
+        _context = context;
+        _logger = logger;
+    }
+
+    
+}
