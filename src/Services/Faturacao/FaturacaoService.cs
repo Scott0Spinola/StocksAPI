@@ -113,10 +113,10 @@ public class FaturacaoService
                 && f.Data <= endInclusive
             let isNotaCredito =
                 f.Valor < 0
-                || f.NumeroDoc.StartsWith("NC", StringComparison.OrdinalIgnoreCase)
+                || f.NumeroDoc.StartsWith("NC")
                 || (f.Estado != null
-                    && (f.Estado.Contains("credito", StringComparison.OrdinalIgnoreCase)
-                        || f.Estado.Contains("crédito", StringComparison.OrdinalIgnoreCase)))
+                    && (f.Estado.Contains("credito")
+                        || f.Estado.Contains("crédito")))
             group new { d, isNotaCredito } by 1 into g
             select new
             {
