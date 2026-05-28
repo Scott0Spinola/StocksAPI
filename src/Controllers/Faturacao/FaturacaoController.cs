@@ -64,4 +64,23 @@ public class FaturacaoController : ControllerBase
         var result = await _faturacaoService.DetalheAsync(request);
         return Ok(result);
     }
+
+    /// <summary>
+    /// Exports the faturação detalhe listing to an Excel file.
+    /// </summary>
+    [HttpPost("exportacao")]
+    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Exportacao([FromBody] FiltroFaturacao request)
+    {
+        _logger.LogInformation(
+            "Faturacao exportacao hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim}",
+            request.Hotel,
+            request.Tab,
+            request.DataInicio,
+            request.DataFim);
+
+        var (content, fileName) = await _faturacaoService.ExportacaoAsync(request);
+        return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+    }
 }

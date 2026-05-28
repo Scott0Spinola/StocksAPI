@@ -1,3 +1,5 @@
+using System.Globalization;
+using Expedita.Export.Excel;
 using Microsoft.EntityFrameworkCore;
 using src.Data;
 using src.Dtos.Faturacao_Dtos;
@@ -127,6 +129,78 @@ public class FaturacaoService
         return result;
     }
 
+    /// <summary>
+    /// Generates an Excel (.xlsx) export for the faturação detalhe listing.
+    /// </summary>
+    public async Task<(byte[] Content, string FileName)> ExportacaoAsync(FiltroFaturacao filtro)
+    {
+        // Reuse the same core logic as the JSON endpoint.
+        var items = await DetalheAsync(filtro);
+
+        // Allocate one spare row/column to avoid any edge-indexing behavior in the library.
+        var numRows = Math.Max(2, items.Count + 2); // header + data + spare
+        const int numCols = 6; // 5 data columns + spare
+
+        var workDir = Path.Combine(Path.GetTempPath(), "StocksAPI", "exports");
+        Directory.CreateDirectory(workDir);
+
+        var fileName = $"{DateTime.UtcNow:yyyyMMdd_HHmmss}_faturacao_detalhe.xlsx";
+        var fullPath = Path.Combine(workDir, fileName);
+
+        if (File.Exists(fullPath))
+        {
+            File.Delete(fullPath);
+        }
+
+        Stream? fileStream = null;
+
+        try
+        {
+            var doc = new xlsxDocumento(workDir);
+            var page = doc.AdicionarPagina("FaturacaoDetalhe", numRows, numCols);
+
+            // Header row
+            SetCell(page, col0: 0, row0: 0, "Produto", xlsxCelula.tiposValor.TextoHeader);
+            SetCell(page, col0: 1, row0: 0, "Servico", xlsxCelula.tiposValor.TextoHeader);
+            SetCell(page, col0: 2, row0: 0, "Qtd", xlsxCelula.tiposValor.TextoHeader);
+            SetCell(page, col0: 3, row0: 0, "Valor", xlsxCelula.tiposValor.TextoHeader);
+            SetCell(page, col0: 4, row0: 0, "PercDiferencialAnterior", xlsxCelula.tiposValor.TextoHeader);
+
+            // Data rows
+            for (var i = 0; i < items.Count; i++)
+            {
+                var row0 = i + 1;
+                var item = items[i];
+
+                SetCell(page, col0: 0, row0, item.Produto ?? string.Empty, xlsxCelula.tiposValor.Texto);
+                SetCell(page, col0: 1, row0, item.Servico ?? string.Empty, xlsxCelula.tiposValor.Texto);
+                SetCell(page, col0: 2, row0, item.Qtd.ToString(CultureInfo.InvariantCulture), xlsxCelula.tiposValor.Inteiro);
+                SetCell(page, col0: 3, row0, item.Valor.ToString("0.00", CultureInfo.InvariantCulture), xlsxCelula.tiposValor.Texto);
+                SetCell(page, col0: 4, row0, item.PercDiferencialAnterior.ToString("0.00", CultureInfo.InvariantCulture), xlsxCelula.tiposValor.Texto);
+            }
+
+            doc.Exportar(fileName, xlsxDocumento.tipoExportacao.documentoXls, workDir, ref fileStream);
+            fileStream?.Flush();
+        }
+        finally
+        {
+            fileStream?.Dispose();
+        }
+
+        var content = await File.ReadAllBytesAsync(fullPath);
+
+        try
+        {
+            File.Delete(fullPath);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to delete temporary Excel export file: {Path}", fullPath);
+        }
+
+        return (content, fileName);
+    }
+
     private static void ValidateFiltro(FiltroFaturacao filtro)
     {
         if (string.IsNullOrWhiteSpace(filtro.Hotel))
@@ -143,6 +217,25 @@ public class FaturacaoService
         {
             throw new ArgumentException("'dataInicio' must be less than or equal to 'dataFim'.");
         }
+    }
+
+    /// <summary>
+    /// Writes a single cell into an <see cref="xlsxPagina"/>.
+    /// </summary>
+    private static void SetCell(xlsxPagina page, int col0, int row0, string? value, xlsxCelula.tiposValor tipo)
+    {
+        var safeValue = value ?? string.Empty;
+
+        var cell = new xlsxCelula(col0, row0)
+        {
+            idxColuna = col0,
+            idxLinha = row0,
+            valor = safeValue,
+            tipoValor = tipo
+        };
+
+        // NOTE: this is row/col order.
+        page.set_Celula(row0, col0, cell);
     }
 
     /// <summary>

@@ -353,6 +353,11 @@
             including percent change vs the previous period.
             </summary>
         </member>
+        <member name="M:src.Controllers.Faturacao.FaturacaoController.Exportacao(src.Dtos.Faturacao_Dtos.FiltroFaturacao)">
+            <summary>
+            Exports the faturação detalhe listing to an Excel file.
+            </summary>
+        </member>
         <member name="T:src.Data.Migrations.InitialCreate">
             <inheritdoc />
         </member>
@@ -1007,6 +1012,16 @@
             <summary>
             Lists faturação totals grouped by product and service for the provided period (inclusive),
             including percent change vs the previous period window.
+            </summary>
+        </member>
+        <member name="M:src.Services.Faturacao.FaturacaoService.ExportacaoAsync(src.Dtos.Faturacao_Dtos.FiltroFaturacao)">
+            <summary>
+            Generates an Excel (.xlsx) export for the faturação detalhe listing.
+            </summary>
+        </member>
+        <member name="M:src.Services.Faturacao.FaturacaoService.SetCell(Expedita.Export.Excel.xlsxPagina,System.Int32,System.Int32,System.String,Expedita.Export.Excel.xlsxCelula.tiposValor)">
+            <summary>
+            Writes a single cell into an <see cref="T:Expedita.Export.Excel.xlsxPagina"/>.
             </summary>
         </member>
         <member name="M:src.Services.Faturacao.FaturacaoService.LoadTotalsAsync(System.String,System.DateTime,System.DateTime)">
