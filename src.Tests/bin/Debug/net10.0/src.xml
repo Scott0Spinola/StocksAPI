@@ -347,6 +347,12 @@
             <param name="request">Filter containing hotel and date window.</param>
             <returns>Computed faturação indicators.</returns>
         </member>
+        <member name="M:src.Controllers.Faturacao.FaturacaoController.Detalhe(src.Dtos.Faturacao_Dtos.FiltroFaturacao)">
+            <summary>
+            Lists faturação totals grouped by product and service for a given period (inclusive),
+            including percent change vs the previous period.
+            </summary>
+        </member>
         <member name="T:src.Data.Migrations.InitialCreate">
             <inheritdoc />
         </member>
@@ -996,6 +1002,12 @@
             </summary>
             <param name="filtro">Request filter: hotel and date window.</param>
             <returns>Computed indicators.</returns>
+        </member>
+        <member name="M:src.Services.Faturacao.FaturacaoService.DetalheAsync(src.Dtos.Faturacao_Dtos.FiltroFaturacao)">
+            <summary>
+            Lists faturação totals grouped by product and service for the provided period (inclusive),
+            including percent change vs the previous period window.
+            </summary>
         </member>
         <member name="M:src.Services.Faturacao.FaturacaoService.LoadTotalsAsync(System.String,System.DateTime,System.DateTime)">
              <summary>

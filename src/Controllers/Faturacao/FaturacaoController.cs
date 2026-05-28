@@ -35,12 +35,33 @@ public class FaturacaoController : ControllerBase
     public async Task<ActionResult<IndicadoresFaturacaoDTO>> Indicadores([FromBody] FiltroFaturacao request)
     {
         _logger.LogInformation(
-            "Faturacao indicadores hotel={Hotel} dataInicio={DataInicio} dataFim={DataFim}",
+            "Faturacao indicadores hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim}",
             request.Hotel,
+            request.Tab,
             request.DataInicio,
             request.DataFim);
 
         var result = await _faturacaoService.IndicadoresAsync(request);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Lists faturação totals grouped by product and service for a given period (inclusive),
+    /// including percent change vs the previous period.
+    /// </summary>
+    [HttpPost("detalhe")]
+    [ProducesResponseType(typeof(List<DocumentoFaturaDetalheDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<List<DocumentoFaturaDetalheDTO>>> Detalhe([FromBody] FiltroFaturacao request)
+    {
+        _logger.LogInformation(
+            "Faturacao detalhe hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim}",
+            request.Hotel,
+            request.Tab,
+            request.DataInicio,
+            request.DataFim);
+
+        var result = await _faturacaoService.DetalheAsync(request);
         return Ok(result);
     }
 }

@@ -36,8 +36,7 @@ public class FaturacaoService
         ValidateFiltro(filtro);
 
         var hotel = filtro.Hotel.Trim();
-        var startInclusive = filtro.DataInicio;
-        var endInclusive = filtro.DataFim;
+        var (startInclusive, endInclusive) = TimeSeriesTabs.GetWindow(filtro.DataInicio, filtro.DataFim, filtro.Tab);
 
         // Reuse the same previous-window approach as the Dashboard time-series indicators:
         // previous window has the same duration and ends immediately before the current window.
@@ -73,11 +72,71 @@ public class FaturacaoService
             PercDiferencialAnterior: percDiferencialAnterior);
     }
 
+    /// <summary>
+    /// Lists faturação totals grouped by product and service for the provided period (inclusive),
+    /// including percent change vs the previous period window.
+    /// </summary>
+    public async Task<List<DocumentoFaturaDetalheDTO>> DetalheAsync(FiltroFaturacao filtro)
+    {
+        ValidateFiltro(filtro);
+
+        var hotel = filtro.Hotel.Trim();
+        var (startInclusive, endInclusive) = TimeSeriesTabs.GetWindow(filtro.DataInicio, filtro.DataFim, filtro.Tab);
+
+        var (previousStartInclusive, previousEndInclusive) = TimeSeriesTabs.GetPreviousWindow(startInclusive, endInclusive);
+
+        var current = await LoadDetalheAsync(hotel, startInclusive, endInclusive);
+        var previous = await LoadDetalheAsync(hotel, previousStartInclusive, previousEndInclusive);
+
+        var previousByKey = previous.ToDictionary(
+            x => (x.Produto, x.Servico),
+            x => x.Valor);
+
+        var result = current
+            .Select(x =>
+            {
+                previousByKey.TryGetValue((x.Produto, x.Servico), out var prevValor);
+
+                decimal perc = 0m;
+                if (prevValor != 0m)
+                {
+                    perc = (x.Valor - prevValor) / prevValor * 100m;
+                }
+
+                return new DocumentoFaturaDetalheDTO(
+                    Produto: x.Produto,
+                    Servico: x.Servico,
+                    Qtd: x.Qtd,
+                    Valor: x.Valor,
+                    PercDiferencialAnterior: perc);
+            })
+            .OrderByDescending(x => x.Valor)
+            .ThenBy(x => x.Produto)
+            .ThenBy(x => x.Servico)
+            .ToList();
+
+        _logger.LogInformation(
+            "Faturacao detalhe hotel={Hotel} current={Start}-{End} previous={PrevStart}-{PrevEnd} result={Count}",
+            hotel,
+            startInclusive,
+            endInclusive,
+            previousStartInclusive,
+            previousEndInclusive,
+            result.Count);
+
+        return result;
+    }
+
     private static void ValidateFiltro(FiltroFaturacao filtro)
     {
         if (string.IsNullOrWhiteSpace(filtro.Hotel))
         {
             throw new ArgumentException("'hotel' is required.");
+        }
+
+        if (filtro.Tab is < 0 or > 4)
+        {
+            throw new ArgumentException("'tab' must be 0 (dia), 1 (semana), 2 (mes), 3 (ano), or 4 (personalizado). ");
         }
 
         if (filtro.DataInicio > filtro.DataFim)
@@ -138,5 +197,46 @@ public class FaturacaoService
         var totalNotasCredito = aggregates.NotasCreditoGross;
 
         return (TotalFaturacado: totalFaturacado, TotalIVA: totalIva, TotalNotasCredito: totalNotasCredito);
+    }
+
+    private async Task<List<(string Produto, string Servico, int Qtd, decimal Valor)>> LoadDetalheAsync(
+        string hotel,
+        DateTime startInclusive,
+        DateTime endInclusive)
+    {
+        var query =
+            from d in _context.Cliente_DetalheFaturas.AsNoTracking()
+            join f in _context.Cliente_Faturas.AsNoTracking() on d.DocId equals f.Id
+            where f.Cliente == hotel
+                && f.Data >= startInclusive
+                && f.Data <= endInclusive
+            let isNotaCredito =
+                f.Valor < 0
+                || f.NumeroDoc.StartsWith("NC")
+                || (f.Estado != null
+                    && (f.Estado.Contains("credito")
+                        || f.Estado.Contains("crédito")))
+            select new
+            {
+                Produto = d.Produto ?? string.Empty,
+                Servico = d.Servico ?? string.Empty,
+                QtdSigned = isNotaCredito ? -Math.Abs(d.Quantidade) : d.Quantidade,
+                ValorSigned = isNotaCredito ? -Math.Abs(d.Valor + d.Iva) : (d.Valor + d.Iva)
+            };
+
+        var aggregates = await query
+            .GroupBy(x => new { x.Produto, x.Servico })
+            .Select(g => new
+            {
+                g.Key.Produto,
+                g.Key.Servico,
+                Qtd = g.Sum(x => x.QtdSigned),
+                Valor = g.Sum(x => x.ValorSigned),
+            })
+            .ToListAsync();
+
+        return aggregates
+            .Select(x => (x.Produto, x.Servico, x.Qtd, x.Valor))
+            .ToList();
     }
 }

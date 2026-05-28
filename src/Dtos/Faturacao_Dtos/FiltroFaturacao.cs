@@ -12,5 +12,8 @@ public record FiltroFaturacao(
     DateTime DataInicio,
 
     [Required]
-    DateTime DataFim
+    DateTime DataFim,
+
+    [Range(0, 4)]
+    int Tab = 4
 );
