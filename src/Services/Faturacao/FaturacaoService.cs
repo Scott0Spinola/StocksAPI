@@ -321,7 +321,7 @@ public class FaturacaoService
             .GroupBy(x => new { x.Produto, x.Servico })
             .Select(g => new
             {
-                g.Key.Produto,
+                g.Key.Produto,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
                 g.Key.Servico,
                 Qtd = g.Sum(x => x.QtdSigned),
                 Valor = g.Sum(x => x.ValorSigned),
