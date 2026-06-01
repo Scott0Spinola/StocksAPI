@@ -13,7 +13,7 @@ public class DocumentosService
     private readonly IHttpClientFactory _httpClientFactory;
 
 
-    public record DocumentDownloadResult(Stream Stream, string ContentType, string FileName);
+    public record DocumentDownloadResult(Stream Stream, string ContentType, string FileName, IDisposable? Cleanup);
 
     public DocumentosService(StocksContext context, ILogger<DocumentosService> logger, IHttpClientFactory httpClientFactory)
     {
@@ -275,7 +275,7 @@ public class DocumentosService
             var placeholderStream = new MemoryStream(placeholderBytes);
 
             var fileName = $"{tipo}_{numeroDocumento ?? docId.ToString()}_placeholder.txt";
-            return new DocumentDownloadResult(placeholderStream, MediaTypeNames.Text.Plain, fileName);
+            return new DocumentDownloadResult(placeholderStream, MediaTypeNames.Text.Plain, fileName, Cleanup: null);
         }
 
         if (!Uri.TryCreate(url, UriKind.Absolute, out var uri)
@@ -288,7 +288,7 @@ public class DocumentosService
             var placeholderStream = new MemoryStream(placeholderBytes);
 
             var fileName = $"{tipo}_{numeroDocumento ?? docId.ToString()}_placeholder.txt";
-            return new DocumentDownloadResult(placeholderStream, MediaTypeNames.Text.Plain, fileName);
+            return new DocumentDownloadResult(placeholderStream, MediaTypeNames.Text.Plain, fileName, Cleanup: null);
         }
 
         // If the DB currently contains a placeholder URL, keep returning placeholder content.
@@ -301,20 +301,19 @@ public class DocumentosService
             var placeholderStream = new MemoryStream(placeholderBytes);
 
             var fileName = $"{tipo}_{numeroDocumento ?? docId.ToString()}_placeholder.txt";
-            return new DocumentDownloadResult(placeholderStream, MediaTypeNames.Text.Plain, fileName);
+            return new DocumentDownloadResult(placeholderStream, MediaTypeNames.Text.Plain, fileName, Cleanup: null);
         }
 
         var http = _httpClientFactory.CreateClient(nameof(DocumentosService));
 
         // Stream the remote content without buffering the entire response in memory.
-        var response = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+        var response = await http.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
         response.EnsureSuccessStatusCode();
 
         var contentType = response.Content.Headers.ContentType?.MediaType ?? MediaTypeNames.Application.Octet;
-        var innerStream = await response.Content.ReadAsStreamAsync(cancellationToken);
-        var stream = new DisposingStream(innerStream, response);
+        var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 
-        var fileName2 = BuildFileName(tipo, numeroDocumento, docId, contentType, url);
+        var fileName2 = BuildFileName(tipo, numeroDocumento, docId, contentType, uri);
 
         _logger.LogInformation(
             "Documentos download ok tipo={Tipo} docid={DocId} url={Url} contentType={ContentType} fileName={FileName}",
@@ -324,85 +323,15 @@ public class DocumentosService
             contentType,
             fileName2);
 
-        return new DocumentDownloadResult(stream, contentType, fileName2);
+        return new DocumentDownloadResult(stream, contentType, fileName2, Cleanup: response);
     }
 
-    private sealed class DisposingStream : Stream
-    {
-        private readonly Stream _inner;
-        private readonly HttpResponseMessage _response;
-
-        public DisposingStream(Stream inner, HttpResponseMessage response)
-        {
-            _inner = inner;
-            _response = response;
-        }
-
-        public override bool CanRead => _inner.CanRead;
-        public override bool CanSeek => _inner.CanSeek;
-        public override bool CanWrite => _inner.CanWrite;
-        public override long Length => _inner.Length;
-
-        public override long Position
-        {
-            get => _inner.Position;
-            set => _inner.Position = value;
-        }
-
-        public override void Flush() => _inner.Flush();
-        public override Task FlushAsync(CancellationToken cancellationToken) => _inner.FlushAsync(cancellationToken);
-        public override int Read(byte[] buffer, int offset, int count) => _inner.Read(buffer, offset, count);
-        public override int Read(Span<byte> buffer) => _inner.Read(buffer);
-        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken) =>
-            _inner.ReadAsync(buffer, offset, count, cancellationToken);
-        public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default) =>
-            _inner.ReadAsync(buffer, cancellationToken);
-        public override long Seek(long offset, SeekOrigin origin) => _inner.Seek(offset, origin);
-        public override void SetLength(long value) => _inner.SetLength(value);
-        public override void Write(byte[] buffer, int offset, int count) => _inner.Write(buffer, offset, count);
-        public override void Write(ReadOnlySpan<byte> buffer) => _inner.Write(buffer);
-        public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken) =>
-            _inner.WriteAsync(buffer, offset, count, cancellationToken);
-        public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default) =>
-            _inner.WriteAsync(buffer, cancellationToken);
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _inner.Dispose();
-                _response.Dispose();
-            }
-
-            base.Dispose(disposing);
-        }
-
-        public override async ValueTask DisposeAsync()
-        {
-            await _inner.DisposeAsync();
-            _response.Dispose();
-            await base.DisposeAsync();
-        }
-    }
-
-    private static string BuildFileName(string tipo, string? numeroDocumento, Guid docId, string contentType, string url)
+    private static string BuildFileName(string tipo, string? numeroDocumento, Guid docId, string contentType, Uri uri)
     {
         var safeNumero = string.IsNullOrWhiteSpace(numeroDocumento) ? docId.ToString() : numeroDocumento.Trim();
 
         // Try to keep a reasonable file extension.
-        var extension = string.Empty;
-
-        try
-        {
-            if (Uri.TryCreate(url, UriKind.Absolute, out var uri))
-            {
-                extension = Path.GetExtension(uri.AbsolutePath) ?? string.Empty;
-            }
-        }
-        catch
-        {
-            extension = string.Empty;
-        }
+        var extension = Path.GetExtension(uri.AbsolutePath) ?? string.Empty;
 
         if (string.IsNullOrWhiteSpace(extension))
         {

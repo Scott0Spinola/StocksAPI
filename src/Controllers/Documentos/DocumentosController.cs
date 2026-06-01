@@ -80,6 +80,15 @@ public class DocumentosController : ControllerBase
         {
             return NotFound();
         }
+
+        if (result.Cleanup != null)
+        {
+            HttpContext.Response.OnCompleted(() =>
+            {
+                result.Cleanup.Dispose();
+                return Task.CompletedTask;
+            });
+        }
         return File(result.Stream, result.ContentType, result.FileName);
     }
 }
