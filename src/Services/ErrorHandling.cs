@@ -62,6 +62,7 @@ public class ErrorHandling : IExceptionHandler
         {
             ArgumentException => (StatusCodes.Status400BadRequest, $"Invalid argument provided: {exception.Message}"),
             UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, $"Unauthorized access: {exception.Message}"),
+            HttpRequestException => (StatusCodes.Status502BadGateway, $"Upstream request failed: {exception.Message}"),
            _ => (StatusCodes.Status500InternalServerError, "An unexpected error occured."),
         };
     }

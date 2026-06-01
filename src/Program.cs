@@ -41,6 +41,8 @@ builder.Services.AddDbContext<StocksContext>(options =>
             sqlServerOptions.EnableRetryOnFailure();
         }));
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddScoped<Cliente_Movimento_Services>();
 builder.Services.AddScoped<Cliente_Tag_Services>();
 builder.Services.AddScoped<ClienteService>();

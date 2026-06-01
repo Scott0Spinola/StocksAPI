@@ -53,4 +53,33 @@ public class DocumentosController : ControllerBase
         var result = await _documentosService.PesquisaGuiasAsync(request);
         return Ok(result);
     }
+
+    [HttpGet("download")]
+    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Download(
+        [FromQuery(Name = "tipo")] string? tipo,
+        [FromQuery(Name = "docid")] Guid docId,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(tipo))
+        {
+            return BadRequest("'tipo' is required (fatura|guia). Use /documentos/download?tipo=fatura&docid=<guid>.");
+        }
+
+        if (docId == Guid.Empty)
+        {
+            return BadRequest("'docid' is required.");
+        }
+
+        _logger.LogInformation("Documentos download tipo={Tipo} docid={DocId}", tipo, docId);
+
+        var result = await _documentosService.DownloadAsync(tipo, docId, cancellationToken);
+        if (result == null)
+        {
+            return NotFound();
+        }
+        return File(result.Stream, result.ContentType, result.FileName);
+    }
 }

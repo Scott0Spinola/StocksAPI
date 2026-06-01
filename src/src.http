@@ -90,4 +90,9 @@ Content-Type: application/json
 
 ###
 
+GET {{src_HostAddress}}/documentos/download?tipo=fatura&docid=00000000-0000-0000-0000-000000000000
+X-API-KEY: {{apiKey}}
+
+###
+
 ###
