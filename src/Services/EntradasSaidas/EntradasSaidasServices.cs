@@ -12,10 +12,10 @@ using Microsoft.EntityFrameworkCore;
 namespace src.Services.EntradasSaidasService;
 
 public class EntradasSaidasService
-{   
+{
     private readonly StocksContext _context;
     private readonly ILogger<EntradasSaidasService> _logger;
-    
+
     /// <summary>
     /// Initializes a new instance of <see cref="EntradasSaidasService"/>.
     /// </summary>
@@ -213,7 +213,7 @@ public class EntradasSaidasService
             .ThenBy(r => r.Direcao)
             .ToList());
     }
-    
+
 
     /// <summary>
     /// Searches movimentos within a date range and returns entries/exits (or both) for a given hotel.
@@ -519,72 +519,37 @@ public class EntradasSaidasService
     /// when tipo=2 we output two rows per time bucket.
     /// </remarks>
     private static List<EvolucaoItem> BuildEvolucaoResult(
-        IReadOnlyList<DateTime> buckets,
-        TimeSeriesGranularity granularity,
-        Dictionary<DateTime, int> entradasMap,
-        Dictionary<DateTime, int> saidasMap,
-        int tipo,
-        int skip,
-        int take)
+    IReadOnlyList<DateTime> buckets,
+    TimeSeriesGranularity granularity,
+    Dictionary<DateTime, int> entradasMap,
+    Dictionary<DateTime, int> saidasMap,
+    int tipo)
     {
-        // Formatting helpers: these match the original JSON endpoint behavior.
-        static string FormatData(DateTime bucket, TimeSeriesGranularity granularity)
-        {
-            return granularity == TimeSeriesGranularity.Month
+        static string FormatData(DateTime bucket, TimeSeriesGranularity g) =>
+            g == TimeSeriesGranularity.Month
                 ? bucket.ToString("MM/yyyy", CultureInfo.InvariantCulture)
                 : bucket.ToString("dd/MM", CultureInfo.InvariantCulture);
-        }
 
-        static string FormatHora(DateTime bucket, TimeSeriesGranularity granularity)
-        {
-            return granularity == TimeSeriesGranularity.Hour
-                ? bucket.Hour.ToString("00")
-                : string.Empty;
-        }
+        static string FormatHora(DateTime bucket, TimeSeriesGranularity g) =>
+            g == TimeSeriesGranularity.Hour ? bucket.Hour.ToString("00") : string.Empty;
 
-        var result = new List<EvolucaoItem>(capacity: Math.Min(Math.Max(take, 32), 32_768));
-        var index = 0;
+        var result = new List<EvolucaoItem>(buckets.Count * 2);
 
         foreach (var bucket in buckets)
         {
+            var data = FormatData(bucket, granularity);
+            var hora = FormatHora(bucket, granularity);
+
             if (tipo is 0 or 2)
             {
-                // entradas
-                var qtd = entradasMap.TryGetValue(bucket, out var value) ? value : 0;
-                if (index >= skip && result.Count < take)
-                {
-                    result.Add(new EvolucaoItem(
-                        Data: FormatData(bucket, granularity),
-                        Hora: FormatHora(bucket, granularity),
-                        Direcao: 0,
-                        Qtd: qtd));
-                }
-
-                index++;
-                if (result.Count >= take)
-                {
-                    break;
-                }
+                entradasMap.TryGetValue(bucket, out var qtd);
+                result.Add(new EvolucaoItem(data, hora, Direcao: 0, Qtd: qtd));
             }
 
             if (tipo is 1 or 2)
             {
-                // saidas
-                var qtd = saidasMap.TryGetValue(bucket, out var value) ? value : 0;
-                if (index >= skip && result.Count < take)
-                {
-                    result.Add(new EvolucaoItem(
-                        Data: FormatData(bucket, granularity),
-                        Hora: FormatHora(bucket, granularity),
-                        Direcao: 1,
-                        Qtd: qtd));
-                }
-
-                index++;
-                if (result.Count >= take)
-                {
-                    break;
-                }
+                saidasMap.TryGetValue(bucket, out var qtd);
+                result.Add(new EvolucaoItem(data, hora, Direcao: 1, Qtd: qtd));
             }
         }
 
@@ -599,17 +564,6 @@ public class EntradasSaidasService
     /// <exception cref="ArgumentException">Thrown when request parameters are invalid.</exception>
     public async Task<List<EvolucaoItem>> EvolucaoAsync(EvolucaoRequest request)
     {
-        // JSON endpoint requires explicit pagination.
-        if (request.Pagina < 1)
-        {
-            throw new ArgumentException("'pagina' must be >= 1.");
-        }
-
-        if (request.NumRegistos < 1)
-        {
-            throw new ArgumentException("'numRegistos' must be >= 1.");
-        }
-
         var (buckets, granularity, entradasMap, saidasMap) = await LoadEvolucaoDataAsync(
             request.Hotel,
             request.Tab,
@@ -617,16 +571,7 @@ public class EntradasSaidasService
             request.DataFim,
             request.Tipo);
 
-        var skip = (request.Pagina - 1) * request.NumRegistos;
-
-        return BuildEvolucaoResult(
-            buckets,
-            granularity,
-            entradasMap,
-            saidasMap,
-            request.Tipo,
-            skip,
-            request.NumRegistos);
+        return BuildEvolucaoResult(buckets, granularity, entradasMap, saidasMap, request.Tipo);
     }
 
     /// <summary>

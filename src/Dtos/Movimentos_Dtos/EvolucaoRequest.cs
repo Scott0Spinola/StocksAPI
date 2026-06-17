@@ -22,13 +22,5 @@ public record EvolucaoRequest
    
     [Required]
     [Range(0, 2)]
-    int Tipo,
-
-    [Required]
-    [Range(1, int.MaxValue)]
-    int Pagina,
-
-    [Required]
-    [Range(1, 500)]
-    int NumRegistos
+    int Tipo
 );

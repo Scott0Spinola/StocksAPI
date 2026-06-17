@@ -59,14 +59,12 @@ public class MovimentosController : ControllerBase
     public async Task<ActionResult<List<EvolucaoItem>>> Evolucao([FromBody] EvolucaoRequest request)
     {
         _logger.LogInformation(
-            "Evolucao movimentos hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo}  pagina={Pagina} numRegistos={NumRegistos}",
+            "Evolucao movimentos hotel={Hotel} tab={Tab} dataInicio={DataInicio} dataFim={DataFim} tipo={Tipo}",
             request.Hotel,
             request.Tab,
             request.DataInicio,
             request.DataFim,
-            request.Tipo,
-            request.Pagina,
-            request.NumRegistos);
+            request.Tipo);
 
         var result = await _movimentosService.EvolucaoAsync(request);
         return Ok(result);

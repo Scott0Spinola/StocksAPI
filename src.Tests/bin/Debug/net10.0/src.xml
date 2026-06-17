@@ -932,7 +932,7 @@
              looking up each bucket in a dictionary (fast and predictable ordering).
              </remarks>
         </member>
-        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.BuildEvolucaoResult(System.Collections.Generic.IReadOnlyList{System.DateTime},src.Services.TimeSeries.TimeSeriesGranularity,System.Collections.Generic.Dictionary{System.DateTime,System.Int32},System.Collections.Generic.Dictionary{System.DateTime,System.Int32},System.Int32,System.Int32,System.Int32)">
+        <member name="M:src.Services.EntradasSaidasService.EntradasSaidasService.BuildEvolucaoResult(System.Collections.Generic.IReadOnlyList{System.DateTime},src.Services.TimeSeries.TimeSeriesGranularity,System.Collections.Generic.Dictionary{System.DateTime,System.Int32},System.Collections.Generic.Dictionary{System.DateTime,System.Int32},System.Int32)">
              <summary>
              Builds the Evolução series as a flat list of <see cref="T:src.Dtos.Movimentos_Dtos.EvolucaoItem"/>, including zero-filled buckets.
              </summary>

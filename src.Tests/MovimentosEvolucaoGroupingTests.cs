@@ -43,9 +43,7 @@ public class MovimentosEvolucaoGroupingTests
             Tab: 0,
             DataInicio: anchor,
             DataFim: anchor,
-            Tipo: 2,
-            Pagina: 1,
-            NumRegistos: 1000);
+            Tipo: 2);
 
         var result = await service.EvolucaoAsync(request);
 
@@ -86,9 +84,8 @@ public class MovimentosEvolucaoGroupingTests
             Tab: 1,
             DataInicio: anchor,
             DataFim: anchor,
-            Tipo: 0,
-            Pagina: 1,
-            NumRegistos: 1000);
+            Tipo: 0
+            );
 
         var result = await service.EvolucaoAsync(request);
 
@@ -122,9 +119,8 @@ public class MovimentosEvolucaoGroupingTests
             Tab: 3,
             DataInicio: anchor,
             DataFim: anchor,
-            Tipo: 0,
-            Pagina: 1,
-            NumRegistos: 1000);
+            Tipo: 0
+           );
 
         var result = await service.EvolucaoAsync(request);
 
