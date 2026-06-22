@@ -284,6 +284,11 @@ public class EntradasSaidasService
                 : string.Empty;
         }
 
+        static string FormatDirecao(int direcao)
+        {
+            return direcao == 0 ? "Entrada" : "Saida";
+        }
+
         // Allocate one spare row/column to avoid any edge-indexing behavior in the library.
         var numRows = Math.Max(2, items.Count + 2); // header + data + spare
         const int numCols = 8; // 7 data columns + spare
@@ -323,7 +328,7 @@ public class EntradasSaidasService
 
                 SetCell(page, col0: 0, row0, FormatData(item.Data, granularity), xlsxCelula.tiposValor.Texto);
                 SetCell(page, col0: 1, row0, FormatHora(item.Data, granularity), xlsxCelula.tiposValor.Texto);
-                SetCell(page, col0: 2, row0, item.Direcao.ToString(CultureInfo.InvariantCulture), xlsxCelula.tiposValor.Inteiro);
+                SetCell(page, col0: 2, row0, FormatDirecao(item.Direcao), xlsxCelula.tiposValor.Texto);
                 SetCell(page, col0: 3, row0, item.Tipo, xlsxCelula.tiposValor.Texto);
                 SetCell(page, col0: 4, row0, item.Produto ?? string.Empty, xlsxCelula.tiposValor.Texto);
                 SetCell(page, col0: 5, row0, item.Qtd.ToString(CultureInfo.InvariantCulture), xlsxCelula.tiposValor.Inteiro);
