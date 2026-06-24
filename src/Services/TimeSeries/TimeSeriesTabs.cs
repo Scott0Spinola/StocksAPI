@@ -19,7 +19,7 @@ public static class TimeSeriesTabs
             1 => (anchorDay.AddDays(-6), anchorDay.AddDays(1).AddTicks(-1)),
             2 => (anchorDay.AddDays(-30), anchorDay.AddDays(1).AddTicks(-1)),
             3 => (new DateTime(anchorDay.Year, anchorDay.Month, 1).AddMonths(-11), anchorDay.AddDays(1).AddTicks(-1)),
-            4 => (dataInicio, dataFim),
+            4 => (dataInicio.Date, dataFim.Date.AddDays(1).AddTicks(-1)),
             _ => (dataInicio, dataFim)
         };
     }
@@ -37,7 +37,7 @@ public static class TimeSeriesTabs
             1 => (anchorDay.AddDays(-6), anchorDay.AddDays(1).AddTicks(-1), TimeSeriesGranularity.Day),
             2 => (anchorDay.AddDays(-30), anchorDay.AddDays(1).AddTicks(-1), TimeSeriesGranularity.Day),
             3 => (new DateTime(anchorDay.Year, anchorDay.Month, 1).AddMonths(-11), anchorDay.AddDays(1).AddTicks(-1), TimeSeriesGranularity.Month),
-            4 => (dataInicio, dataFim, dataInicio.Date == dataFim.Date ? TimeSeriesGranularity.Hour : TimeSeriesGranularity.Day),
+            4 => (dataInicio.Date, dataFim.Date.AddDays(1).AddTicks(-1), dataInicio.Date == dataFim.Date ? TimeSeriesGranularity.Hour : TimeSeriesGranularity.Day),
             _ => (dataInicio, dataFim, TimeSeriesGranularity.Day)
         };
     }
